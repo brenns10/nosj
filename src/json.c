@@ -298,7 +298,7 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
                                            size_t maxtoken, struct json_parser p)
 {
   (void) maxtoken; //unused
-  size_t array_token_index = p.tokenidx;
+  size_t array_tokenidx = p.tokenidx, prev_tokenidx, curr_tokenidx;
   struct json_token tok = {
     .type = JSON_ARRAY,
     .start = p.textidx,
@@ -316,6 +316,8 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
   p = json_skip_whitespace(text, p);
   while (text[p.textidx] != ']') {
     // Parse a value.
+    prev_tokenidx = curr_tokenidx;
+    curr_tokenidx = p.tokenidx;
     p = json_parse_rec(text, arr, maxtoken, p);
 
     // Now set some bookkeeping of previous values.
@@ -323,10 +325,10 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
       // If this is the first element of the list, set the list's child to point
       // to it.
       tok.child = p.tokenidx - 1;
-      json_setchild(arr, p.tokenidx - 2, p.tokenidx - 1);
+      json_setchild(arr, array_tokenidx, curr_tokenidx);
     } else {
       // Otherwise set the previous element's next pointer to point to it.
-      json_setnext(arr, p.tokenidx - 2, p.tokenidx - 1);
+      json_setnext(arr, prev_tokenidx, curr_tokenidx);
     }
 
     // Skip whitespace.
@@ -337,8 +339,10 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
     }
   }
 
-  json_setend(arr, array_token_index, p.textidx);
-  // Don't forget to return parser state!
+  // Set the end of the array token to point to the closing bracket, then move
+  // it up.
+  json_setend(arr, array_tokenidx, p.textidx);
+  p.textidx++;
   return p;
 }
 
@@ -401,7 +405,7 @@ void json_print(struct json_token *arr, size_t n)
 {
   size_t i;
   for (i = 0; i < n; i++) {
-    printf("%s:\tidx%04lu-%04lu,\tchild=%lu,\tnext=%lu\n",
+    printf("%d: % 6s\tidx%04lu-%04lu,\tchild=%lu,\tnext=%lu\n", i,
            json_type_str[arr[i].type], arr[i].start, arr[i].end, arr[i].child,
            arr[i].next);
   }
