@@ -405,7 +405,7 @@ void json_print(struct json_token *arr, size_t n)
 {
   size_t i;
   for (i = 0; i < n; i++) {
-    printf("%d: % 6s\tidx%04lu-%04lu,\tchild=%lu,\tnext=%lu\n", i,
+    printf("%d: % 6s\t%04lu-%04lu,\tchild=%lu,\tnext=%lu\n", i,
            json_type_str[arr[i].type], arr[i].start, arr[i].end, arr[i].child,
            arr[i].next);
   }
