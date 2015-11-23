@@ -324,7 +324,7 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
     if (tok.child == 0) {
       // If this is the first element of the list, set the list's child to point
       // to it.
-      tok.child = p.tokenidx - 1;
+      tok.child = curr_tokenidx;
       json_setchild(arr, array_tokenidx, curr_tokenidx);
     } else {
       // Otherwise set the previous element's next pointer to point to it.
@@ -347,6 +347,72 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
 }
 
 /**
+   @brief Parse an object.
+   @param text The text we're parsing.
+   @param arr The token buffer.
+   @param maxtoken The length of the token buffer.
+   @param p The parser state.
+   @returns Parser state after parsing the array.
+ */
+static struct json_parser json_parse_object(char *text, struct json_token *arr,
+                                            size_t maxtoken, struct json_parser p)
+{
+  (void) maxtoken; //unused
+  size_t object_tokenidx = p.tokenidx, prev_keyidx, curr_keyidx;
+  struct json_token tok = {
+    .type  = JSON_OBJECT,
+    .start = p.textidx,
+    .end   = 0,
+    .child = 0,
+    .next  = 0,
+  };
+  json_settoken(arr, tok, p);
+
+  // current char is {, so we need to go past it.
+  p.textidx++;
+  p.tokenidx++;
+
+  // Skip through whitespace.
+  p = json_skip_whitespace(text, p);
+  while (text[p.textidx] != '}') {
+    // Parse a string (key) and value.
+    prev_keyidx = curr_keyidx;
+    curr_keyidx = p.tokenidx;
+    p = json_parse_string(text, arr, maxtoken, p);
+    p = json_skip_whitespace(text, p);
+    assert(text[p.textidx] == ':');  // TODO: replace with real error handling
+    p.textidx++;
+    p = json_parse_rec(text, arr, maxtoken, p);
+
+    // Now set some bookkeeping of previous values.
+    if (tok.child == 0) {
+      // If this is the first element of the list, set the list's child to point
+      // to it.
+      tok.child = curr_keyidx;
+      json_setchild(arr, object_tokenidx, curr_keyidx);
+    } else {
+      // Otherwise set the previous element's next pointer to point to it.
+      json_setnext(arr, prev_keyidx, curr_keyidx);
+    }
+    // Set the key's child pointer to point at its value.  Just cause we can.
+    json_setchild(arr, curr_keyidx, curr_keyidx + 1);
+
+    // Skip whitespace.
+    p = json_skip_whitespace(text, p);
+    if (text[p.textidx] == ',') {
+      p.textidx++;
+      p = json_skip_whitespace(text, p);
+    }
+  }
+
+  // Set the end of the array token to point to the closing bracket, then move
+  // it up.
+  json_setend(arr, object_tokenidx, p.textidx);
+  p.textidx++;
+  return p;
+}
+
+/**
    @brief Parse any JSON value.
    @param text The text we're parsing.
    @param arr The token buffer.
@@ -361,8 +427,8 @@ static struct json_parser json_parse_rec(char *text, struct json_token *arr,
   p = json_skip_whitespace(text, p);
 
   switch (text[p.textidx]) {
-    //  case '{':
-    //    return json_parse_object(text, arr, maxtoken, p);
+  case '{':
+    return json_parse_object(text, arr, maxtoken, p);
   case '[':
     return json_parse_array(text, arr, maxtoken, p);
   case '"':
@@ -405,7 +471,7 @@ void json_print(struct json_token *arr, size_t n)
 {
   size_t i;
   for (i = 0; i < n; i++) {
-    printf("%d: % 6s\t%04lu-%04lu,\tchild=%lu,\tnext=%lu\n", i,
+    printf("%03lu: %6s\t%04lu-%04lu,\tchild=%lu,\tnext=%lu\n", i,
            json_type_str[arr[i].type], arr[i].start, arr[i].end, arr[i].child,
            arr[i].next);
   }
