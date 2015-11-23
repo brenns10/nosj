@@ -352,7 +352,7 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
    @param arr The token buffer.
    @param maxtoken The length of the token buffer.
    @param p The parser state.
-   @returns Parser state after parsing the array.
+   @returns Parser state after parsing the object.
  */
 static struct json_parser json_parse_object(char *text, struct json_token *arr,
                                             size_t maxtoken, struct json_parser p)
