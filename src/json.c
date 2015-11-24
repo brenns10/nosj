@@ -412,6 +412,157 @@ static struct json_parser json_parse_object(char *text, struct json_token *arr,
   return p;
 }
 
+char *parse_number_state[] = {
+  "START", "MINUS", "ZERO", "DIGIT", "DECIMAL", "DECIMAL_ACCEPT", "EXPONENT",
+  "EXPONENT_DIGIT", "EXPONENT_DIGIT_ACCEPT", "END"
+};
+
+/**
+   @brief Parse a string number.
+   @param text The text we're parsing.
+   @param arr The token buffer.
+   @param maxtoken The length of the token buffer.
+   @param p The parser state.
+   @returns Parser state after parsing the number.
+ */
+static struct json_parser json_parse_number(char *text, struct json_token *arr,
+                                            size_t maxtoken, struct json_parser p)
+{
+  (void) maxtoken; //unused
+  struct json_token tok = {
+    .type  = JSON_NUMBER,
+    .start = p.textidx,
+    .end   = 0,
+    .child = 0,
+    .next  = 0
+  };
+  enum state {
+    START, MINUS, ZERO, DIGIT, DECIMAL, DECIMAL_ACCEPT, EXPONENT,
+    EXPONENT_DIGIT, EXPONENT_DIGIT_ACCEPT, END
+  } state = START;
+
+  /*
+    This function is completely described by this FSM.  States marked by
+    asterisk are accepting.  Unexpected input at accepting states ends the
+    number, and unexpected input at rejecting states causes an error.  This
+    state machine is designed to accept any input given by the diagram in the
+    ECMA JSON spec.
+
+                         -----START-----
+                        /       | (-)   \
+                       /        v        \
+                   (0) | +----MINUS----+ | (1-9)
+                       v v (0)   (1-9) v v
+                    *ZERO*            *DIGIT*--------
+                     |  \ (.)       (.) / |-\ (0-9)  \
+                     |   --->DECIMAL<---              \
+                     |          |                      \
+                     |          v (0-9)  /----\ (0-9)  |
+                     |   *DECIMAL_ACCEPT* ----/        |
+                     |          |                     /
+                     |(e,E)     v (e,E)   (e,E)      /
+                     +-----> EXPONENT <-------------
+                           /        \
+                      (+,-)v        v (0-9)
+              EXPONENT_DIGIT        *EXPONENT_DIGIT_ACCEPT*
+                          \-----------/         \    /(0-9)
+                                 (0-9)           \--/
+   */
+
+  //printf("input: %s\n", text + p.textidx);
+  while (state != END) {
+    char c = text[p.textidx];
+    //printf("state: %s\n", parse_number_state[state]);
+    switch (state) {
+    case START:
+      if (c == '0') {
+        state = ZERO;
+      } else if (c == '-') {
+        state = MINUS;
+      } else if ('1' <= c && c <= '9') {
+        state = DIGIT;
+      } else {
+        assert(false); // ERROR
+      }
+      break;
+    case MINUS:
+      if (c == '0') {
+        state = ZERO;
+      } else if ('1' <= c && c <= '9') {
+        state = DIGIT;
+      } else {
+        assert(false); // ERROR
+      }
+      break;
+    case ZERO:
+      if (c == '.') {
+        state = DECIMAL;
+      } else if (c == 'e' || c == 'E') {
+        state = EXPONENT;
+      } else {
+        state = END;
+      }
+      break;
+    case DIGIT:
+      if (c == '.') {
+        state = DECIMAL;
+      } else if (c == 'e' || c == 'E') {
+        state = EXPONENT;
+      } else if ('0' <= c && c <= '9') {
+        state = DIGIT;
+      } else {
+        state = END;
+      }
+      break;
+    case DECIMAL:
+      if ('0' <= c && c <= '9') {
+        state = DECIMAL_ACCEPT;
+      } else {
+        assert(false); // ERROR
+      }
+      break;
+    case DECIMAL_ACCEPT:
+      if ('0' <= c && c <= '9') {
+        state = DECIMAL_ACCEPT;
+      } else if (c == 'e' || c == 'E') {
+        state = EXPONENT;
+      } else {
+        state = END;
+      }
+      break;
+    case EXPONENT:
+      if (c == '+' || c == '-') {
+        state = EXPONENT_DIGIT;
+      } else if ('0' <= c && c <= '9') {
+        state = EXPONENT_DIGIT_ACCEPT;
+      } else {
+        assert(false);
+      }
+      break;
+    case EXPONENT_DIGIT:
+      if ('0' <= c && c <= '9') {
+        state = EXPONENT_DIGIT_ACCEPT;
+      } else {
+        assert(false);
+      }
+      break;
+    case EXPONENT_DIGIT_ACCEPT:
+      if ('0' <= c && c <= '9') {
+        state = EXPONENT_DIGIT_ACCEPT;
+      } else {
+        state = END;
+      }
+      break;
+    }
+    p.textidx++;
+  }
+
+  tok.end = p.textidx - 1;
+  json_settoken(arr, tok, p);
+  p.tokenidx++;
+  return p;
+}
+
 /**
    @brief Parse any JSON value.
    @param text The text we're parsing.
@@ -441,9 +592,9 @@ static struct json_parser json_parse_rec(char *text, struct json_token *arr,
     return json_parse_null(text, arr, maxtoken, p);
   default:
     if (json_isnumber(text[p.textidx])) {
-      //return json_parse_number(text, arr, maxtoken, p);
+      return json_parse_number(text, arr, maxtoken, p);
     } else {
-      // error!
+      assert(false);
     }
   }
 }
