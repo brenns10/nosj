@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "libstephen/str.h"
 #include "json.h"
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
   FILE *f;
   char *text;
   struct json_token *tokens = NULL;
-  size_t amount = 1000;
+  struct json_parser p;
 
   if (argc < 2 || strcmp(argv[1], "-") == 0) {
     f = stdin;
@@ -33,12 +34,10 @@ int main(int argc, char *argv[])
   }
 
   text = read_file(f);
-  amount = json_parse(text, tokens, amount);
-  printf("amount: %lu\n", amount);
-  tokens = calloc(amount, sizeof(struct json_token));
-  printf("tokens: %p\n", tokens);
-  json_parse(text, tokens, amount);
-  json_print(tokens, amount);
+  p = json_parse(text, tokens, 0);
+  tokens = calloc(p.tokenidx, sizeof(struct json_token));
+  p = json_parse(text, tokens, p.tokenidx);
+  json_print(tokens, p.tokenidx);
   free(text);
   free(tokens);
   return 0;

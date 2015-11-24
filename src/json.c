@@ -26,24 +26,6 @@ static struct json_parser json_parse_rec(char *text, struct json_token *arr,
                                          size_t maxtoken, struct json_parser p);
 
 /**
-   @brief Data structure that contains parser state.
-
-   We pass and return copies of this struct throughout this parser.  I like this
-   just because it makes things a bit more transparent, and a little less
-   "mystery pointer operations".
- */
-struct json_parser {
-  /**
-     @brief The index of the next "unhandled" character.
-   */
-  size_t textidx;
-  /**
-     @brief The index of the next slot to stick a token in our array.
-   */
-  size_t tokenidx;
-};
-
-/**
    @brief Return true if c is a whitespace character according to the JSON spec.
  */
 static bool json_isspace(char c)
@@ -609,13 +591,15 @@ char *json_type_str[] = {
   "null"
 };
 
-size_t json_parse(char *text, struct json_token *arr, size_t maxtoken)
+struct json_parser json_parse(char *text, struct json_token *arr, size_t maxtoken)
 {
-  struct json_parser parser;
-  parser.textidx = 0;
-  parser.tokenidx = 0;
-  parser = json_parse_rec(text, arr, maxtoken, parser);
-  return parser.tokenidx;
+  struct json_parser parser = {
+    .textidx = 0,
+    .tokenidx = 0,
+    .error = JSONERR_NO_ERROR,
+    .errorarg = 0
+  };
+  return json_parse_rec(text, arr, maxtoken, parser);
 }
 
 void json_print(struct json_token *arr, size_t n)

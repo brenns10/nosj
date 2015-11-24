@@ -34,6 +34,36 @@ struct json_token {
   size_t next;
 };
 
+enum json_error {
+  JSONERR_NO_ERROR,
+};
+
+/**
+   @brief Data structure that contains parser state.
+
+   We pass and return copies of this struct throughout this parser.  I like this
+   just because it makes things a bit more transparent, and a little less
+   "mystery pointer operations".
+ */
+struct json_parser {
+  /**
+     @brief The index of the next "unhandled" character.
+   */
+  size_t textidx;
+  /**
+     @brief The index of the next slot to stick a token in our array.
+   */
+  size_t tokenidx;
+  /**
+     @brief Error code from the parser, if any.
+   */
+  enum json_error error;
+  /**
+     @brief Argument to the error code.
+   */
+  size_t errorarg;
+};
+
 /**
    @brief Array mapping JSON type to a string representation of that type.
  */
@@ -52,9 +82,9 @@ char *json_type_str[JSON_NULL+1];
    @param json The text buffer to parse.
    @param arr A buffer to put the tokens in.  May be null.
    @param n The number of slots in the arr buffer.
-   @returns The number of tokens parsed.
+   @returns A parser result.
  */
-size_t json_parse(char *json, struct json_token *arr, size_t n);
+struct json_parser json_parse(char *json, struct json_token *arr, size_t n);
 
 /**
    @brief Print a list of JSON tokens.
