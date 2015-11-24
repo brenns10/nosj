@@ -16,6 +16,9 @@
 #ifndef SMB_JSON
 #define SMB_JSON
 
+#include <stddef.h>
+#include <stdio.h>
+
 enum json_type {
   JSON_OBJECT=0,
   JSON_ARRAY,

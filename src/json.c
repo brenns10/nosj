@@ -237,13 +237,7 @@ static struct json_parser json_parse_string(char *text, struct json_token *arr,
   while (state != END) {
     switch (state) {
     case START:
-      if (text[p.textidx] == '"') {
-        state = INSTRING;
-      } else {
-        state = END;
-        p.error = JSONERR_UNEXPECTED_TOKEN;
-        p.textidx--;
-      }
+      state = INSTRING;
       break;
     case INSTRING:
       if (text[p.textidx] == '\\') {
@@ -497,7 +491,6 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
         state = DIGIT;
       } else {
         p.error = JSONERR_INVALID_NUMBER;
-        p.textidx--;
         state = END; // ERROR
       }
       break;
@@ -508,7 +501,6 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
         state = DIGIT;
       } else {
         p.error = JSONERR_INVALID_NUMBER;
-        p.textidx--;
         state = END; // ERROR
       }
       break;
@@ -537,7 +529,6 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
         state = DECIMAL_ACCEPT;
       } else {
         p.error = JSONERR_INVALID_NUMBER;
-        p.textidx--;
         state = END; // ERROR
       }
       break;
@@ -557,7 +548,6 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
         state = EXPONENT_DIGIT_ACCEPT;
       } else {
         p.error = JSONERR_INVALID_NUMBER;
-        p.textidx--;
         state = END; // ERROR
       }
       break;
@@ -566,7 +556,6 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
         state = EXPONENT_DIGIT_ACCEPT;
       } else {
         p.error = JSONERR_INVALID_NUMBER;
-        p.textidx--;
         state = END; // ERROR
       }
       break;
@@ -584,7 +573,8 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
     p.textidx++;
   }
 
-  tok.end = p.textidx - 1;
+  p.textidx--; // the character we failed on
+  tok.end = p.textidx - 1; // the previous character
   json_settoken(arr, tok, p, maxtoken);
   p.tokenidx++;
   return p;

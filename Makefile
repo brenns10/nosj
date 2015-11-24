@@ -54,7 +54,7 @@ PROJECT_MAIN=main.c
 # TARGET - the name you want your target to have (bin/release/[whatgoeshere])
 TARGET=main
 # TEST_TARGET - the name you want your tests to have (probably test)
-TEST_TARGET=
+TEST_TARGET=test
 # STATIC_LIBS - path to any static libs you need.  you may need to make a rule
 # to generate them from subprojects.  Leave this blank if you don't have any.
 STATIC_LIBS=libstephen/bin/release/libstephen.a
