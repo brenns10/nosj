@@ -70,9 +70,9 @@ static bool json_isnumber(char c)
    @param p The parser state.
  */
 static void json_settoken(struct json_token *arr, struct json_token tok,
-                          struct json_parser p)
+                          struct json_parser p, size_t maxtoken)
 {
-  if (arr == NULL) {
+  if (arr == NULL || p.tokenidx >= maxtoken) {
     return;
   }
   arr[p.tokenidx] = tok;
@@ -87,9 +87,10 @@ static void json_settoken(struct json_token *arr, struct json_token tok,
    @param tokidx The index of the token to update.
    @param next New value for next.
  */
-static void json_setnext(struct json_token *arr, size_t tokidx, size_t next)
+static void json_setnext(struct json_token *arr, size_t tokidx, size_t next,
+                         size_t maxtoken)
 {
-  if (arr == NULL) {
+  if (arr == NULL || tokidx >= maxtoken) {
     return;
   }
   struct json_token tok = arr[tokidx];
@@ -106,9 +107,10 @@ static void json_setnext(struct json_token *arr, size_t tokidx, size_t next)
    @param tokidx The index of the token to update.
    @param child New value for child.
  */
-static void json_setchild(struct json_token *arr, size_t tokidx, size_t child)
+static void json_setchild(struct json_token *arr, size_t tokidx, size_t child,
+                          size_t maxtoken)
 {
-  if (arr == NULL) {
+  if (arr == NULL || tokidx >= maxtoken) {
     return;
   }
   struct json_token tok = arr[tokidx];
@@ -125,9 +127,10 @@ static void json_setchild(struct json_token *arr, size_t tokidx, size_t child)
    @param tokidx The index of the token to update.
    @param end New value for end.
  */
-static void json_setend(struct json_token *arr, size_t tokidx, size_t end)
+static void json_setend(struct json_token *arr, size_t tokidx, size_t end,
+                        size_t maxtoken)
 {
-  if (arr == NULL) {
+  if (arr == NULL || tokidx >= maxtoken) {
     return;
   }
   struct json_token tok = arr[tokidx];
@@ -160,7 +163,6 @@ static struct json_parser json_skip_whitespace(char *text, struct json_parser p)
 static struct json_parser json_parse_true(char *text, struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
-  (void) maxtoken; //unused
   struct json_token tok;
   tok.type = JSON_TRUE;
   tok.start = p.textidx;
@@ -168,7 +170,7 @@ static struct json_parser json_parse_true(char *text, struct json_token *arr,
   tok.child = 0;
   tok.next = 0;
   if (strncmp("true", text + p.textidx, 4) == 0) {
-    json_settoken(arr, tok, p);
+    json_settoken(arr, tok, p, maxtoken);
     p.textidx += 4;
     p.tokenidx += 1;
     return p;
@@ -197,7 +199,7 @@ static struct json_parser json_parse_false(char *text, struct json_token *arr,
   tok.child = 0;
   tok.next = 0;
   if (strncmp("false", text + p.textidx, 4) == 0) {
-    json_settoken(arr, tok, p);
+    json_settoken(arr, tok, p, maxtoken);
     p.textidx += 5;
     p.tokenidx += 1;
     return p;
@@ -218,7 +220,6 @@ static struct json_parser json_parse_false(char *text, struct json_token *arr,
 static struct json_parser json_parse_null(char *text, struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
-  (void) maxtoken; //unused
   struct json_token tok;
   tok.type = JSON_NULL;
   tok.start = p.textidx;
@@ -226,7 +227,7 @@ static struct json_parser json_parse_null(char *text, struct json_token *arr,
   tok.child = 0;
   tok.next = 0;
   if (strncmp("null", text + p.textidx, 4) == 0) {
-    json_settoken(arr, tok, p);
+    json_settoken(arr, tok, p, maxtoken);
     p.textidx += 4;
     p.tokenidx += 1;
     return p;
@@ -247,7 +248,6 @@ static struct json_parser json_parse_null(char *text, struct json_token *arr,
 static struct json_parser json_parse_string(char *text, struct json_token *arr,
                                             size_t maxtoken, struct json_parser p)
 {
-  (void) maxtoken; //unused
   struct json_token tok;
   tok.type = JSON_STRING;
   tok.start = p.textidx;
@@ -281,7 +281,7 @@ static struct json_parser json_parse_string(char *text, struct json_token *arr,
   tok.end = p.textidx - 1;
   tok.child = 0;
   tok.next = 0;
-  json_settoken(arr, tok, p);
+  json_settoken(arr, tok, p, maxtoken);
   p.tokenidx++;
   return p;
 }
@@ -297,7 +297,6 @@ static struct json_parser json_parse_string(char *text, struct json_token *arr,
 static struct json_parser json_parse_array(char *text, struct json_token *arr,
                                            size_t maxtoken, struct json_parser p)
 {
-  (void) maxtoken; //unused
   size_t array_tokenidx = p.tokenidx, prev_tokenidx, curr_tokenidx;
   struct json_token tok = {
     .type = JSON_ARRAY,
@@ -306,7 +305,7 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
     .child = 0,
     .next = 0,
   };
-  json_settoken(arr, tok, p);
+  json_settoken(arr, tok, p, maxtoken);
 
   // current char is [, so we need to go past it.
   p.textidx++;
@@ -325,10 +324,10 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
       // If this is the first element of the list, set the list's child to point
       // to it.
       tok.child = curr_tokenidx;
-      json_setchild(arr, array_tokenidx, curr_tokenidx);
+      json_setchild(arr, array_tokenidx, curr_tokenidx, maxtoken);
     } else {
       // Otherwise set the previous element's next pointer to point to it.
-      json_setnext(arr, prev_tokenidx, curr_tokenidx);
+      json_setnext(arr, prev_tokenidx, curr_tokenidx, maxtoken);
     }
 
     // Skip whitespace.
@@ -341,7 +340,7 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
 
   // Set the end of the array token to point to the closing bracket, then move
   // it up.
-  json_setend(arr, array_tokenidx, p.textidx);
+  json_setend(arr, array_tokenidx, p.textidx, maxtoken);
   p.textidx++;
   return p;
 }
@@ -357,7 +356,6 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
 static struct json_parser json_parse_object(char *text, struct json_token *arr,
                                             size_t maxtoken, struct json_parser p)
 {
-  (void) maxtoken; //unused
   size_t object_tokenidx = p.tokenidx, prev_keyidx, curr_keyidx;
   struct json_token tok = {
     .type  = JSON_OBJECT,
@@ -366,7 +364,7 @@ static struct json_parser json_parse_object(char *text, struct json_token *arr,
     .child = 0,
     .next  = 0,
   };
-  json_settoken(arr, tok, p);
+  json_settoken(arr, tok, p, maxtoken);
 
   // current char is {, so we need to go past it.
   p.textidx++;
@@ -389,13 +387,13 @@ static struct json_parser json_parse_object(char *text, struct json_token *arr,
       // If this is the first element of the list, set the list's child to point
       // to it.
       tok.child = curr_keyidx;
-      json_setchild(arr, object_tokenidx, curr_keyidx);
+      json_setchild(arr, object_tokenidx, curr_keyidx, maxtoken);
     } else {
       // Otherwise set the previous element's next pointer to point to it.
-      json_setnext(arr, prev_keyidx, curr_keyidx);
+      json_setnext(arr, prev_keyidx, curr_keyidx, maxtoken);
     }
     // Set the key's child pointer to point at its value.  Just cause we can.
-    json_setchild(arr, curr_keyidx, curr_keyidx + 1);
+    json_setchild(arr, curr_keyidx, curr_keyidx + 1, maxtoken);
 
     // Skip whitespace.
     p = json_skip_whitespace(text, p);
@@ -407,7 +405,7 @@ static struct json_parser json_parse_object(char *text, struct json_token *arr,
 
   // Set the end of the array token to point to the closing bracket, then move
   // it up.
-  json_setend(arr, object_tokenidx, p.textidx);
+  json_setend(arr, object_tokenidx, p.textidx, maxtoken);
   p.textidx++;
   return p;
 }
@@ -428,7 +426,6 @@ char *parse_number_state[] = {
 static struct json_parser json_parse_number(char *text, struct json_token *arr,
                                             size_t maxtoken, struct json_parser p)
 {
-  (void) maxtoken; //unused
   struct json_token tok = {
     .type  = JSON_NUMBER,
     .start = p.textidx,
@@ -553,12 +550,15 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
         state = END;
       }
       break;
+    case END:
+      // never happens
+      assert(false);
     }
     p.textidx++;
   }
 
   tok.end = p.textidx - 1;
-  json_settoken(arr, tok, p);
+  json_settoken(arr, tok, p, maxtoken);
   p.tokenidx++;
   return p;
 }
