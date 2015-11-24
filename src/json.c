@@ -128,7 +128,7 @@ static void json_setend(struct json_token *arr, size_t tokidx, size_t end,
  */
 static struct json_parser json_skip_whitespace(char *text, struct json_parser p)
 {
-  while (json_isspace(text[p.textidx])) {
+  while (json_isspace(text[p.textidx]) && text[p.textidx] != '\0') {
     p.textidx++;
   }
   return p;
@@ -157,7 +157,7 @@ static struct json_parser json_parse_true(char *text, struct json_token *arr,
     p.tokenidx += 1;
     return p;
   } else {
-    // ERROR
+    p.error = JSONERR_UNEXPECTED_TOKEN;
     return p;
   }
 }
@@ -186,7 +186,7 @@ static struct json_parser json_parse_false(char *text, struct json_token *arr,
     p.tokenidx += 1;
     return p;
   } else {
-    // ERROR
+    p.error = JSONERR_UNEXPECTED_TOKEN;
     return p;
   }
 }
@@ -214,7 +214,7 @@ static struct json_parser json_parse_null(char *text, struct json_token *arr,
     p.tokenidx += 1;
     return p;
   } else {
-    // ERROR
+    p.error = JSONERR_UNEXPECTED_TOKEN;
     return p;
   }
 }
@@ -240,7 +240,9 @@ static struct json_parser json_parse_string(char *text, struct json_token *arr,
       if (text[p.textidx] == '"') {
         state = INSTRING;
       } else {
-        //error
+        state = END;
+        p.error = JSONERR_UNEXPECTED_TOKEN;
+        p.textidx--;
       }
       break;
     case INSTRING:
@@ -248,9 +250,18 @@ static struct json_parser json_parse_string(char *text, struct json_token *arr,
         state = ESCAPE;
       } else if (text[p.textidx] == '"') {
         state = END;
+      } else if (text[p.textidx] == '\0') {
+        state = END;
+        p.error = JSONERR_PREMATURE_EOF;
+        p.textidx--;
       }
       break;
     case ESCAPE:
+      if (text[p.textidx] == '\0') {
+        state = END;
+        p.error = JSONERR_PREMATURE_EOF;
+        p.textidx--;
+      }
       state = INSTRING;
       break;
     case END:
@@ -296,10 +307,18 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
   // Skip through whitespace.
   p = json_skip_whitespace(text, p);
   while (text[p.textidx] != ']') {
+
+    if (text[p.textidx] == '\0') {
+      p.error = JSONERR_PREMATURE_EOF;
+      return p;
+    }
     // Parse a value.
     prev_tokenidx = curr_tokenidx;
     curr_tokenidx = p.tokenidx;
     p = json_parse_rec(text, arr, maxtoken, p);
+    if (p.error != JSONERR_NO_ERROR) {
+      return p;
+    }
 
     // Now set some bookkeeping of previous values.
     if (tok.child == 0) {
@@ -355,14 +374,30 @@ static struct json_parser json_parse_object(char *text, struct json_token *arr,
   // Skip through whitespace.
   p = json_skip_whitespace(text, p);
   while (text[p.textidx] != '}') {
+    // Make sure the string didn't end.
+    if (text[p.textidx] == '\0') {
+      p.error = JSONERR_PREMATURE_EOF;
+      return p;
+    }
+
     // Parse a string (key) and value.
     prev_keyidx = curr_keyidx;
     curr_keyidx = p.tokenidx;
     p = json_parse_string(text, arr, maxtoken, p);
+    if (p.error != JSONERR_NO_ERROR) {
+      return p;
+    }
     p = json_skip_whitespace(text, p);
-    assert(text[p.textidx] == ':');  // TODO: replace with real error handling
+    if (text[p.textidx] != ':') {
+      p.error = JSONERR_EXPECTED_TOKEN;
+      p.errorarg = ':';
+      return p;
+    }
     p.textidx++;
     p = json_parse_rec(text, arr, maxtoken, p);
+    if (p.error != JSONERR_NO_ERROR) {
+      return p;
+    }
 
     // Now set some bookkeeping of previous values.
     if (tok.child == 0) {
@@ -461,7 +496,9 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
       } else if ('1' <= c && c <= '9') {
         state = DIGIT;
       } else {
-        assert(false); // ERROR
+        p.error = JSONERR_INVALID_NUMBER;
+        p.textidx--;
+        state = END; // ERROR
       }
       break;
     case MINUS:
@@ -470,7 +507,9 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
       } else if ('1' <= c && c <= '9') {
         state = DIGIT;
       } else {
-        assert(false); // ERROR
+        p.error = JSONERR_INVALID_NUMBER;
+        p.textidx--;
+        state = END; // ERROR
       }
       break;
     case ZERO:
@@ -497,7 +536,9 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
       if ('0' <= c && c <= '9') {
         state = DECIMAL_ACCEPT;
       } else {
-        assert(false); // ERROR
+        p.error = JSONERR_INVALID_NUMBER;
+        p.textidx--;
+        state = END; // ERROR
       }
       break;
     case DECIMAL_ACCEPT:
@@ -515,14 +556,18 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
       } else if ('0' <= c && c <= '9') {
         state = EXPONENT_DIGIT_ACCEPT;
       } else {
-        assert(false);
+        p.error = JSONERR_INVALID_NUMBER;
+        p.textidx--;
+        state = END; // ERROR
       }
       break;
     case EXPONENT_DIGIT:
       if ('0' <= c && c <= '9') {
         state = EXPONENT_DIGIT_ACCEPT;
       } else {
-        assert(false);
+        p.error = JSONERR_INVALID_NUMBER;
+        p.textidx--;
+        state = END; // ERROR
       }
       break;
     case EXPONENT_DIGIT_ACCEPT:
@@ -556,8 +601,12 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
 static struct json_parser json_parse_rec(char *text, struct json_token *arr,
                                          size_t maxtoken, struct json_parser p)
 {
-  (void) maxtoken; //unused
   p = json_skip_whitespace(text, p);
+
+  if (text[p.textidx] == '\0') {
+    p.error = JSONERR_PREMATURE_EOF;
+    return p;
+  }
 
   switch (text[p.textidx]) {
   case '{':
@@ -576,7 +625,8 @@ static struct json_parser json_parse_rec(char *text, struct json_token *arr,
     if (json_isnumber(text[p.textidx])) {
       return json_parse_number(text, arr, maxtoken, p);
     } else {
-      assert(false);
+      p.error = JSONERR_UNEXPECTED_TOKEN;
+      return p;
     }
   }
 }
@@ -589,6 +639,14 @@ char *json_type_str[] = {
   "true",
   "false",
   "null"
+};
+
+char *json_error_str[] = {
+  "no error",
+  "encountered an invalid numeric literal",
+  "string ended prematurely",
+  "unexpected token",
+  "expected token '%c'",
 };
 
 struct json_parser json_parse(char *text, struct json_token *arr, size_t maxtoken)
@@ -610,4 +668,11 @@ void json_print(struct json_token *arr, size_t n)
            json_type_str[arr[i].type], arr[i].start, arr[i].end, arr[i].child,
            arr[i].next);
   }
+}
+
+void json_print_error(FILE *f, struct json_parser p)
+{
+  fprintf(f, "at character %lu: ", p.textidx);
+  fprintf(f, json_error_str[p.error], p.errorarg);
+  fprintf(f, "\n");
 }

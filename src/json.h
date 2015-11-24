@@ -36,6 +36,10 @@ struct json_token {
 
 enum json_error {
   JSONERR_NO_ERROR,
+  JSONERR_INVALID_NUMBER,
+  JSONERR_PREMATURE_EOF,
+  JSONERR_UNEXPECTED_TOKEN,
+  JSONERR_EXPECTED_TOKEN,
 };
 
 /**
@@ -70,6 +74,11 @@ struct json_parser {
 char *json_type_str[JSON_NULL+1];
 
 /**
+   @brief Array mapping error to printf format string.
+ */
+char *json_error_str[JSONERR_EXPECTED_TOKEN+1];
+
+/**
    @brief Parse JSON into tokens.
 
    This function simply tokenizes JSON.  That is, it identifies the location of
@@ -97,5 +106,12 @@ struct json_parser json_parse(char *json, struct json_token *arr, size_t n);
    @param n The number of tokens in the buffer.
  */
 void json_print(struct json_token *arr, size_t n);
+
+/**
+   @brief Print out the error message for a parser error.
+   @param f File to print to.
+   @param p Parser return struct.
+ */
+void json_print_error(FILE *f, struct json_parser p);
 
 #endif // SMB_JSON
