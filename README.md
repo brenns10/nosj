@@ -44,7 +44,7 @@ Status
     - [x] Arrays
     - [x] Objects
     - [x] Numbers
-    - [ ] True/False/Null
+    - [x] True/False/Null
 - [ ] Tests for the parsed tokens (i.e. relationships, indices, etc).
 - [ ] Loading JSON values into memory for inspection.
     - [ ] Simple values (True/False/Null/Numbers)

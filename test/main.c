@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
   test_parse_strings();
   test_parse_numbers();
-  // test_parse_atomics();
+  test_parse_atomics();
   test_parse_arrays();
   test_parse_objects();
 

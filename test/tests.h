@@ -18,7 +18,7 @@
 
 void test_parse_strings(void);
 void test_parse_numbers(void);
-//void test_parse_atomics(void);
+void test_parse_atomics(void);
 void test_parse_arrays(void);
 void test_parse_objects(void);
 
