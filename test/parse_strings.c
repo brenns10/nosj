@@ -23,7 +23,7 @@ static int test_empty_string(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 2);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -33,7 +33,7 @@ static int test_single_char(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 3);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -51,7 +51,7 @@ static int test_escape(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 12);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 

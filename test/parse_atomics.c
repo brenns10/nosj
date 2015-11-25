@@ -24,7 +24,7 @@ static int test_parse_true(void)
   struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 4);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   TEST_ASSERT(tokens[0].type == JSON_TRUE);
   TEST_ASSERT(tokens[0].start == 0);
   TEST_ASSERT(tokens[0].end == 3);
@@ -40,7 +40,7 @@ static int test_parse_false(void)
   struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 5);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   TEST_ASSERT(tokens[0].type == JSON_FALSE);
   TEST_ASSERT(tokens[0].start == 0);
   TEST_ASSERT(tokens[0].end == 4);
@@ -56,7 +56,7 @@ static int test_parse_null(void)
   struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 4);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   TEST_ASSERT(tokens[0].type == JSON_NULL);
   TEST_ASSERT(tokens[0].start == 0);
   TEST_ASSERT(tokens[0].end == 3);

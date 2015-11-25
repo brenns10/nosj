@@ -22,7 +22,7 @@ static int test_single_digit(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 1);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -32,7 +32,7 @@ static int test_multiple_digit(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 2);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -60,7 +60,7 @@ static int test_decimal(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 3);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -70,7 +70,7 @@ static int test_zero_decimal(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 3);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -80,7 +80,7 @@ static int test_negative_sign(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 2);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -90,7 +90,7 @@ static int test_exponent_upper(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 3);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -100,7 +100,7 @@ static int test_exponent_lower(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 3);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -110,7 +110,7 @@ static int test_exponent_plus(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 4);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -120,7 +120,7 @@ static int test_exponent_minus(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 4);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -130,7 +130,7 @@ static int test_sign_decimal_exponent(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 7);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -172,7 +172,7 @@ static int test_negative_zero(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 2);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -182,7 +182,7 @@ static int test_zero_exp(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 3);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -192,7 +192,7 @@ static int test_double_digit_decimal(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 4);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
@@ -202,7 +202,7 @@ static int test_double_digit_exp(void)
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 4);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
   return 0;
 }
 
