@@ -237,7 +237,13 @@ static struct json_parser json_parse_string(char *text, struct json_token *arr,
   while (state != END) {
     switch (state) {
     case START:
-      state = INSTRING;
+      if (text[p.textidx] == '"') {
+        state = INSTRING;
+      } else {
+        state = END;
+        p.error = JSONERR_UNEXPECTED_TOKEN;
+        p.textidx--;
+      }
       break;
     case INSTRING:
       if (text[p.textidx] == '\\') {
