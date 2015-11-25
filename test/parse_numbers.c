@@ -18,7 +18,7 @@
 
 static int test_single_digit(void)
 {
-  char *input = "0";
+  char input[] = "0";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -28,7 +28,7 @@ static int test_single_digit(void)
 
 static int test_multiple_digit(void)
 {
-  char *input = "12";
+  char input[] = "12";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -46,7 +46,7 @@ static int test_starts_with_zero(void)
     unparsed.  (TODO) In the future, I should address the way this works (would
     produce nicer error messages), but for now this is expected behavior.
    */
-  char *input = "01";
+  char input[] = "01";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -56,7 +56,7 @@ static int test_starts_with_zero(void)
 
 static int test_decimal(void)
 {
-  char *input = "1.1";
+  char input[] = "1.1";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -66,7 +66,7 @@ static int test_decimal(void)
 
 static int test_zero_decimal(void)
 {
-  char *input = "0.1";
+  char input[] = "0.1";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -76,7 +76,7 @@ static int test_zero_decimal(void)
 
 static int test_negative_sign(void)
 {
-  char *input = "-1";
+  char input[] = "-1";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -86,7 +86,7 @@ static int test_negative_sign(void)
 
 static int test_exponent_upper(void)
 {
-  char *input = "1E5";
+  char input[] = "1E5";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -96,7 +96,7 @@ static int test_exponent_upper(void)
 
 static int test_exponent_lower(void)
 {
-  char *input = "1e5";
+  char input[] = "1e5";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -106,7 +106,7 @@ static int test_exponent_lower(void)
 
 static int test_exponent_plus(void)
 {
-  char *input = "1e+5";
+  char input[] = "1e+5";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -116,7 +116,7 @@ static int test_exponent_plus(void)
 
 static int test_exponent_minus(void)
 {
-  char *input = "1e-5";
+  char input[] = "1e-5";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -126,7 +126,7 @@ static int test_exponent_minus(void)
 
 static int test_sign_decimal_exponent(void)
 {
-  char *input = "-1.5e+5";
+  char input[] = "-1.5e+5";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -136,7 +136,7 @@ static int test_sign_decimal_exponent(void)
 
 static int test_sign_alone(void)
 {
-  char *input = "-";
+  char input[] = "-";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
   return 0;
@@ -144,7 +144,7 @@ static int test_sign_alone(void)
 
 static int test_decimal_without_digits(void)
 {
-  char *input = "1.";
+  char input[] = "1.";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
   return 0;
@@ -152,7 +152,7 @@ static int test_decimal_without_digits(void)
 
 static int test_exponent_without_digits(void)
 {
-  char *input = "1e";
+  char input[] = "1e";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
   return 0;
@@ -160,7 +160,7 @@ static int test_exponent_without_digits(void)
 
 static int test_exponent_sign_without_digits(void)
 {
-  char *input = "1e+";
+  char input[] = "1e+";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
   return 0;
@@ -168,7 +168,7 @@ static int test_exponent_sign_without_digits(void)
 
 static int test_negative_zero(void)
 {
-  char *input = "-0";  // believe it or not, this is valid JSON.
+  char input[] = "-0";  // believe it or not, this is valid JSON.
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -178,7 +178,7 @@ static int test_negative_zero(void)
 
 static int test_zero_exp(void)
 {
-  char *input = "0e5";  // again, doesn't make sense, but is valid
+  char input[] = "0e5";  // again, doesn't make sense, but is valid
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -188,7 +188,7 @@ static int test_zero_exp(void)
 
 static int test_double_digit_decimal(void)
 {
-  char *input = "1.23";
+  char input[] = "1.23";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -198,7 +198,7 @@ static int test_double_digit_decimal(void)
 
 static int test_double_digit_exp(void)
 {
-  char *input = "1e23";
+  char input[] = "1e23";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);

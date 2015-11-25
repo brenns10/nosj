@@ -19,7 +19,7 @@
 
 static int test_empty_array(void)
 {
-  char *input = "[]";
+  char input[] = "[]";
   struct json_token tokens[1];
   struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -35,7 +35,7 @@ static int test_empty_array(void)
 
 static int test_single_element(void)
 {
-  char *input = "[1]";
+  char input[] = "[1]";
   size_t ntok = 2, i;
   struct json_token tokens[ntok];
   struct json_token expected[] = {
@@ -59,7 +59,7 @@ static int test_single_element(void)
 static int test_multiple_elements(void)
 {
   size_t ntok = 3, i;
-  char *input = "[1, 2]";
+  char input[] = "[1, 2]";
   struct json_token tokens[ntok];
   struct json_token expected[] = {
     {.type = JSON_ARRAY, .start = 0, .end = 5, .child = 1, .next = 0},
@@ -82,7 +82,7 @@ static int test_multiple_elements(void)
 
 static int test_extra_comma(void)
 {
-  char *input = "[1,]";
+  char input[] = "[1,]";
   size_t ntok = 2, i;
   struct json_token tokens[ntok];
   struct json_token expected[] = {
@@ -105,7 +105,7 @@ static int test_extra_comma(void)
 
 static int test_no_end(void)
 {
-  char *input = "[1,";
+  char input[] = "[1,";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
   return 0;
@@ -113,7 +113,7 @@ static int test_no_end(void)
 
 static int test_error_within_list(void)
 {
-  char *input = "[1e,";
+  char input[] = "[1e,";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
   return 0;

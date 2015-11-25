@@ -19,7 +19,7 @@
 
 static int test_parse_true(void)
 {
-  char *input = "true";
+  char input[] = "true";
   struct json_token tokens[1];
   struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -35,7 +35,7 @@ static int test_parse_true(void)
 
 static int test_parse_false(void)
 {
-  char *input = "false";
+  char input[] = "false";
   struct json_token tokens[1];
   struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -51,7 +51,7 @@ static int test_parse_false(void)
 
 static int test_parse_null(void)
 {
-  char *input = "null";
+  char input[] = "null";
   struct json_token tokens[1];
   struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -67,7 +67,7 @@ static int test_parse_null(void)
 
 static int test_parse_empty_string(void)
 {
-  char *input = "";
+  char input[] = "";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
   return 0;
@@ -75,7 +75,7 @@ static int test_parse_empty_string(void)
 
 static int test_parse_whitespace_string(void)
 {
-  char *input = " \t\r\n";
+  char input[] = " \t\r\n";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
   return 0;
@@ -83,7 +83,7 @@ static int test_parse_whitespace_string(void)
 
 static int test_parse_invalid_true(void)
 {
-  char *input = "trua";
+  char input[] = "trua";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -91,7 +91,7 @@ static int test_parse_invalid_true(void)
 
 static int test_parse_invalid_false(void)
 {
-  char *input = "flase";
+  char input[] = "flase";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -99,7 +99,7 @@ static int test_parse_invalid_false(void)
 
 static int test_parse_invalid_null(void)
 {
-  char *input = "nulL";
+  char input[] = "nulL";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;

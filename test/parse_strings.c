@@ -19,7 +19,7 @@
 
 static int test_empty_string(void)
 {
-  char *input = "\"\"";
+  char input[] = "\"\"";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -29,7 +29,7 @@ static int test_empty_string(void)
 
 static int test_single_char(void)
 {
-  char *input = "\"a\"";
+  char input[] = "\"a\"";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -39,7 +39,7 @@ static int test_single_char(void)
 
 static int test_no_end(void)
 {
-  char *input = "\"blah";
+  char input[] = "\"blah";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
   return 0;
@@ -47,7 +47,7 @@ static int test_no_end(void)
 
 static int test_escape(void)
 {
-  char *input = "\"blah\\\"blah\"";
+  char input[] = "\"blah\\\"blah\"";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
@@ -57,7 +57,7 @@ static int test_escape(void)
 
 static int test_escaped_end(void)
 {
-  char *input = "\"blah\\";
+  char input[] = "\"blah\\";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
   return 0;
