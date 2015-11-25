@@ -19,47 +19,98 @@
 
 static int test_empty_object(void)
 {
-  char *input = "{}";
-  struct json_parser p = json_parse(input, NULL, 0);
+  char input[] = "{}";
+  size_t ntok = 1;
+  struct json_token tokens[ntok];
+  struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == 2);
+  TEST_ASSERT(p.tokenidx == ntok);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
+  TEST_ASSERT(tokens[0].type == JSON_OBJECT);
+  TEST_ASSERT(tokens[0].start == 0);
+  TEST_ASSERT(tokens[0].end == 1);
+  TEST_ASSERT(tokens[0].child == 0);
+  TEST_ASSERT(tokens[0].next == 0);
   return 0;
 }
 
 static int test_single_element(void)
 {
-  char *input = "{\"a\": 1}";
-  struct json_parser p = json_parse(input, NULL, 0);
+  char input[] = "{\"a\": 1}";
+  size_t ntok = 3, i;
+  struct json_token tokens[ntok];
+  struct json_token expected[] = {
+    {.type = JSON_OBJECT, .start = 0, .end = 7, .child = 1, .next = 0},
+    {.type = JSON_STRING, .start = 1, .end = 3, .child = 2, .next = 0},
+    {.type = JSON_NUMBER, .start = 6, .end = 6, .child = 0, .next = 0},
+  };
+  struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 3);
-  TEST_ASSERT(p.textidx == 8);
+  TEST_ASSERT(p.tokenidx == ntok);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
+  for (i = 0; i < ntok; i++) {
+    TEST_ASSERT(tokens[i].type == expected[i].type);
+    TEST_ASSERT(tokens[i].start == expected[i].start);
+    TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].child == expected[i].child);
+    TEST_ASSERT(tokens[i].next == expected[i].next);
+  }
   return 0;
 }
 
 static int test_multiple_elements(void)
 {
-  char *input = "{\"a\": 1, \"b\": 2}";
-  struct json_parser p = json_parse(input, NULL, 0);
+  char input[] = "{\"a\": 1, \"b\": 2}";
+  size_t ntok = 5, i;
+  struct json_token tokens[ntok];
+  struct json_token expected[] = {
+    {.type = JSON_OBJECT, .start = 0, .end = 15, .child = 1, .next = 0},
+    {.type = JSON_STRING, .start = 1, .end = 3, .child = 2, .next = 3},
+    {.type = JSON_NUMBER, .start = 6, .end = 6, .child = 0, .next = 0},
+    {.type = JSON_STRING, .start = 9, .end = 11, .child = 4, .next = 0},
+    {.type = JSON_NUMBER, .start = 14, .end = 14, .child = 0, .next = 0},
+  };
+  struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 5);
-  TEST_ASSERT(p.textidx == 16);
+  TEST_ASSERT(p.tokenidx == ntok);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
+  for (i = 0; i < ntok; i++) {
+    TEST_ASSERT(tokens[i].type == expected[i].type);
+    TEST_ASSERT(tokens[i].start == expected[i].start);
+    TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].child == expected[i].child);
+    TEST_ASSERT(tokens[i].next == expected[i].next);
+  }
   return 0;
 }
 
 static int test_extra_comma(void)
 {
-  char *input = "{\"a\": 1,}";
-  struct json_parser p = json_parse(input, NULL, 0);
+  char input[] = "{\"a\": 1,}";
+  size_t ntok = 3, i;
+  struct json_token tokens[ntok];
+  struct json_token expected[] = {
+    {.type = JSON_OBJECT, .start = 0, .end = 8, .child = 1, .next = 0},
+    {.type = JSON_STRING, .start = 1, .end = 3, .child = 2, .next = 0},
+    {.type = JSON_NUMBER, .start = 6, .end = 6, .child = 0, .next = 0},
+  };
+  struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 3);
-  TEST_ASSERT(p.textidx == 9);
+  TEST_ASSERT(p.tokenidx == ntok);
+  TEST_ASSERT(p.textidx == sizeof(input) - 1);
+  for (i = 0; i < ntok; i++) {
+    TEST_ASSERT(tokens[i].type == expected[i].type);
+    TEST_ASSERT(tokens[i].start == expected[i].start);
+    TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].child == expected[i].child);
+    TEST_ASSERT(tokens[i].next == expected[i].next);
+  }
   return 0;
 }
 
 static int test_no_end(void)
 {
-  char *input = "{\"a\": 1,";
+  char input[] = "{\"a\": 1,";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
   return 0;
@@ -67,7 +118,7 @@ static int test_no_end(void)
 
 static int test_no_colon(void)
 {
-  char *input = "{\"blah\" 2}";
+  char input[] = "{\"blah\" 2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
   TEST_ASSERT(p.errorarg == ':');
@@ -76,7 +127,7 @@ static int test_no_colon(void)
 
 static int test_missing_value(void)
 {
-  char *input = "{\"blah\":}";
+  char input[] = "{\"blah\":}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -84,7 +135,7 @@ static int test_missing_value(void)
 
 static int test_no_key(void)
 {
-  char *input = "{:2}";
+  char input[] = "{:2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -92,7 +143,7 @@ static int test_no_key(void)
 
 static int test_number_key(void)
 {
-  char *input = "{1:2}";
+  char input[] = "{1:2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -100,7 +151,7 @@ static int test_number_key(void)
 
 static int test_true_key(void)
 {
-  char *input = "{true:2}";
+  char input[] = "{true:2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -108,7 +159,7 @@ static int test_true_key(void)
 
 static int test_false_key(void)
 {
-  char *input = "{false:2}";
+  char input[] = "{false:2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -116,7 +167,7 @@ static int test_false_key(void)
 
 static int test_null_key(void)
 {
-  char *input = "{null:2}";
+  char input[] = "{null:2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -124,7 +175,7 @@ static int test_null_key(void)
 
 static int test_list_key(void)
 {
-  char *input = "{[]:2}";
+  char input[] = "{[]:2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
@@ -132,7 +183,7 @@ static int test_list_key(void)
 
 static int test_object_key(void)
 {
-  char *input = "{{}:2}";
+  char input[] = "{{}:2}";
   struct json_parser p = json_parse(input, NULL, 0);
   TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
   return 0;
