@@ -20,40 +20,86 @@
 static int test_empty_array(void)
 {
   char *input = "[]";
-  struct json_parser p = json_parse(input, NULL, 0);
+  struct json_token tokens[1];
+  struct json_parser p = json_parse(input, tokens, 1);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 1);
   TEST_ASSERT(p.textidx == 2);
+  TEST_ASSERT(tokens[0].type == JSON_ARRAY);
+  TEST_ASSERT(tokens[0].start == 0);
+  TEST_ASSERT(tokens[0].end == 1);
+  TEST_ASSERT(tokens[0].child == 0);
+  TEST_ASSERT(tokens[0].next == 0);
   return 0;
 }
 
 static int test_single_element(void)
 {
   char *input = "[1]";
-  struct json_parser p = json_parse(input, NULL, 0);
+  size_t ntok = 2, i;
+  struct json_token tokens[ntok];
+  struct json_token expected[] = {
+    {.type = JSON_ARRAY, .start = 0, .end = 2, .child = 1, .next = 0},
+    {.type = JSON_NUMBER, .start = 1, .end = 1, .child = 0, .next = 0},
+  };
+  struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 2);
   TEST_ASSERT(p.textidx == 3);
+  for (i = 0; i < ntok; i++) {
+    TEST_ASSERT(tokens[i].type == expected[i].type);
+    TEST_ASSERT(tokens[i].start == expected[i].start);
+    TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].child == expected[i].child);
+    TEST_ASSERT(tokens[i].next == expected[i].next);
+  }
   return 0;
 }
 
 static int test_multiple_elements(void)
 {
+  size_t ntok = 3, i;
   char *input = "[1, 2]";
-  struct json_parser p = json_parse(input, NULL, 0);
+  struct json_token tokens[ntok];
+  struct json_token expected[] = {
+    {.type = JSON_ARRAY, .start = 0, .end = 5, .child = 1, .next = 0},
+    {.type = JSON_NUMBER, .start = 1, .end = 1, .child = 0, .next = 2},
+    {.type = JSON_NUMBER, .start = 4, .end = 4, .child = 0, .next = 0},
+  };
+  struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 3);
   TEST_ASSERT(p.textidx == 6);
+  for (i = 0; i < ntok; i++) {
+    TEST_ASSERT(tokens[i].type == expected[i].type);
+    TEST_ASSERT(tokens[i].start == expected[i].start);
+    TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].child == expected[i].child);
+    TEST_ASSERT(tokens[i].next == expected[i].next);
+  }
   return 0;
 }
 
 static int test_extra_comma(void)
 {
   char *input = "[1,]";
-  struct json_parser p = json_parse(input, NULL, 0);
+  size_t ntok = 2, i;
+  struct json_token tokens[ntok];
+  struct json_token expected[] = {
+    {.type = JSON_ARRAY, .start = 0, .end = 3, .child = 1, .next = 0},
+    {.type = JSON_NUMBER, .start = 1, .end = 1, .child = 0, .next = 0},
+  };
+  struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
   TEST_ASSERT(p.tokenidx == 2);
   TEST_ASSERT(p.textidx == 4);
+  for (i = 0; i < ntok; i++) {
+    TEST_ASSERT(tokens[i].type == expected[i].type);
+    TEST_ASSERT(tokens[i].start == expected[i].start);
+    TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].child == expected[i].child);
+    TEST_ASSERT(tokens[i].next == expected[i].next);
+  }
   return 0;
 }
 
