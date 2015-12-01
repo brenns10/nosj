@@ -19,6 +19,14 @@
 #include <stddef.h>
 #include <stdio.h>
 
+/**
+   @brief Enumeration for all possible types of JSON values.
+
+   The JSON spec lists each of these as their own type.  So, I internally
+   recognize them as such.  An argument could be made for having JSON_TRUE and
+   JSON_FALSE be the same type (some sort of boolean type).  But I don't
+   honestly think that would make things that much clearer or simpler.
+ */
 enum json_type {
   JSON_OBJECT=0,
   JSON_ARRAY,
@@ -29,19 +37,65 @@ enum json_type {
   JSON_NULL
 };
 
+/**
+   @brief Represents a JSON "token".
+
+   This isn't a token in the sense of lexical analysis.  JSON is simple enough
+   that I don't really need to tokenize before parsing.  Each "token" is a JSON
+   value (object, array, string, number, etc).  Tokens are stored in an array.
+ */
 struct json_token {
+
+  /**
+     @brief Type of the token.
+   */
   enum json_type type;
+  /**
+     @brief Index of the first character of the token in the string.
+   */
   size_t start;
+  /**
+     @brief Index of the last character of the token in the string.
+   */
   size_t end;
+  /**
+     @brief Index of the first "child" value.
+
+     Child values are either items in a list, keys in a dictionary, or the
+     values associated with a key.
+   */
   size_t child;
+  /**
+     @brief Index of the next value in the sequence.
+   */
   size_t next;
 };
 
+/**
+   @brief Errors that could be encountered in JSON parsing.
+ */
 enum json_error {
+  /**
+    @brief No error!
+   */
   JSONERR_NO_ERROR,
+  /**
+     @brief An error was encountered while parsing a number.
+   */
   JSONERR_INVALID_NUMBER,
+  /**
+     @brief The string ended unexpectedly.
+   */
   JSONERR_PREMATURE_EOF,
+  /**
+     @brief Parser encountered a token that was not expected.
+   */
   JSONERR_UNEXPECTED_TOKEN,
+  /**
+     @brief Parser did not encounter an expected token.
+
+     This error has an argument (e.g. expected ':').
+   */
   JSONERR_EXPECTED_TOKEN,
 };
 
