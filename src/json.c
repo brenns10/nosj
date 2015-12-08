@@ -33,6 +33,14 @@ static bool json_isspace(wchar_t c)
   return (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n');
 }
 
+/**
+   @brief Return true if c is a valid hexadecimal digit for JSON.
+
+   Although there is an iswxdigit function in the C standard library, it allows
+   for other hexadecimal other than just 0-9, a-f, A-F (depending on locale).
+   The JSON spec explicitly states that these are the only hex characters it
+   accepts, so I've written my own to explicitly cover only those.
+ */
 static bool json_isxdigit(wchar_t c)
 {
   return (L'0' <= c && c <= L'9') ||
