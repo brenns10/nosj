@@ -189,6 +189,15 @@ static int test_object_key(void)
   return 0;
 }
 
+static int test_no_comma(void)
+{
+  wchar_t input[] = L"{\"a\":2 \"b\":\"blah\"}";
+  struct json_parser p = json_parse(input, NULL, 0);
+  TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
+  TEST_ASSERT(p.errorarg == L',');
+  return 0;
+}
+
 void test_parse_objects(void)
 {
   smb_ut_group *group = su_create_test_group("test/parse_objects.c");
@@ -234,6 +243,9 @@ void test_parse_objects(void)
 
   smb_ut_test *object_key = su_create_test("object_key", test_object_key);
   su_add_test(group, object_key);
+
+  smb_ut_test *no_comma = su_create_test("no_comma", test_no_comma);
+  su_add_test(group, no_comma);
 
   su_run_group(group);
   su_delete_group(group);

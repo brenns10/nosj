@@ -400,6 +400,11 @@ static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr
     if (text[p.textidx] == L',') {
       p.textidx++;
       p = json_skip_whitespace(text, p);
+    } else if (text[p.textidx] != L']') {
+      // If there was no comma, this better be the end of the object.
+      p.error = JSONERR_EXPECTED_TOKEN;
+      p.errorarg = L',';
+      return p;
     }
   }
 
@@ -481,6 +486,11 @@ static struct json_parser json_parse_object(wchar_t *text, struct json_token *ar
     if (text[p.textidx] == L',') {
       p.textidx++;
       p = json_skip_whitespace(text, p);
+    } else if (text[p.textidx] != L'}') {
+      // If there was no comma, this better be the end of the object.
+      p.error = JSONERR_EXPECTED_TOKEN;
+      p.errorarg = L',';
+      return p;
     }
   }
 

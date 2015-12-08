@@ -120,6 +120,15 @@ static int test_error_within_list(void)
   return 0;
 }
 
+static int test_no_comma(void)
+{
+  wchar_t input[] = L"[1 2 3]";
+  struct json_parser p = json_parse(input, NULL, 0);
+  TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
+  TEST_ASSERT(p.errorarg = L',');
+  return 0;
+}
+
 void test_parse_arrays(void)
 {
   smb_ut_group *group = su_create_test_group("test/parse_arrays.c");
@@ -141,6 +150,9 @@ void test_parse_arrays(void)
 
   smb_ut_test *error_within_list = su_create_test("error_within_list", test_error_within_list);
   su_add_test(group, error_within_list);
+
+  smb_ut_test *no_comma = su_create_test("no_comma", test_no_comma);
+  su_add_test(group, no_comma);
 
   su_run_group(group);
   su_delete_group(group);
