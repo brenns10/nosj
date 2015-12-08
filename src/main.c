@@ -23,7 +23,7 @@
 int main(int argc, char *argv[])
 {
   FILE *f;
-  char *text;
+  wchar_t *text;
   struct json_token *tokens = NULL;
   struct json_parser p;
   int returncode = 0;
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   }
 
   // Read the whole contents of the file.
-  text = read_file(f);
+  text = read_filew(f);
 
   // Parse the first time to get the number of tokens.
   p = json_parse(text, tokens, 0);
