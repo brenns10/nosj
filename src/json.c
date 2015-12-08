@@ -49,6 +49,27 @@ static bool json_isxdigit(wchar_t c)
 }
 
 /**
+   @brief Return true if c is a valid character to come after a backslash.
+ */
+static bool json_isescape(wchar_t c)
+{
+  switch (c) {
+  case L'\"':
+  case L'\\':
+  case L'/':
+  case L'b':
+  case L'f':
+  case L'n':
+  case L'r':
+  case L't':
+  case L'u':
+    return true;
+  default:
+    return false;
+  }
+}
+
+/**
    @brief Return true if c could be the beginning of a JSON number.
  */
 static bool json_isnumber(wchar_t c)
@@ -279,8 +300,12 @@ static struct json_parser json_parse_string(wchar_t *text, struct json_token *ar
         p.textidx--;
       } else if (text[p.textidx] == L'u') {
         state = UESC0;
-      } else {
+      } else if (json_isescape(text[p.textidx])) {
         state = INSTRING;
+      } else {
+        state = END;
+        p.error = JSONERR_UNEXPECTED_TOKEN;
+        p.textidx--;
       }
       break;
     case UESC0:

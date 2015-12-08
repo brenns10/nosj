@@ -97,6 +97,36 @@ static int test_invalid_char_uesc(void)
   return 0;
 }
 
+static int test_valid_esc(void)
+{
+  wchar_t input[] = L"\"\\a\"";
+  wchar_t valid[] = L"\"\\/bfnrt";
+  size_t i;
+  struct json_parser p;
+  for (i = 0; valid[i] != L'\0'; i++) {
+    input[2] = valid[i];
+    p = json_parse(input, NULL, 0);
+    TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+    TEST_ASSERT(p.tokenidx == 1);
+    TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
+  }
+  return 0;
+}
+
+static int test_invalid_esc(void)
+{
+  wchar_t input[] = L"\"\\a\"";
+  wchar_t valid[] = L"aAB12.,[(%!"; // something of a cross-section!
+  size_t i;
+  struct json_parser p;
+  for (i = 0; valid[i] != L'\0'; i++) {
+    input[2] = valid[i];
+    p = json_parse(input, NULL, 0);
+    TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
+  }
+  return 0;
+}
+
 void test_parse_strings(void)
 {
   smb_ut_group *group = su_create_test_group("test/parse_strings.c");
@@ -127,6 +157,12 @@ void test_parse_strings(void)
 
   smb_ut_test *invalid_char_uesc = su_create_test("invalid_char_uesc", test_invalid_char_uesc);
   su_add_test(group, invalid_char_uesc);
+
+  smb_ut_test *valid_esc = su_create_test("valid_esc", test_valid_esc);
+  su_add_test(group, valid_esc);
+
+  smb_ut_test *invalid_esc = su_create_test("invalid_esc", test_invalid_esc);
+  su_add_test(group, invalid_esc);
 
   su_run_group(group);
   su_delete_group(group);
