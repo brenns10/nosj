@@ -33,6 +33,13 @@ static bool json_isspace(wchar_t c)
   return (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n');
 }
 
+static bool json_isxdigit(wchar_t c)
+{
+  return (L'0' <= c && c <= L'9') ||
+         (L'a' <= c && c <= L'f') ||
+         (L'A' <= c && c <= L'F');
+}
+
 /**
    @brief Return true if c could be the beginning of a JSON number.
  */
@@ -233,7 +240,8 @@ static struct json_parser json_parse_string(wchar_t *text, struct json_token *ar
   struct json_token tok;
   tok.type = JSON_STRING;
   tok.start = p.textidx;
-  enum state {START, INSTRING, ESCAPE, END} state = START;
+  enum state {START, INSTRING, ESCAPE, END, UESC0, UESC1, UESC2, UESC3}
+  state = START;
   while (state != END) {
     switch (state) {
     case START:
@@ -261,8 +269,31 @@ static struct json_parser json_parse_string(wchar_t *text, struct json_token *ar
         state = END;
         p.error = JSONERR_PREMATURE_EOF;
         p.textidx--;
+      } else if (text[p.textidx] == L'u') {
+        state = UESC0;
+      } else {
+        state = INSTRING;
       }
-      state = INSTRING;
+      break;
+    case UESC0:
+    case UESC1:
+    case UESC2:
+    case UESC3:
+      if (text[p.textidx] == L'\0') {
+        state = END;
+        p.error = JSONERR_PREMATURE_EOF;
+        p.textidx--;
+      } else if (!json_isxdigit(text[p.textidx])) {
+        state = END;
+        p.error = JSONERR_UNEXPECTED_TOKEN;
+        p.textidx--;
+      } else {
+        if (state != UESC3) {
+          state += 1;
+        } else {
+          state = INSTRING;
+        }
+      }
       break;
     case END:
       // never happens
