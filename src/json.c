@@ -150,6 +150,7 @@ static struct json_parser json_parse_true(wchar_t *text, struct json_token *arr,
   tok.type = JSON_TRUE;
   tok.start = p.textidx;
   tok.end = p.textidx + 3;
+  tok.length = 0;
   tok.child = 0;
   tok.next = 0;
   if (wcsncmp(L"true", text + p.textidx, 4) == 0) {
@@ -179,6 +180,7 @@ static struct json_parser json_parse_false(wchar_t *text, struct json_token *arr
   tok.type = JSON_FALSE;
   tok.start = p.textidx;
   tok.end = p.textidx + 4;
+  tok.length = 0;
   tok.child = 0;
   tok.next = 0;
   if (wcsncmp(L"false", text + p.textidx, 5) == 0) {
@@ -207,6 +209,7 @@ static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
   tok.type = JSON_NULL;
   tok.start = p.textidx;
   tok.end = p.textidx + 3;
+  tok.length = 0;
   tok.child = 0;
   tok.next = 0;
   if (wcsncmp(L"null", text + p.textidx, 4) == 0) {
