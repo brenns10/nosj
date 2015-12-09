@@ -211,4 +211,15 @@ bool json_string_match(const wchar_t *json, const struct json_token *tokens,
 void json_string_load(const wchar_t *json, const struct json_token *tokens,
                       size_t index, wchar_t *buffer);
 
+/**
+   @brief Return the value associated with a key in a JSON object.
+   @param json The original JSON buffer.
+   @param tokens The parsed token buffer.
+   @param index The index of the JSON object.
+   @param key The key you're searching for.
+   @return the index of the value token, or 0 if not found.
+ */
+size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
+                       size_t index, const wchar_t *key);
+
 #endif // SMB_JSON

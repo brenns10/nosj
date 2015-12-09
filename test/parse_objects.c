@@ -199,6 +199,26 @@ static int test_no_comma(void)
   return 0;
 }
 
+static int test_get_object(void)
+{
+  wchar_t input[] = L"{\"a\":2, \"b\":\"blah\"}";
+  struct json_token tokens[5];
+  struct json_parser p = json_parse(input, tokens, 5);
+  TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+  TEST_ASSERT(p.tokenidx == 5);
+  TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
+  size_t value = json_object_get(input, tokens, 0, L"a");
+  TEST_ASSERT(value == 2);
+  TEST_ASSERT(tokens[value].type == JSON_NUMBER);
+  value = json_object_get(input, tokens, 0, L"b");
+  TEST_ASSERT(value == 4);
+  TEST_ASSERT(tokens[value].type == JSON_STRING);
+  TEST_ASSERT(tokens[value].start == 12);
+  value = json_object_get(input, tokens, 0, L"c");
+  TEST_ASSERT(value == 0);
+  return 0;
+}
+
 void test_parse_objects(void)
 {
   smb_ut_group *group = su_create_test_group("test/parse_objects.c");
@@ -247,6 +267,9 @@ void test_parse_objects(void)
 
   smb_ut_test *no_comma = su_create_test("no_comma", test_no_comma);
   su_add_test(group, no_comma);
+
+  smb_ut_test *get_object = su_create_test("get_object", test_get_object);
+  su_add_test(group, get_object);
 
   su_run_group(group);
   su_delete_group(group);
