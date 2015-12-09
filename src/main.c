@@ -52,6 +52,22 @@ int main(int argc, char *argv[])
   // Finally, print.
   json_print(tokens, p.tokenidx);
 
+  // A demonstration of getting tokens out of an object.
+  if (p.tokenidx > 0 && tokens[0].type == JSON_OBJECT) {
+    printf("Searching for key \"text\" in the base object.\n");
+    size_t value = json_object_get(text, tokens, 0, L"text");
+    if (value != 0) {
+      printf("Found key \"text\".\n");
+      json_print(tokens + value, 1);
+      wchar_t *string = calloc(sizeof(wchar_t), tokens[value].length + 1);
+      json_string_load(text, tokens, value, string);
+      printf("Value: \"%ls\"\n", string);
+      free(string);
+    } else {
+      printf("Key \"text\" not found in base object.\n");
+    }
+  }
+
   free(tokens);
  cleanup_text:
   free(text);
