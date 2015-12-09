@@ -20,6 +20,7 @@
 #include <assert.h>
 
 #include "json.h"
+#include "json_private.h"
 
 // forward declaration of the main parser
 static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
@@ -31,42 +32,6 @@ static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
 static bool json_isspace(wchar_t c)
 {
   return (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n');
-}
-
-/**
-   @brief Return true if c is a valid hexadecimal digit for JSON.
-
-   Although there is an iswxdigit function in the C standard library, it allows
-   for other hexadecimal other than just 0-9, a-f, A-F (depending on locale).
-   The JSON spec explicitly states that these are the only hex characters it
-   accepts, so I've written my own to explicitly cover only those.
- */
-static bool json_isxdigit(wchar_t c)
-{
-  return (L'0' <= c && c <= L'9') ||
-         (L'a' <= c && c <= L'f') ||
-         (L'A' <= c && c <= L'F');
-}
-
-/**
-   @brief Return true if c is a valid character to come after a backslash.
- */
-static bool json_isescape(wchar_t c)
-{
-  switch (c) {
-  case L'\"':
-  case L'\\':
-  case L'/':
-  case L'b':
-  case L'f':
-  case L'n':
-  case L'r':
-  case L't':
-  case L'u':
-    return true;
-  default:
-    return false;
-  }
 }
 
 /**
@@ -87,8 +52,8 @@ static bool json_isnumber(wchar_t c)
    @param tok The token to add.
    @param p The parser state.
  */
-static void json_settoken(struct json_token *arr, struct json_token tok,
-                          struct json_parser p, size_t maxtoken)
+void json_settoken(struct json_token *arr, struct json_token tok,
+                   struct json_parser p, size_t maxtoken)
 {
   if (arr == NULL || p.tokenidx >= maxtoken) {
     return;
@@ -253,94 +218,6 @@ static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
     p.error = JSONERR_UNEXPECTED_TOKEN;
     return p;
   }
-}
-
-/**
-   @brief Parse a string literal.
-   @param text The text we're parsing.
-   @param arr The token buffer.
-   @param maxtoken The length of the token buffer.
-   @param p The parser state.
-   @returns Parser state after parsing the string.
- */
-static struct json_parser json_parse_string(wchar_t *text, struct json_token *arr,
-                                            size_t maxtoken, struct json_parser p)
-{
-  struct json_token tok;
-  tok.type = JSON_STRING;
-  tok.start = p.textidx;
-  enum state {START, INSTRING, ESCAPE, END, UESC0, UESC1, UESC2, UESC3}
-  state = START;
-  while (state != END) {
-    switch (state) {
-    case START:
-      if (text[p.textidx] == L'"') {
-        state = INSTRING;
-      } else {
-        state = END;
-        p.error = JSONERR_UNEXPECTED_TOKEN;
-        p.textidx--;
-      }
-      break;
-    case INSTRING:
-      if (text[p.textidx] == L'\\') {
-        state = ESCAPE;
-      } else if (text[p.textidx] == L'"') {
-        state = END;
-      } else if (text[p.textidx] == L'\0') {
-        state = END;
-        p.error = JSONERR_PREMATURE_EOF;
-        p.textidx--;
-      }
-      break;
-    case ESCAPE:
-      if (text[p.textidx] == L'\0') {
-        state = END;
-        p.error = JSONERR_PREMATURE_EOF;
-        p.textidx--;
-      } else if (text[p.textidx] == L'u') {
-        state = UESC0;
-      } else if (json_isescape(text[p.textidx])) {
-        state = INSTRING;
-      } else {
-        state = END;
-        p.error = JSONERR_UNEXPECTED_TOKEN;
-        p.textidx--;
-      }
-      break;
-    case UESC0:
-    case UESC1:
-    case UESC2:
-    case UESC3:
-      if (text[p.textidx] == L'\0') {
-        state = END;
-        p.error = JSONERR_PREMATURE_EOF;
-        p.textidx--;
-      } else if (!json_isxdigit(text[p.textidx])) {
-        state = END;
-        p.error = JSONERR_UNEXPECTED_TOKEN;
-        p.textidx--;
-      } else {
-        if (state != UESC3) {
-          state += 1;
-        } else {
-          state = INSTRING;
-        }
-      }
-      break;
-    case END:
-      // never happens
-      assert(false);
-      break;
-    }
-    p.textidx++;
-  }
-  tok.end = p.textidx - 1;
-  tok.child = 0;
-  tok.next = 0;
-  json_settoken(arr, tok, p, maxtoken);
-  p.tokenidx++;
-  return p;
 }
 
 /**
