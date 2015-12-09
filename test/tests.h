@@ -22,5 +22,6 @@ void test_parse_atomics(void);
 void test_parse_arrays(void);
 void test_parse_objects(void);
 void test_compare_strings(void);
+void test_load_strings(void);
 
 #endif // SMB_JSON_TEST_H

@@ -197,4 +197,18 @@ void json_print_error(FILE *f, struct json_parser p);
 bool json_string_match(const wchar_t *json, const struct json_token *tokens,
                        size_t index, const wchar_t *other);
 
+/**
+   @brief Load a string into a buffer.
+   @param json The original JSON buffer.
+   @param tokens The parsed tokens.
+   @param index The index of the string token.
+   @param buffer The buffer to load the string into.
+
+   The buffer MUST NOT be null.  It must point to an already allocated buffer,
+   of at least size `tokens[index].length + 1` (room for the text and a NULL
+   character).
+ */
+void json_string_load(const wchar_t *json, const struct json_token *tokens,
+                      size_t index, wchar_t *buffer);
+
 #endif // SMB_JSON

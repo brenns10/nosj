@@ -435,3 +435,29 @@ bool json_string_match(const wchar_t *json, const struct json_token *tokens,
   // in the other string is the null character, signifying the end.
   return ca.equal && (other[pa.outidx] == L'\0');
 }
+
+/**
+   @brief This is the "setter" function for json_string_match().
+   @param a Parser arguments.
+   @param wc Character to set.
+   @param arg The struct string_compare_arg.
+
+   This function just compares each output character to the corresponding
+   character in the other string.  It stores the result in the arg, which will
+   be examined after the fact.
+ */
+static void json_string_loader(struct parser_arg *a, wchar_t wc, void *arg)
+{
+  wchar_t *str = arg;
+  // we are depending on short-circuit evaluation here :)
+  str[a->outidx] = wc;
+}
+
+void json_string_load(const wchar_t *json, const struct json_token *tokens,
+                      size_t index, wchar_t *buffer)
+{
+  struct parser_arg pa = json_string(json, tokens[index].start,
+                                     &json_string_loader, buffer);
+
+  buffer[pa.outidx] = L'\0';
+}

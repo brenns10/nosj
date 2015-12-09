@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
   test_parse_arrays();
   test_parse_objects();
   test_compare_strings();
+  test_load_strings();
 
   return 0;
 }
