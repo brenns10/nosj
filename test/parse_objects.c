@@ -53,6 +53,7 @@ static int test_single_element(void)
     TEST_ASSERT(tokens[i].type == expected[i].type);
     TEST_ASSERT(tokens[i].start == expected[i].start);
     TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].length == expected[i].length);
     TEST_ASSERT(tokens[i].child == expected[i].child);
     TEST_ASSERT(tokens[i].next == expected[i].next);
   }
@@ -79,6 +80,7 @@ static int test_multiple_elements(void)
     TEST_ASSERT(tokens[i].type == expected[i].type);
     TEST_ASSERT(tokens[i].start == expected[i].start);
     TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].length == expected[i].length);
     TEST_ASSERT(tokens[i].child == expected[i].child);
     TEST_ASSERT(tokens[i].next == expected[i].next);
   }
@@ -103,6 +105,7 @@ static int test_extra_comma(void)
     TEST_ASSERT(tokens[i].type == expected[i].type);
     TEST_ASSERT(tokens[i].start == expected[i].start);
     TEST_ASSERT(tokens[i].end == expected[i].end);
+    TEST_ASSERT(tokens[i].length == expected[i].length);
     TEST_ASSERT(tokens[i].child == expected[i].child);
     TEST_ASSERT(tokens[i].next == expected[i].next);
   }

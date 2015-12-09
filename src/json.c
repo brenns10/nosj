@@ -122,6 +122,26 @@ static void json_setend(struct json_token *arr, size_t tokidx, size_t end,
 }
 
 /**
+   @brief Set the "length" index in a token to be a new value.
+
+   If arr is null, this does nothing.  If we've run past the end of the buffer,
+   do nothing.
+   @param arr The token buffer.  May be null.
+   @param tokidx The index of the token to update.
+   @param length New value for end.
+ */
+static void json_setlength(struct json_token *arr, size_t tokidx, size_t length,
+                           size_t maxtoken)
+{
+  if (arr == NULL || tokidx >= maxtoken) {
+    return;
+  }
+  struct json_token tok = arr[tokidx];
+  tok.length = length;
+  arr[tokidx] = tok;
+}
+
+/**
    @brief Return the parser state with textidx pointed at the next non-ws char.
    @param text The text we're parsing.
    @param p The current parser state
@@ -234,7 +254,7 @@ static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
 static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr,
                                            size_t maxtoken, struct json_parser p)
 {
-  size_t array_tokenidx = p.tokenidx, prev_tokenidx, curr_tokenidx;
+  size_t array_tokenidx = p.tokenidx, prev_tokenidx, curr_tokenidx, length=0;
   struct json_token tok = {
     .type = JSON_ARRAY,
     .start = p.textidx,
@@ -276,7 +296,7 @@ static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr
       json_setnext(arr, prev_tokenidx, curr_tokenidx, maxtoken);
     }
 
-    tok.length++;
+    length++;
 
     // Skip whitespace.
     p = json_skip_whitespace(text, p);
@@ -294,6 +314,7 @@ static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr
   // Set the end of the array token to point to the closing bracket, then move
   // it up.
   json_setend(arr, array_tokenidx, p.textidx, maxtoken);
+  json_setlength(arr, array_tokenidx, length, maxtoken);
   p.textidx++;
   return p;
 }
@@ -309,7 +330,7 @@ static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr
 static struct json_parser json_parse_object(wchar_t *text, struct json_token *arr,
                                             size_t maxtoken, struct json_parser p)
 {
-  size_t object_tokenidx = p.tokenidx, prev_keyidx, curr_keyidx;
+  size_t object_tokenidx = p.tokenidx, prev_keyidx, curr_keyidx, length=0;
   struct json_token tok = {
     .type  = JSON_OBJECT,
     .start = p.textidx,
@@ -365,7 +386,7 @@ static struct json_parser json_parse_object(wchar_t *text, struct json_token *ar
     // Set the key's child pointer to point at its value.  Just cause we can.
     json_setchild(arr, curr_keyidx, curr_keyidx + 1, maxtoken);
 
-    tok.length++;
+    length++;
 
     // Skip whitespace.
     p = json_skip_whitespace(text, p);
@@ -383,6 +404,7 @@ static struct json_parser json_parse_object(wchar_t *text, struct json_token *ar
   // Set the end of the array token to point to the closing bracket, then move
   // it up.
   json_setend(arr, object_tokenidx, p.textidx, maxtoken);
+  json_setlength(arr, object_tokenidx, length, maxtoken);
   p.textidx++;
   return p;
 }
