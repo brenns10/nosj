@@ -39,18 +39,20 @@ Status
 ------
 
 - [x] Implement parsing JSON input into tokens.
-- [ ] Simple tests for parsing values (i.e. accept/reject).
+- [x] Simple tests for parsing values (i.e. accept/reject).
     - [x] Strings
     - [x] Arrays
     - [x] Objects
     - [x] Numbers
     - [x] True/False/Null
-- [ ] Tests for the parsed tokens (i.e. relationships, indices, etc).
+- [x] Tests for the parsed tokens (i.e. relationships, indices, etc).
 - [ ] Loading JSON values into memory for inspection.
     - [ ] Simple values (True/False/Null/Numbers)
-    - [ ] Strings, Arrays, Objects
-    - [ ] Implement lookup for objects, indexing for arrays.
-    - [ ] Minimize memory allocation!
+    - [x] Loading strings
+    - [ ] Loading arrays
+    - [ ] Loading objects
+    - [x] Lookup for objects 
+    - [ ] Indexing for arrays
 - [ ] API Documentation.
 
 Setup
@@ -63,69 +65,32 @@ If you'd like to try it out, follow the commands below:
     $ git submodule init
     $ git submodule update
     $ make
-    $ emacs test.json # make your own test file
-    $ bin/release/main test.json
+    $ bin/release/main twitapi.json
 
-Above, `test.json` is some input file, like the example below:
-
-```
-["a", true, ["b", "c"], "d", false, null,
- {
-     "key": "value",
-     "key2": "val\"ue2"
- },
- [], {},
- 1,
- 0,
- -0,
- -0.0,
- -1.57,
- 15.75,
- 1e-1,
- 1e+1,
- 1.2e3,
-]
-```
-
-The driver program should give output like this:
+Above, `twitapi.json` is an JSON
+[example](https://dev.twitter.com/rest/reference/get/statuses/show/%3Aid) from
+the Twitter API Documentation.  It contains a deeply nested structure with all
+sorts of data types and stuff.  The main driver program parses it and prints out
+every single "token" from it.  Then, it queries the root object for the key
+"text", which does exist in that particular example.  Finally, it prints out the
+token and loads the corresponding string, and prints that.  Here is some example
+output:
 
 ```
-amount: 25
-tokens: 0x24512f0
-000:  array	0000-0161,	child=1,	next=0
-001: string	0001-0003,	child=0,	next=2
-002:   true	0006-0009,	child=0,	next=3
-003:  array	0012-0021,	child=4,	next=6
-004: string	0013-0015,	child=0,	next=5
-005: string	0018-0020,	child=0,	next=0
-006: string	0024-0026,	child=0,	next=7
-007:  false	0029-0033,	child=0,	next=8
-008:   null	0036-0039,	child=0,	next=9
-009: object	0043-0091,	child=10,	next=14
-010: string	0050-0054,	child=11,	next=12
-011: string	0057-0063,	child=0,	next=0
-012: string	0071-0076,	child=13,	next=0
-013: string	0079-0088,	child=0,	next=0
-014:  array	0095-0096,	child=0,	next=15
-015: object	0099-0100,	child=0,	next=16
-016: number	0104-0105,	child=0,	next=17
-017: number	0108-0109,	child=0,	next=18
-018: number	0112-0114,	child=0,	next=19
-019: number	0117-0121,	child=0,	next=20
-020: number	0124-0129,	child=0,	next=21
-021: number	0132-0137,	child=0,	next=22
-022: number	0140-0144,	child=0,	next=23
-023: number	0147-0151,	child=0,	next=24
-024: number	0154-0159,	child=0,	next=0
+$ bin/release/main twitapi.json
+000: object	0000-3065,	length=21,	child=1,	next=0
+001: string	0004-0016,	length=11,	child=2,	next=3
+002:   null	0019-0022,	length=0,	child=0,	next=0
+003: string	0027-0037,	length=9,	child=4,	next=5
+004:  false	0040-0044,	length=0,	child=0,	next=0
+005: string	0049-0059,	length=9,	child=6,	next=7
+...  ...  ...  ...  ...  ...  ...  ...  ...  ...  ...
+162:   null	3060-3063,	length=0,	child=0,	next=0
+Searching for key "text" in the base object.
+Found key "text".
+000: string	0692-0795,	length=102,	child=0,	next=0
+Value: "Along with our new #Twitterbird, we've also updated our Display Guidelines: https://t.co/Ed4omjYs  ^JC"
 ```
-
-This output describes each token encountered.  The first number of the line is
-the index (within the token buffer) of the token.  The next item is the JSON
-type of the token.  The next is the index range of the token in the input
-string.  The `child` field is the index of the first "child" of this value (for
-lists, this is the first element contained; for objects, this is the first
-key).  The `next` field is the index of the next item in a container.  Both of
-these fields default to zero.
 
 You can also run the tests:
 
