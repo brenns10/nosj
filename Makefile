@@ -121,7 +121,10 @@ DEPENDENCIES += $(patsubst $(TEST_DIR)/%.c,$(DEPENDENCY_DIR)/$(TEST_DIR)/%.d,$(T
 # --- GLOBAL TARGETS: You can probably adjust and augment these if you'd like.
 .PHONY: all test clean clean_all clean_cov clean_doc
 
-all: $(BINARY_DIR)/$(CFG)/$(TARGET)
+all: $(BINARY_DIR)/$(CFG)/$(TARGET) GTAGS
+
+GTAGS: $(SOURCES) $(TEST_SOURCES)
+	gtags
 
 test: $(BINARY_DIR)/$(CFG)/$(TEST_TARGET)
 	valgrind $(BINARY_DIR)/$(CFG)/$(TEST_TARGET)
