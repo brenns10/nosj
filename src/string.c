@@ -381,6 +381,7 @@ struct json_parser json_parse_string(wchar_t *text, struct json_token *arr,
   tok.end = a.textidx - 1;
   tok.child = 0;
   tok.next = 0;
+  tok.length = a.outidx;
   json_settoken(arr, tok, p, maxtoken);
 
   p.error = a.error;

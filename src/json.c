@@ -235,6 +235,7 @@ static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr
   struct json_token tok = {
     .type = JSON_ARRAY,
     .start = p.textidx,
+    .length = 0,
     .end = 0,
     .child = 0,
     .next = 0,
@@ -272,6 +273,8 @@ static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr
       json_setnext(arr, prev_tokenidx, curr_tokenidx, maxtoken);
     }
 
+    tok.length++;
+
     // Skip whitespace.
     p = json_skip_whitespace(text, p);
     if (text[p.textidx] == L',') {
@@ -307,6 +310,7 @@ static struct json_parser json_parse_object(wchar_t *text, struct json_token *ar
   struct json_token tok = {
     .type  = JSON_OBJECT,
     .start = p.textidx,
+    .length = 0,
     .end   = 0,
     .child = 0,
     .next  = 0,
@@ -358,6 +362,8 @@ static struct json_parser json_parse_object(wchar_t *text, struct json_token *ar
     // Set the key's child pointer to point at its value.  Just cause we can.
     json_setchild(arr, curr_keyidx, curr_keyidx + 1, maxtoken);
 
+    tok.length++;
+
     // Skip whitespace.
     p = json_skip_whitespace(text, p);
     if (text[p.textidx] == L',') {
@@ -397,6 +403,7 @@ static struct json_parser json_parse_number(wchar_t *text, struct json_token *ar
   struct json_token tok = {
     .type  = JSON_NUMBER,
     .start = p.textidx,
+    .length = 0, // not used
     .end   = 0,
     .child = 0,
     .next  = 0
@@ -612,9 +619,9 @@ void json_print(struct json_token *arr, size_t n)
 {
   size_t i;
   for (i = 0; i < n; i++) {
-    printf("%03lu: %6s\t%04lu-%04lu,\tchild=%lu,\tnext=%lu\n", i,
-           json_type_str[arr[i].type], arr[i].start, arr[i].end, arr[i].child,
-           arr[i].next);
+    printf("%03lu: %6s\t%04lu-%04lu,\tlength=%lu,\tchild=%lu,\tnext=%lu\n", i,
+           json_type_str[arr[i].type], arr[i].start, arr[i].end, arr[i].length,
+           arr[i].child, arr[i].next);
   }
 }
 

@@ -61,6 +61,15 @@ struct json_token {
    */
   size_t end;
   /**
+     @brief For tokens that can have a length, this is the length!
+
+     More specifically, it is:
+     - For arrays, the number of elements.
+     - For objects, the number of key, value pairs.
+     - For strings, the number of Unicode code points.
+   */
+  size_t length;
+  /**
      @brief Index of the first "child" value.
 
      Child values are either items in a list, keys in a dictionary, or the

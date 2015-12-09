@@ -29,6 +29,7 @@ static int test_empty_array(void)
   TEST_ASSERT(tokens[0].type == JSON_ARRAY);
   TEST_ASSERT(tokens[0].start == 0);
   TEST_ASSERT(tokens[0].end == 1);
+  TEST_ASSERT(tokens[0].length == 0);
   TEST_ASSERT(tokens[0].child == 0);
   TEST_ASSERT(tokens[0].next == 0);
   return 0;
@@ -40,8 +41,8 @@ static int test_single_element(void)
   size_t ntok = 2, i;
   struct json_token tokens[ntok];
   struct json_token expected[] = {
-    {.type = JSON_ARRAY, .start = 0, .end = 2, .child = 1, .next = 0},
-    {.type = JSON_NUMBER, .start = 1, .end = 1, .child = 0, .next = 0},
+    {.type = JSON_ARRAY, .start = 0, .end = 2, .length=1, .child = 1, .next = 0},
+    {.type = JSON_NUMBER, .start = 1, .end = 1, .length=0, .child = 0, .next = 0},
   };
   struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -63,9 +64,9 @@ static int test_multiple_elements(void)
   wchar_t input[] = L"[1, 2]";
   struct json_token tokens[ntok];
   struct json_token expected[] = {
-    {.type = JSON_ARRAY, .start = 0, .end = 5, .child = 1, .next = 0},
-    {.type = JSON_NUMBER, .start = 1, .end = 1, .child = 0, .next = 2},
-    {.type = JSON_NUMBER, .start = 4, .end = 4, .child = 0, .next = 0},
+    {.type = JSON_ARRAY, .start = 0, .end = 5, .length=2, .child = 1, .next = 0},
+    {.type = JSON_NUMBER, .start = 1, .end = 1, .length=0, .child = 0, .next = 2},
+    {.type = JSON_NUMBER, .start = 4, .end = 4, .length=0, .child = 0, .next = 0},
   };
   struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -87,8 +88,8 @@ static int test_extra_comma(void)
   size_t ntok = 2, i;
   struct json_token tokens[ntok];
   struct json_token expected[] = {
-    {.type = JSON_ARRAY, .start = 0, .end = 3, .child = 1, .next = 0},
-    {.type = JSON_NUMBER, .start = 1, .end = 1, .child = 0, .next = 0},
+    {.type = JSON_ARRAY, .start = 0, .end = 3, .length=1, .child = 1, .next = 0},
+    {.type = JSON_NUMBER, .start = 1, .end = 1, .length=0, .child = 0, .next = 0},
   };
   struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);

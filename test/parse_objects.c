@@ -29,6 +29,7 @@ static int test_empty_object(void)
   TEST_ASSERT(tokens[0].type == JSON_OBJECT);
   TEST_ASSERT(tokens[0].start == 0);
   TEST_ASSERT(tokens[0].end == 1);
+  TEST_ASSERT(tokens[0].length == 0);
   TEST_ASSERT(tokens[0].child == 0);
   TEST_ASSERT(tokens[0].next == 0);
   return 0;
@@ -40,9 +41,9 @@ static int test_single_element(void)
   size_t ntok = 3, i;
   struct json_token tokens[ntok];
   struct json_token expected[] = {
-    {.type = JSON_OBJECT, .start = 0, .end = 7, .child = 1, .next = 0},
-    {.type = JSON_STRING, .start = 1, .end = 3, .child = 2, .next = 0},
-    {.type = JSON_NUMBER, .start = 6, .end = 6, .child = 0, .next = 0},
+    {.type = JSON_OBJECT, .start = 0, .end = 7, .length=1, .child = 1, .next = 0},
+    {.type = JSON_STRING, .start = 1, .end = 3, .length=1, .child = 2, .next = 0},
+    {.type = JSON_NUMBER, .start = 6, .end = 6, .length=0, .child = 0, .next = 0},
   };
   struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -64,11 +65,11 @@ static int test_multiple_elements(void)
   size_t ntok = 5, i;
   struct json_token tokens[ntok];
   struct json_token expected[] = {
-    {.type = JSON_OBJECT, .start = 0, .end = 15, .child = 1, .next = 0},
-    {.type = JSON_STRING, .start = 1, .end = 3, .child = 2, .next = 3},
-    {.type = JSON_NUMBER, .start = 6, .end = 6, .child = 0, .next = 0},
-    {.type = JSON_STRING, .start = 9, .end = 11, .child = 4, .next = 0},
-    {.type = JSON_NUMBER, .start = 14, .end = 14, .child = 0, .next = 0},
+    {.type = JSON_OBJECT, .start = 0, .end = 15, .length=2, .child = 1, .next = 0},
+    {.type = JSON_STRING, .start = 1, .end = 3, .length=1, .child = 2, .next = 3},
+    {.type = JSON_NUMBER, .start = 6, .end = 6, .length=0, .child = 0, .next = 0},
+    {.type = JSON_STRING, .start = 9, .end = 11, .length=1, .child = 4, .next = 0},
+    {.type = JSON_NUMBER, .start = 14, .end = 14, .length=0, .child = 0, .next = 0},
   };
   struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -90,9 +91,9 @@ static int test_extra_comma(void)
   size_t ntok = 3, i;
   struct json_token tokens[ntok];
   struct json_token expected[] = {
-    {.type = JSON_OBJECT, .start = 0, .end = 8, .child = 1, .next = 0},
-    {.type = JSON_STRING, .start = 1, .end = 3, .child = 2, .next = 0},
-    {.type = JSON_NUMBER, .start = 6, .end = 6, .child = 0, .next = 0},
+    {.type = JSON_OBJECT, .start = 0, .end = 8, .length=1, .child = 1, .next = 0},
+    {.type = JSON_STRING, .start = 1, .end = 3, .length=1, .child = 2, .next = 0},
+    {.type = JSON_NUMBER, .start = 6, .end = 6, .length=0, .child = 0, .next = 0},
   };
   struct json_parser p = json_parse(input, tokens, ntok);
   TEST_ASSERT(p.error == JSONERR_NO_ERROR);
