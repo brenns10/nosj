@@ -593,6 +593,7 @@ char *json_error_str[] = {
   "encountered an invalid numeric literal",
   "string ended prematurely",
   "unexpected token",
+  "invalid surrogate pair",
   "expected token '%c'",
 };
 

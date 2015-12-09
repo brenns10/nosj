@@ -18,6 +18,7 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <wchar.h>
 
 /**
@@ -92,6 +93,10 @@ enum json_error {
      @brief Parser encountered a token that was not expected.
    */
   JSONERR_UNEXPECTED_TOKEN,
+  /**
+     @brief Parser encountered an invalid surrogate pair.
+   */
+  JSONERR_INVALID_SURROGATE,
   /**
      @brief Parser did not encounter an expected token.
 
@@ -171,5 +176,16 @@ void json_print(struct json_token *arr, size_t n);
    @param p Parser return struct.
  */
 void json_print_error(FILE *f, struct json_parser p);
+
+/**
+   @brief Return whether or not a string matches a token string.
+   @param json The original JSON buffer.
+   @param tokens The parsed tokens.
+   @param index The index of the string token.
+   @param other The other string to compare to.
+   @return True if they are equal, false otherwise.
+ */
+bool json_string_match(const wchar_t *json, const struct json_token *tokens,
+                       size_t index, const wchar_t *other);
 
 #endif // SMB_JSON

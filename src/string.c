@@ -106,21 +106,25 @@ struct parser_arg {
 /**
    @brief Return true if c is a valid character to come after a backslash.
  */
-static bool json_isescape(wchar_t c)
+static wchar_t json_escape(wchar_t c)
 {
   switch (c) {
   case L'\"':
   case L'\\':
   case L'/':
+    return c;
   case L'b':
+    return L'\b';
   case L'f':
+    return L'\f';
   case L'n':
+    return L'\n';
   case L'r':
+    return L'\r';
   case L't':
-  case L'u':
-    return true;
+    return L'\t';
   default:
-    return false;
+    return L'\0';
   }
 }
 
@@ -156,9 +160,9 @@ static unsigned char json_xdigit(wchar_t c) {
 static void set_output(struct parser_arg *a, wchar_t out) {
   // don't forget to flush the "buffered" potential surrogate pair
   if (a->prev != 0) {
-    wchar_t prev = a->prev;
-    a->prev = 0;
-    set_output(a, prev);
+    a->state = END;
+    a->error = JSONERR_INVALID_SURROGATE;
+    return;
   }
 
   if (a->setter != NULL) {
@@ -166,6 +170,13 @@ static void set_output(struct parser_arg *a, wchar_t out) {
   }
 
   a->outidx++;
+}
+
+static void set_state(struct parser_arg *a, enum parser_st state)
+{
+  if (a->state != END) {
+    a->state = state;
+  }
 }
 
 /*******************************************************************************
@@ -182,9 +193,9 @@ static void set_output(struct parser_arg *a, wchar_t out) {
 static void json_string_start(struct parser_arg *a, wchar_t wc)
 {
   if (wc == L'"') {
-    a->state = INSTRING;
+    set_state(a, INSTRING);
   } else {
-    a->state = END;
+    set_state(a, END);
     a->error = JSONERR_UNEXPECTED_TOKEN;
     a->textidx--;
   }
@@ -198,11 +209,11 @@ static void json_string_start(struct parser_arg *a, wchar_t wc)
 static void json_string_instring(struct parser_arg *a, wchar_t wc)
 {
   if (wc == L'\\') {
-    a->state = ESCAPE;
+    set_state(a, ESCAPE);
   } else if (wc == L'"') {
-    a->state = END;
+    set_state(a, END);
   } else if (wc == L'\0') {
-    a->state = END;
+    set_state(a, END);
     a->error = JSONERR_PREMATURE_EOF;
     a->textidx--;
   } else {
@@ -217,16 +228,18 @@ static void json_string_instring(struct parser_arg *a, wchar_t wc)
  */
 static void json_string_escape(struct parser_arg *a, wchar_t wc)
 {
+  wchar_t esc = json_escape(wc);
   if (wc == L'\0') {
-    a->state = END;
+    set_state(a, END);
     a->error = JSONERR_PREMATURE_EOF;
     a->textidx--;
   } else if (wc == L'u') {
-    a->state = UESC0;
-  } else if (json_isescape(wc)) {
-    a->state = INSTRING;
+    set_state(a, UESC0);
+  } else if (esc != L'\0') {
+    set_state(a, INSTRING);
+    set_output(a, esc);
   } else {
-    a->state = END;
+    set_state(a, END);
     a->error = JSONERR_UNEXPECTED_TOKEN;
     a->textidx--;
   }
@@ -240,11 +253,11 @@ static void json_string_escape(struct parser_arg *a, wchar_t wc)
 static void json_string_uesc(struct parser_arg *a, wchar_t wc)
 {
   if (wc == L'\0') {
-    a->state = END;
+    set_state(a, END);
     a->error = JSONERR_PREMATURE_EOF;
     a->textidx--;
   } else if (json_xdigit(wc) == 0xFF) {
-    a->state = END;
+    set_state(a, END);
     a->error = JSONERR_UNEXPECTED_TOKEN;
     a->textidx--;
   } else {
@@ -258,7 +271,7 @@ static void json_string_uesc(struct parser_arg *a, wchar_t wc)
       if (a->prev == 0) {
         // if there was no "prev", that means this might be the start of a
         // surrogate pair.  Check for that!
-        if (0xD800 <= wc && wc <= 0xDFFF) {
+        if (0xD800 <= a->curr && a->curr <= 0xDFFF) {
           // yup, it's a surrogate pair!
           a->prev = a->curr;
         } else {
@@ -267,20 +280,20 @@ static void json_string_uesc(struct parser_arg *a, wchar_t wc)
         }
       } else {
         // there was a previous starting surrogate
-        if (0xD800 <= wc && wc <= 0xDFFF) {
+        if (0xD800 <= a->curr && a->curr <= 0xDFFF) {
           // and this is also a surrogate
           a->curr &= 0x03FF; // clear upper bits; keep lower 10
           a->curr |= (a->prev & 0x03FF) << 10;
+          a->curr += 0x10000; // apparently this needs to happen (?)
           a->prev = 0;
           set_output(a, a->curr);
         } else {
-          // not a legal surrogate to match previous surrogate.  We'll just push
-          // the previous code point right along anyway.  May want to error
-          // someday.
-          set_output(a, a->curr);
+          // not a legal surrogate to match previous surrogate.
+          a->state = END;
+          a->error = JSONERR_INVALID_SURROGATE;
         }
       }
-      a->state = INSTRING;
+      set_state(a, INSTRING);
       a->curr = 0;
     }
   }
@@ -334,6 +347,9 @@ static struct parser_arg json_string(const wchar_t *text, size_t idx,
     }
     a.textidx++;
   }
+  if (a.prev != 0) {
+    a.error = JSONERR_INVALID_SURROGATE;
+  }
   return a;
 }
 
@@ -371,4 +387,50 @@ struct json_parser json_parse_string(wchar_t *text, struct json_token *arr,
   p.tokenidx++;
   p.textidx = a.textidx;
   return p;
+}
+
+/**
+   @brief Argument passed to setter when we are doing json_string_match().
+ */
+struct string_compare_arg {
+  /**
+     @brief String we're comparing to.
+   */
+  const wchar_t *other;
+  /**
+     @brief Whether or not the string has evaluated to equal so far.
+   */
+  bool equal;
+};
+
+/**
+   @brief This is the "setter" function for json_string_match().
+   @param a Parser arguments.
+   @param wc Character to set.
+   @param arg The struct string_compare_arg.
+
+   This function just compares each output character to the corresponding
+   character in the other string.  It stores the result in the arg, which will
+   be examined after the fact.
+ */
+static void json_string_comparator(struct parser_arg *a, wchar_t wc, void *arg)
+{
+  struct string_compare_arg *ca = arg;
+  // we are depending on short-circuit evaluation here :)
+  ca->equal = ca->equal && (wc == ca->other[a->outidx]);
+}
+
+bool json_string_match(const wchar_t *json, const struct json_token *tokens,
+                       size_t index, const wchar_t *other)
+{
+  struct string_compare_arg ca = {
+    .other = other,
+    .equal = true,
+  };
+  struct parser_arg pa = json_string(json, tokens[index].start,
+                                     &json_string_comparator, &ca);
+
+  // They are equal if every previous character matches, and the next character
+  // in the other string is the null character, signifying the end.
+  return ca.equal && (other[pa.outidx] == L'\0');
 }
