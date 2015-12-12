@@ -130,6 +130,55 @@ static int test_no_comma(void)
   return 0;
 }
 
+static int test_get(void)
+{
+  wchar_t input[] = L"[1, null, true, \"hi\", {}]";
+  struct json_token tokens[7];
+  struct json_parser p = json_parse(input, tokens, 7);
+  size_t res;
+
+  // assertions for parsing correctly
+  TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+  TEST_ASSERT(p.tokenidx == 6);
+  TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
+
+  // assertions for the results of json_array_get()
+  res = json_array_get(input, tokens, 0, 0);
+  TEST_ASSERT(res == 1);
+  TEST_ASSERT(tokens[res].type == JSON_NUMBER);
+
+  res = json_array_get(input, tokens, 0, 1);
+  TEST_ASSERT(res == 2);
+  TEST_ASSERT(tokens[res].type == JSON_NULL);
+
+  res = json_array_get(input, tokens, 0, 2);
+  TEST_ASSERT(res == 3);
+  TEST_ASSERT(tokens[res].type == JSON_TRUE);
+
+  res = json_array_get(input, tokens, 0, 3);
+  TEST_ASSERT(res == 4);
+  TEST_ASSERT(tokens[res].type == JSON_STRING);
+
+  res = json_array_get(input, tokens, 0, 4);
+  TEST_ASSERT(res == 5);
+  TEST_ASSERT(tokens[res].type == JSON_OBJECT);
+
+  res = json_array_get(input, tokens, 0, 5);
+  TEST_ASSERT(res == 0);
+
+  return 0;
+}
+
+static int test_get_empty(void)
+{
+  wchar_t input[] = L"[]";
+  struct json_token tokens[1];
+  json_parse(input, tokens, 1);
+
+  TEST_ASSERT(0 == json_array_get(input, tokens, 0, 0));
+  return 0;
+}
+
 void test_parse_arrays(void)
 {
   smb_ut_group *group = su_create_test_group("test/parse_arrays.c");
@@ -154,6 +203,12 @@ void test_parse_arrays(void)
 
   smb_ut_test *no_comma = su_create_test("no_comma", test_no_comma);
   su_add_test(group, no_comma);
+
+  smb_ut_test *get = su_create_test("get", test_get);
+  su_add_test(group, get);
+
+  smb_ut_test *get_empty = su_create_test("get_empty", test_get_empty);
+  su_add_test(group, get_empty);
 
   su_run_group(group);
   su_delete_group(group);

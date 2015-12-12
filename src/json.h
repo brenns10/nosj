@@ -222,4 +222,15 @@ void json_string_load(const wchar_t *json, const struct json_token *tokens,
 size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
                        size_t index, const wchar_t *key);
 
+/**
+   @brief Return the value at a certain index within a JSON array.
+   @param json The original JSON buffer.
+   @param tokens The parsed token buffer.
+   @param index The index of the array token within the buffer.
+   @param array_index The index to lookup in the JSON array.
+   @return the index of the value's token, or 0 if not found.
+ */
+size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
+                      size_t index, size_t array_index);
+
 #endif // SMB_JSON

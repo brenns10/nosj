@@ -32,3 +32,18 @@ size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
 
   return 0;
 }
+
+size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
+                      size_t index, size_t array_index)
+{
+  if (index >= tokens[index].length) {
+    return 0;
+  }
+
+  index = tokens[index].child;
+  while (array_index--) {
+    index = tokens[index].next;
+  }
+
+  return index;
+}
