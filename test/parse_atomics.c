@@ -14,7 +14,7 @@
 *******************************************************************************/
 
 #include "libstephen/ut.h"
-#include "json.h"
+#include "nosj.h"
 #include "tests.h"
 
 static int test_parse_true(void)

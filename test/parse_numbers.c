@@ -14,7 +14,7 @@
 *******************************************************************************/
 
 #include "libstephen/ut.h"
-#include "json.h"
+#include "nosj.h"
 
 static int test_single_digit(void)
 {

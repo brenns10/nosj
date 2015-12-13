@@ -16,7 +16,7 @@
 #ifndef SMB_JSON_PRIVATE_H
 #define SMB_JSON_PRIVATE_H
 
-#include "json.h"
+#include "nosj.h"
 
 void json_settoken(struct json_token *arr, struct json_token tok,
                    struct json_parser p, size_t maxtoken);

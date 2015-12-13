@@ -24,7 +24,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#include "json.h"
+#include "nosj.h"
 #include "json_private.h"
 
 /*******************************************************************************

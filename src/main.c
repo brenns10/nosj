@@ -18,7 +18,7 @@
 #include <string.h>
 
 #include "libstephen/str.h"
-#include "json.h"
+#include "nosj.h"
 
 int main(int argc, char *argv[])
 {

@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 
-#include "json.h"
+#include "nosj.h"
 
 size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
                        size_t index, const wchar_t *key)
