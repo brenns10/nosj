@@ -94,4 +94,4 @@ Value: "Along with our new #Twitterbird, we've also updated our Display Guidelin
 
 You can also run the tests:
 
-    $ bin/release/test
+    $ make test
