@@ -47,12 +47,12 @@ Status
     - [x] True/False/Null
 - [x] Tests for the parsed tokens (i.e. relationships, indices, etc).
 - [ ] Loading JSON values into memory for inspection.
-    - [ ] Simple values (True/False/Null/Numbers)
+    - [x] Simple values (True/False/Null/Numbers)
     - [x] Loading strings
     - [ ] Loading arrays
     - [ ] Loading objects
     - [x] Lookup for objects 
-    - [ ] Indexing for arrays
+    - [x] Indexing for arrays
 - [ ] API Documentation.
 
 Setup
