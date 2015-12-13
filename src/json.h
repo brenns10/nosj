@@ -233,4 +233,14 @@ size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
 size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
                       size_t index, size_t array_index);
 
+/**
+   @brief Return the value of a JSON number token.
+   @param json The original JSON buffer.
+   @param tokens The parsed token buffer.
+   @param index The index of the number in the token buffer.
+   @returns the value as a double-precision float
+ */
+double json_number_get(const wchar_t *json, const struct json_token *tokens,
+                       size_t index);
+
 #endif // SMB_JSON

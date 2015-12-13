@@ -13,6 +13,8 @@
 
 *******************************************************************************/
 
+#include <stdio.h>
+
 #include "json.h"
 
 size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
@@ -46,4 +48,12 @@ size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
   }
 
   return index;
+}
+
+double json_number_get(const wchar_t *json, const struct json_token *tokens,
+                       size_t index)
+{
+  double result;
+  swscanf(json + tokens[index].start, L"%lf", &result);
+  return result;
 }
