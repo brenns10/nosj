@@ -1,0 +1,18 @@
+language: c
+addons:
+  apt:
+    packages:
+      - doxygen
+      - valgrind
+install:
+  - pip install sphinx sphinx_rtd_theme breathe
+  - curl http://ftp.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
+  - make -C lcov-1.1 install
+  - rm -rf lcov-1.1
+  - lcov --version
+script: make test
+after_success:
+  - ./push.sh
+env:
+  global:
+    - secure: "R/FFdC74T6A9XMAq0cwc6SPweUFfXMy1HPXE739uxxhWZDImtXlIzSM21TdxkQZVRl8xeaF4IqD6Cid/17OB9VyvGR3mZOTJqHKJO9+GJKuOzHnX+imw2KAgvOIV6j4qTpLswVrHfCp0j7btb/DLpg1QNF2ScCOckcamwoaufmlKpIKg0nDjBTAfPvT+jMNrHRz/sbIfHr0Aag/2m1fICM/ULFg+47ABl74pJYpBcU2536HSY57zYV6+NvGQHD8sSQ0+0oZa+RW+wd08hRoctffmlpwo2AWS+1Zuhf5Yy3WGZ1u+AhVpR4Gs1lhaNYLMMlqHKNJkm8TbJ/zgx+DSqYl5oH6d83gC46bzxSNusRYBVQa86CuYZ3huUAqZJtR+Tg4mZKrmErE4ueUzYBP0zU1s/tiXe4rgPyIyHrsXtx86CS8zJOcWMaE9qedc8KiqI14CXdh5dxnV6S912/Dcni6i+NeoeSlX/XunKRmR9W+XtaMqo4I+vf8ZnjBuoxRH7rpn8oqeCjZ7N9gFMPnlifhXaKeYFhYIRLZGQURCJKAAWJEThg/arTObpS5hzf0XC+XzjbTYO0bvqsyzKrQWM3GWcs84ae70JAv7XMBKTi8pwZB+JWz/443lZHQyp6pPulr8+b7XkAKrvlCScahh4qzVkG2fng1gFqje2kfn4mQ="
