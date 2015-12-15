@@ -1,6 +1,6 @@
 language: python
 python:
-  - 3.5
+  - 3.4
 addons:
   apt:
     packages:
@@ -10,7 +10,10 @@ install:
   - pwd
   - ls
   - pip install sphinx sphinx_rtd_theme breathe
-  - curl http://ftp.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
+  - cd .. && curl http://ftp.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
+  - pwd
+  - cd nosj
+  - pwd
   - export PATH=$(pwd)/lcov-1.11/bin:$PATH
   - echo $PATH
   - lcov --version
