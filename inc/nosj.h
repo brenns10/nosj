@@ -24,10 +24,12 @@
 /**
    @brief Enumeration for all possible types of JSON values.
 
-   The JSON spec lists each of these as their own type.  So, I internally
-   recognize them as such.  An argument could be made for having JSON_TRUE and
-   JSON_FALSE be the same type (some sort of boolean type).  But I don't
-   honestly think that would make things that much clearer or simpler.
+   An instance of this enum is included in each `struct json_token`, since each
+   token directly represents a JSON value.
+
+   The JSON spec lists each of these as their own type.  So, NOSJ internally
+   recognizes them as such.  Note that the boolean values true and false
+   actually are each their own type (as is null).
  */
 enum json_type {
   JSON_OBJECT=0,
@@ -42,9 +44,13 @@ enum json_type {
 /**
    @brief Represents a JSON "token".
 
-   This isn't a token in the sense of lexical analysis.  JSON is simple enough
-   that I don't really need to tokenize before parsing.  Each "token" is a JSON
-   value (object, array, string, number, etc).  Tokens are stored in an array.
+   A "token" in NOSJ terminology maps directly to a single JSON value.  This
+   struct contains "metadata" that NOSJ can later use to navigate through the
+   JSON structure or load the value.  These tokens are stored in an array, so
+   their relationships (child, next, etc) are simply other indices in the array.
+   JSON values take on a "tree-like" structure, so tokens are stored in a
+   pre-order traversal of this tree.  That is, you have the parent object,
+   followed by each of its children.
  */
 struct json_token {
 
@@ -63,7 +69,7 @@ struct json_token {
   /**
      @brief For tokens that can have a length, this is the length!
 
-     More specifically, it is:
+     More specifically, this value represents:
      - For arrays, the number of elements.
      - For objects, the number of key, value pairs.
      - For strings, the number of Unicode code points.
@@ -72,12 +78,18 @@ struct json_token {
   /**
      @brief Index of the first "child" value.
 
-     Child values are either items in a list, keys in a dictionary, or the
-     values associated with a key.
+     A "child value" can mean slightly different things in different situations:
+     - For an array, the child is the first element of the array.
+     - For an object, the child is the first key of the object.
+     - For strings that are keys in an object, the child is the value
+       corresponding to that key.
    */
   size_t child;
   /**
      @brief Index of the next value in the sequence.
+
+     Within lists, "next" refers to the next value in the list.  Within objects,
+     the "next" attribute of a key refers to the next key in the object.
    */
   size_t next;
 };
@@ -115,40 +127,36 @@ enum json_error {
 };
 
 /**
-   @brief Data structure that contains parser state.
+   @brief A data structure that contains parser state.
 
-   We pass and return copies of this struct throughout this parser.  I like this
-   just because it makes things a bit more transparent, and a little less
-   "mystery pointer operations".
+   This struct is the return value of `json_parse()`.  It is also used
+   internally throughout parsing to represent the current state of the parser.
  */
 struct json_parser {
   /**
      @brief The index of the next "unhandled" character.
+
+     On return from `json_parse()`, this is the index of the first character
+     that wasn't parsed.  Or, equivalently, this is the number of input
+     characters parsed.
    */
   size_t textidx;
   /**
      @brief The index of the next slot to stick a token in our array.
+
+     On return from `json_parse()`, this is the first index of the token array
+     that was not used.  Equivalently, this is the number of tokens parsed.
    */
   size_t tokenidx;
   /**
-     @brief Error code from the parser, if any.
+     @brief Error code.  This *must* be checked the first time you parse.
    */
   enum json_error error;
   /**
-     @brief Argument to the error code.
+     @brief Argument to the error code.  Useful for printing error messages.
    */
   size_t errorarg;
 };
-
-/**
-   @brief Array mapping JSON type to a string representation of that type.
- */
-char *json_type_str[JSON_NULL+1];
-
-/**
-   @brief Array mapping error to printf format string.
- */
-char *json_error_str[JSONERR_EXPECTED_TOKEN+1];
 
 /**
    @brief Parse JSON into tokens.
@@ -158,7 +166,8 @@ char *json_error_str[JSONERR_EXPECTED_TOKEN+1];
    tokenizes into an already allocated buffer of tokens, so that no memory
    allocation takes place.  This means that you should pre-allocate a buffer.
    In order to know what size buffer to allocate, you can call this function
-   with arr=NULL, and it will return the number of tokens it would have parsed.
+   with arr=NULL, and it will return the number of tokens it would have parsed
+   as part of the `json_parser` return value (``textidx``).
 
    @param json The text buffer to parse.
    @param arr A buffer to put the tokens in.  May be null.
@@ -180,7 +189,7 @@ struct json_parser json_parse(wchar_t *json, struct json_token *arr, size_t n);
 void json_print(struct json_token *arr, size_t n);
 
 /**
-   @brief Print out the error message for a parser error.
+   @brief Print out a parser error message for a parser error.
    @param f File to print to.
    @param p Parser return struct.
  */
