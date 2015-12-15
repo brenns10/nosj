@@ -119,7 +119,7 @@ DEPENDENCIES  = $(patsubst $(SOURCE_DIR)/%.c,$(DEPENDENCY_DIR)/$(SOURCE_DIR)/%.d
 DEPENDENCIES += $(patsubst $(TEST_DIR)/%.c,$(DEPENDENCY_DIR)/$(TEST_DIR)/%.d,$(TEST_SOURCES))
 
 # --- GLOBAL TARGETS: You can probably adjust and augment these if you'd like.
-.PHONY: all test clean clean_all clean_cov clean_doc
+.PHONY: all test doc clean clean_all clean_cov clean_doc
 
 all: $(BINARY_DIR)/$(CFG)/$(TARGET) GTAGS
 
@@ -131,6 +131,7 @@ test: $(BINARY_DIR)/$(CFG)/$(TEST_TARGET)
 
 doc: $(SOURCES) $(TEST_SOURCES) Doxyfile
 	doxygen
+	make -C doc html
 
 cov: $(BINARY_DIR)/$(CFG)/$(TEST_TARGET)
 	@if [ "$(CFG)" != "coverage" ]; then \

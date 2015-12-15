@@ -5,4 +5,5 @@ bin
 dep
 obj
 cov
-*.json
+doc/xml
+doc/_build
