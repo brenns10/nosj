@@ -7,14 +7,11 @@ addons:
       - doxygen
       - valgrind
 install:
-  - pwd
-  - ls
   - pip install sphinx sphinx_rtd_theme breathe
-  - cd .. && curl http://ftp.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
-  - pwd
-  - cd nosj
-  - pwd
+  - cd ..
+  - curl http://ftp.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
   - export PATH=$(pwd)/lcov-1.11/bin:$PATH
+  - cd nosj
   - echo $PATH
   - lcov --version
 script: make test
