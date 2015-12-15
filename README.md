@@ -1,4 +1,4 @@
-NOSJ
+NOSJ ![Build Status](https://travis-ci.org/brenns10/nosj.svg?branch=master)
 ====
 
 *NOSJ is a library for parsing JSON in C.*
@@ -53,7 +53,7 @@ Status
     - [ ] Loading objects
     - [x] Lookup for objects 
     - [x] Indexing for arrays
-- [ ] API Documentation.
+- [x] API Documentation.
 
 Setup
 -----
