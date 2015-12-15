@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libstephen/str.h"
+#include "libstephen/str.h" // for read_filew()
 #include "nosj.h"
 
 int main(int argc, char *argv[])
@@ -28,13 +28,16 @@ int main(int argc, char *argv[])
   struct json_parser p;
   int returncode = 0;
 
+  // When no filename specified, or "-" specified, use STDIN.  Else, use the
+  // specified filename as input.
   if (argc < 2 || strcmp(argv[1], "-") == 0) {
     f = stdin;
   } else {
     f = fopen(argv[1], "r");
   }
 
-  // Read the whole contents of the file.
+  // Read the whole contents of the file.  This uses a libstephen helper
+  // function.  http://stephen-brennan.com/libstephen/doc/api/str.html
   text = read_filew(f);
 
   // Parse the first time to get the number of tokens.
@@ -49,20 +52,29 @@ int main(int argc, char *argv[])
   tokens = calloc(p.tokenidx, sizeof(struct json_token));
   p = json_parse(text, tokens, p.tokenidx);
 
-  // Finally, print.
+  // Finally, print the entire token array.
   json_print(tokens, p.tokenidx);
 
-  // A demonstration of getting tokens out of an object.
+  // Now, let's look for the key "text" in the root object.
   if (p.tokenidx > 0 && tokens[0].type == JSON_OBJECT) {
+    // We can only do this if there is a root value and it's an object.
     printf("Searching for key \"text\" in the base object.\n");
     size_t value = json_object_get(text, tokens, 0, L"text");
+
     if (value != 0) {
+      // Non-zero means we successfully found the key!
       printf("Found key \"text\".\n");
-      json_print(tokens + value, 1);
-      wchar_t *string = calloc(sizeof(wchar_t), tokens[value].length + 1);
-      json_string_load(text, tokens, value, string);
-      printf("Value: \"%ls\"\n", string);
-      free(string);
+      json_print(tokens + value, 1); // print just that one token
+
+      if (tokens[value].type == JSON_STRING) {
+        // We're expecting this to be a string.  So, let's load it and print it.
+        wchar_t *string = calloc(sizeof(wchar_t), tokens[value].length + 1);
+        json_string_load(text, tokens, value, string);
+        printf("Value: \"%ls\"\n", string);
+        free(string);
+      } else {
+        printf("Value associated with \"text\" was not a string.\n");
+      }
     } else {
       printf("Key \"text\" not found in base object.\n");
     }
