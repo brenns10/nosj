@@ -1,0 +1,558 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NOSJ API Reference &mdash; NOSJ 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="NOSJ 0.1 documentation" href="index.html"/>
+        <link rel="prev" title="NOSJ Documentation" href="doc.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NOSJ
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="doc.html">NOSJ Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">NOSJ API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">NOSJ</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>NOSJ API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/api.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nosj-api-reference">
+<h1>NOSJ API Reference<a class="headerlink" href="#nosj-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Enums</p>
+<dl class="enum">
+<dt id="c.json_type">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06c"></span><em class="property">enum </em><code class="descname">json_type</code><a class="headerlink" href="#c.json_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumeration for all possible types of JSON values. </p>
+<p>An instance of this enum is included in each `struct json_token`, since each token directly represents a JSON value.</p>
+<p>The JSON spec lists each of these as their own type. So, NOSJ internally recognizes them as such. Note that the boolean values true and false actually are each their own type (as is null). </p>
+<p><em>Values:</em></p>
+<dl class="enumvalue">
+<dt id="c.JSON_OBJECT">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06ca7750125a86a953cfd57b3a4e1fa67bff"></span><code class="descname">JSON_OBJECT</code> = 0<a class="headerlink" href="#c.JSON_OBJECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSON_ARRAY">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06ca97462341a4eba4320d62d49597eabb6a"></span><code class="descname">JSON_ARRAY</code><a class="headerlink" href="#c.JSON_ARRAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSON_NUMBER">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06ca6670b3c9b7ba8ab3976a7521edcc7f97"></span><code class="descname">JSON_NUMBER</code><a class="headerlink" href="#c.JSON_NUMBER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSON_STRING">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06ca02bfd03b07e5b9ecd6ee0d257dc37daf"></span><code class="descname">JSON_STRING</code><a class="headerlink" href="#c.JSON_STRING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSON_TRUE">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06ca1f0fe46dc8290ec256147fe9364c1aba"></span><code class="descname">JSON_TRUE</code><a class="headerlink" href="#c.JSON_TRUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSON_FALSE">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06cadc8ef3806e60d2e9458036d0172ff53c"></span><code class="descname">JSON_FALSE</code><a class="headerlink" href="#c.JSON_FALSE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSON_NULL">
+<span class="target" id="project0nosj_8h_1ac75c61993722a9b8aaa44704072ec06ca03ddcc4e2eef955020a01e10c11bfe48"></span><code class="descname">JSON_NULL</code><a class="headerlink" href="#c.JSON_NULL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="enum">
+<dt id="c.json_error">
+<span class="target" id="project0nosj_8h_1afbbf3a52ff68581b1bd7430dd593cb0a"></span><em class="property">enum </em><code class="descname">json_error</code><a class="headerlink" href="#c.json_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Errors that could be encountered in JSON parsing. </p>
+<p><em>Values:</em></p>
+<dl class="enumvalue">
+<dt id="c.JSONERR_NO_ERROR">
+<span class="target" id="project0nosj_8h_1afbbf3a52ff68581b1bd7430dd593cb0aa3fa23e120c2b6a18d216e499135e8e44"></span><code class="descname">JSONERR_NO_ERROR</code><a class="headerlink" href="#c.JSONERR_NO_ERROR" title="Permalink to this definition">¶</a></dt>
+<dd><p>No error! </p>
+</dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSONERR_INVALID_NUMBER">
+<span class="target" id="project0nosj_8h_1afbbf3a52ff68581b1bd7430dd593cb0aa67eb7de4a67033b5e8ff5e679b3a5b20"></span><code class="descname">JSONERR_INVALID_NUMBER</code><a class="headerlink" href="#c.JSONERR_INVALID_NUMBER" title="Permalink to this definition">¶</a></dt>
+<dd><p>An error was encountered while parsing a number. </p>
+</dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSONERR_PREMATURE_EOF">
+<span class="target" id="project0nosj_8h_1afbbf3a52ff68581b1bd7430dd593cb0aa565776ea4f2781018178375ae6ac0d92"></span><code class="descname">JSONERR_PREMATURE_EOF</code><a class="headerlink" href="#c.JSONERR_PREMATURE_EOF" title="Permalink to this definition">¶</a></dt>
+<dd><p>The string ended unexpectedly. </p>
+</dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSONERR_UNEXPECTED_TOKEN">
+<span class="target" id="project0nosj_8h_1afbbf3a52ff68581b1bd7430dd593cb0aad23ceaf440dd0bf2090b4160541f558e"></span><code class="descname">JSONERR_UNEXPECTED_TOKEN</code><a class="headerlink" href="#c.JSONERR_UNEXPECTED_TOKEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parser encountered a token that was not expected. </p>
+</dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSONERR_INVALID_SURROGATE">
+<span class="target" id="project0nosj_8h_1afbbf3a52ff68581b1bd7430dd593cb0aa68f28c9356ca9d939459d088c87ba74e"></span><code class="descname">JSONERR_INVALID_SURROGATE</code><a class="headerlink" href="#c.JSONERR_INVALID_SURROGATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parser encountered an invalid surrogate pair. </p>
+</dd></dl>
+
+<dl class="enumvalue">
+<dt id="c.JSONERR_EXPECTED_TOKEN">
+<span class="target" id="project0nosj_8h_1afbbf3a52ff68581b1bd7430dd593cb0aa24a92d2669fe906cab4becb76c58b414"></span><code class="descname">JSONERR_EXPECTED_TOKEN</code><a class="headerlink" href="#c.JSONERR_EXPECTED_TOKEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parser did not encounter an expected token. </p>
+<p>This error has an argument (e.g. expected &#8216;:&#8217;). </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Functions</p>
+<dl class="function">
+<dt id="c.json_parse">
+<span class="target" id="project0nosj_8h_1a6df40887f81db3a8abb9f5bf37f236ff"></span>struct <a class="reference internal" href="#c.json_parser" title="json_parser">json_parser</a> <code class="descname">json_parse</code><span class="sig-paren">(</span>wchar_t *<em>&nbsp;json</em>, struct  <a class="reference internal" href="#c.json_token" title="json_token">json_token</a>  *<em>&nbsp;arr</em>, size_t<em>&nbsp;n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse JSON into tokens. </p>
+<p>This function simply tokenizes JSON. That is, it identifies the location of each JSON entity: objects, arrays, strings, numbers, booleans, and null. It tokenizes into an already allocated buffer of tokens, so that no memory allocation takes place. This means that you should pre-allocate a buffer. In order to know what size buffer to allocate, you can call this function with arr=NULL, and it will return the number of tokens it would have parsed as part of the `json_parser` return value (``textidx``).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>A parser result. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">json</span></code> - <p>The text buffer to parse. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">arr</span></code> - <p>A buffer to put the tokens in. May be null. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">n</span></code> - <p>The number of slots in the arr buffer. </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.json_print">
+<span class="target" id="project0nosj_8h_1aa7d5e93efae5909fe766a464eb413986"></span>void <code class="descname">json_print</code><span class="sig-paren">(</span>struct  <a class="reference internal" href="#c.json_token" title="json_token">json_token</a>  *<em>&nbsp;arr</em>, size_t<em>&nbsp;n</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_print" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a list of JSON tokens. </p>
+<p>This is mostly for diagnostics. After you&#8217;ve parsed JSON, you may want to know whether you did it right. This function prints out the contents of a buffer of JSON tokens so that you can see the parse results.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">arr</span></code> - <p>The array of tokens to print. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">n</span></code> - <p>The number of tokens in the buffer. </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.json_print_error">
+<span class="target" id="project0nosj_8h_1a8af01fcd3175053e100b875e18450d7f"></span>void <code class="descname">json_print_error</code><span class="sig-paren">(</span>FILE *<em>&nbsp;f</em>, struct  <a class="reference internal" href="#c.json_parser" title="json_parser">json_parser</a><em>&nbsp;p</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_print_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out a parser error message for a parser error. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">f</span></code> - <p>File to print to. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">p</span></code> - <p>Parser return struct. </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.json_string_match">
+<span class="target" id="project0nosj_8h_1a1cfcfa9c5e76fe492f01e65389c2181e"></span>bool <code class="descname">json_string_match</code><span class="sig-paren">(</span>const wchar_t *<em>&nbsp;json</em>, const struct  <a class="reference internal" href="#c.json_token" title="json_token">json_token</a>  *<em>&nbsp;tokens</em>, size_t<em>&nbsp;index</em>, const wchar_t *<em>&nbsp;other</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_string_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether or not a string matches a token string. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>True if they are equal, false otherwise. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">json</span></code> - <p>The original JSON buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">tokens</span></code> - <p>The parsed tokens. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">index</span></code> - <p>The index of the string token. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">other</span></code> - <p>The other string to compare to. </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.json_string_load">
+<span class="target" id="project0nosj_8h_1ad636ac95a073f7644e9b2c1c0f8bcb53"></span>void <code class="descname">json_string_load</code><span class="sig-paren">(</span>const wchar_t *<em>&nbsp;json</em>, const struct  <a class="reference internal" href="#c.json_token" title="json_token">json_token</a>  *<em>&nbsp;tokens</em>, size_t<em>&nbsp;index</em>, wchar_t *<em>&nbsp;buffer</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_string_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a string into a buffer. </p>
+<p>
+The buffer MUST NOT be null. It must point to an already allocated buffer, of at least size `tokens[index].length + 1` (room for the text and a NULL character). <dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">json</span></code> - <p>The original JSON buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">tokens</span></code> - <p>The parsed tokens. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">index</span></code> - <p>The index of the string token. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">buffer</span></code> - <p>The buffer to load the string into.</p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.json_object_get">
+<span class="target" id="project0nosj_8h_1a5d6aa988889f63b949fe4eb0d62412c0"></span>size_t <code class="descname">json_object_get</code><span class="sig-paren">(</span>const wchar_t *<em>&nbsp;json</em>, const struct  <a class="reference internal" href="#c.json_token" title="json_token">json_token</a>  *<em>&nbsp;tokens</em>, size_t<em>&nbsp;index</em>, const wchar_t *<em>&nbsp;key</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_object_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value associated with a key in a JSON object. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the index of the value token, or 0 if not found. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">json</span></code> - <p>The original JSON buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">tokens</span></code> - <p>The parsed token buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">index</span></code> - <p>The index of the JSON object. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">key</span></code> - <p>The key you&#8217;re searching for. </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.json_array_get">
+<span class="target" id="project0nosj_8h_1a52cb5b432da1522151e4dd845db47cb5"></span>size_t <code class="descname">json_array_get</code><span class="sig-paren">(</span>const wchar_t *<em>&nbsp;json</em>, const struct  <a class="reference internal" href="#c.json_token" title="json_token">json_token</a>  *<em>&nbsp;tokens</em>, size_t<em>&nbsp;index</em>, size_t<em>&nbsp;array_index</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_array_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value at a certain index within a JSON array. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the index of the value&#8217;s token, or 0 if not found. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">json</span></code> - <p>The original JSON buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">tokens</span></code> - <p>The parsed token buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">index</span></code> - <p>The index of the array token within the buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">array_index</span></code> - <p>The index to lookup in the JSON array. </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.json_number_get">
+<span class="target" id="project0nosj_8h_1a7708a52e1b7b224798ae00f277acfd6a"></span>double <code class="descname">json_number_get</code><span class="sig-paren">(</span>const wchar_t *<em>&nbsp;json</em>, const struct  <a class="reference internal" href="#c.json_token" title="json_token">json_token</a>  *<em>&nbsp;tokens</em>, size_t<em>&nbsp;index</em><span class="sig-paren">)</span><a class="headerlink" href="#c.json_number_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of a JSON number token. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the value as a double-precision float </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><code class="first docutils literal"><span class="pre">json</span></code> - <p>The original JSON buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">tokens</span></code> - <p>The parsed token buffer. </p>
+</li>
+<li><code class="first docutils literal"><span class="pre">index</span></code> - <p>The index of the number in the token buffer. </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<dl class="struct">
+<dt id="c.json_token">
+<span class="target" id="project0structjson__token"></span><em class="property">struct </em><code class="descname">json_token</code><a class="headerlink" href="#c.json_token" title="Permalink to this definition">¶</a></dt>
+<dd><em>#include &lt;nosj.h&gt;</em><p>Represents a JSON &#8220;token&#8221;. </p>
+<p>A &#8220;token&#8221; in NOSJ terminology maps directly to a single JSON value. This struct contains &#8220;metadata&#8221; that NOSJ can later use to navigate through the JSON structure or load the value. These tokens are stored in an array, so their relationships (child, next, etc) are simply other indices in the array. JSON values take on a &#8220;tree-like&#8221; structure, so tokens are stored in a pre-order traversal of this tree. That is, you have the parent object, followed by each of its children. </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt id="c.type">
+<span class="target" id="project0structjson__token_1a241d5ebb19a3fa006b74888ea216afa2"></span><a class="reference internal" href="#c.json_type" title="json_type">json_type</a> <code class="descname">type</code><a class="headerlink" href="#c.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of the token. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.start">
+<span class="target" id="project0structjson__token_1a52a8a99bfbb1c17e94e3a9f816d8f5ee"></span>size_t <code class="descname">start</code><a class="headerlink" href="#c.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the first character of the token in the string. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.end">
+<span class="target" id="project0structjson__token_1aca05b1afbbe1c83cf087b49df03c441a"></span>size_t <code class="descname">end</code><a class="headerlink" href="#c.end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the last character of the token in the string. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.length">
+<span class="target" id="project0structjson__token_1ae809d5359ac030c60a30a8f0b2294b82"></span>size_t <code class="descname">length</code><a class="headerlink" href="#c.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>For tokens that can have a length, this is the length! </p>
+<p>More specifically, this value represents:<ul class="simple">
+<li>For arrays, the number of elements.</li>
+<li>For objects, the number of key, value pairs.</li>
+<li>For strings, the number of Unicode code points. </li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.child">
+<span class="target" id="project0structjson__token_1a88247cc25f6c65980ab8ecf6efcc1475"></span>size_t <code class="descname">child</code><a class="headerlink" href="#c.child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the first &#8220;child&#8221; value. </p>
+<p>A &#8220;child value&#8221; can mean slightly different things in different situations:<ul class="simple">
+<li>For an array, the child is the first element of the array.</li>
+<li>For an object, the child is the first key of the object.</li>
+<li>For strings that are keys in an object, the child is the value corresponding to that key. </li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.next">
+<span class="target" id="project0structjson__token_1aecb4d4b187a80f849ed46f7eed1bb57d"></span>size_t <code class="descname">next</code><a class="headerlink" href="#c.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the next value in the sequence. </p>
+<p>Within lists, &#8220;next&#8221; refers to the next value in the list. Within objects, the &#8220;next&#8221; attribute of a key refers to the next key in the object. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="struct">
+<dt id="c.json_parser">
+<span class="target" id="project0structjson__parser"></span><em class="property">struct </em><code class="descname">json_parser</code><a class="headerlink" href="#c.json_parser" title="Permalink to this definition">¶</a></dt>
+<dd><em>#include &lt;nosj.h&gt;</em><p>A data structure that contains parser state. </p>
+<p>This struct is the return value of `json_parse()`. It is also used internally throughout parsing to represent the current state of the parser. </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt id="c.textidx">
+<span class="target" id="project0structjson__parser_1a1bbbe6210a248204ef8907f7d8ca05f7"></span>size_t <code class="descname">textidx</code><a class="headerlink" href="#c.textidx" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the next &#8220;unhandled&#8221; character. </p>
+<p>On return from `json_parse()`, this is the index of the first character that wasn&#8217;t parsed. Or, equivalently, this is the number of input characters parsed. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.tokenidx">
+<span class="target" id="project0structjson__parser_1adc2ded9c089624fb02c210a17eba616f"></span>size_t <code class="descname">tokenidx</code><a class="headerlink" href="#c.tokenidx" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the next slot to stick a token in our array. </p>
+<p>On return from `json_parse()`, this is the first index of the token array that was not used. Equivalently, this is the number of tokens parsed. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.error">
+<span class="target" id="project0structjson__parser_1a1807066b5238059a70eda94e45d7a627"></span><a class="reference internal" href="#c.json_error" title="json_error">json_error</a> <code class="descname">error</code><a class="headerlink" href="#c.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error code. This *must* be checked the first time you parse. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt id="c.errorarg">
+<span class="target" id="project0structjson__parser_1a4f46847c62733fa7aa3b48a27e3d62eb"></span>size_t <code class="descname">errorarg</code><a class="headerlink" href="#c.errorarg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Argument to the error code. Useful for printing error messages. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="doc.html" class="btn btn-neutral" title="NOSJ Documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Stephen Brennan.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
