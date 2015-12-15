@@ -1,14 +1,18 @@
-language: c
+language: python
+python:
+  - 3.5
 addons:
   apt:
     packages:
       - doxygen
       - valgrind
 install:
+  - pwd
+  - ls
   - pip install sphinx sphinx_rtd_theme breathe
   - curl http://ftp.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz | tar xz
-  - make -C lcov-1.1 install
-  - rm -rf lcov-1.1
+  - export PATH=$(pwd)/lcov-1.11/bin:$PATH
+  - echo $PATH
   - lcov --version
 script: make test
 after_success:
