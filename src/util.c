@@ -17,8 +17,8 @@
 
 #include "nosj.h"
 
-size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
-                       size_t index, const wchar_t *key)
+size_t json_object_get(const char *json, const struct json_token *tokens,
+                       size_t index, const char *key)
 {
 	if (tokens[index].type != JSON_OBJECT)
 		return 0;
@@ -35,9 +35,11 @@ size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
 	return 0;
 }
 
-size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
+size_t json_array_get(const char *json, const struct json_token *tokens,
                       size_t index, size_t array_index)
 {
+	(void)json;
+
 	if (index >= tokens[index].length) {
 		return 0;
 	}
@@ -50,10 +52,10 @@ size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
 	return index;
 }
 
-double json_number_get(const wchar_t *json, const struct json_token *tokens,
+double json_number_get(const char *json, const struct json_token *tokens,
                        size_t index)
 {
 	double result;
-	swscanf(json + tokens[index].start, L"%lf", &result);
+	sscanf(json + tokens[index].start, "%lf", &result);
 	return result;
 }

@@ -19,13 +19,13 @@
 
 static int test_empty_object(void)
 {
-	wchar_t input[] = L"{}";
+	char input[] = "{}";
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_OBJECT);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 1);
@@ -37,7 +37,7 @@ static int test_empty_object(void)
 
 static int test_single_element(void)
 {
-	wchar_t input[] = L"{\"a\": 1}";
+	char input[] = "{\"a\": 1}";
 	size_t ntok = 3, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
@@ -63,7 +63,7 @@ static int test_single_element(void)
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
@@ -77,7 +77,7 @@ static int test_single_element(void)
 
 static int test_multiple_elements(void)
 {
-	wchar_t input[] = L"{\"a\": 1, \"b\": 2}";
+	char input[] = "{\"a\": 1, \"b\": 2}";
 	size_t ntok = 5, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
@@ -115,7 +115,7 @@ static int test_multiple_elements(void)
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
@@ -129,7 +129,7 @@ static int test_multiple_elements(void)
 
 static int test_extra_comma(void)
 {
-	wchar_t input[] = L"{\"a\": 1,}";
+	char input[] = "{\"a\": 1,}";
 	size_t ntok = 3, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
@@ -155,7 +155,7 @@ static int test_extra_comma(void)
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
@@ -169,7 +169,7 @@ static int test_extra_comma(void)
 
 static int test_no_end(void)
 {
-	wchar_t input[] = L"{\"a\": 1,";
+	char input[] = "{\"a\": 1,";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
 	return 0;
@@ -177,7 +177,7 @@ static int test_no_end(void)
 
 static int test_no_colon(void)
 {
-	wchar_t input[] = L"{\"blah\" 2}";
+	char input[] = "{\"blah\" 2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
 	TEST_ASSERT(p.errorarg == ':');
@@ -186,7 +186,7 @@ static int test_no_colon(void)
 
 static int test_missing_value(void)
 {
-	wchar_t input[] = L"{\"blah\":}";
+	char input[] = "{\"blah\":}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -194,7 +194,7 @@ static int test_missing_value(void)
 
 static int test_no_key(void)
 {
-	wchar_t input[] = L"{:2}";
+	char input[] = "{:2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -202,7 +202,7 @@ static int test_no_key(void)
 
 static int test_number_key(void)
 {
-	wchar_t input[] = L"{1:2}";
+	char input[] = "{1:2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -210,7 +210,7 @@ static int test_number_key(void)
 
 static int test_true_key(void)
 {
-	wchar_t input[] = L"{true:2}";
+	char input[] = "{true:2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -218,7 +218,7 @@ static int test_true_key(void)
 
 static int test_false_key(void)
 {
-	wchar_t input[] = L"{false:2}";
+	char input[] = "{false:2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -226,7 +226,7 @@ static int test_false_key(void)
 
 static int test_null_key(void)
 {
-	wchar_t input[] = L"{null:2}";
+	char input[] = "{null:2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -234,7 +234,7 @@ static int test_null_key(void)
 
 static int test_list_key(void)
 {
-	wchar_t input[] = L"{[]:2}";
+	char input[] = "{[]:2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -242,7 +242,7 @@ static int test_list_key(void)
 
 static int test_object_key(void)
 {
-	wchar_t input[] = L"{{}:2}";
+	char input[] = "{{}:2}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -250,7 +250,7 @@ static int test_object_key(void)
 
 static int test_no_comma(void)
 {
-	wchar_t input[] = L"{\"a\":2 \"b\":\"blah\"}";
+	char input[] = "{\"a\":2 \"b\":\"blah\"}";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
 	TEST_ASSERT(p.errorarg == L',');
@@ -259,20 +259,20 @@ static int test_no_comma(void)
 
 static int test_get_object(void)
 {
-	wchar_t input[] = L"{\"a\":2, \"b\":\"blah\"}";
+	char input[] = "{\"a\":2, \"b\":\"blah\"}";
 	struct json_token tokens[5];
 	struct json_parser p = json_parse(input, tokens, 5);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 5);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
-	size_t value = json_object_get(input, tokens, 0, L"a");
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
+	size_t value = json_object_get(input, tokens, 0, "a");
 	TEST_ASSERT(value == 2);
 	TEST_ASSERT(tokens[value].type == JSON_NUMBER);
-	value = json_object_get(input, tokens, 0, L"b");
+	value = json_object_get(input, tokens, 0, "b");
 	TEST_ASSERT(value == 4);
 	TEST_ASSERT(tokens[value].type == JSON_STRING);
 	TEST_ASSERT(tokens[value].start == 12);
-	value = json_object_get(input, tokens, 0, L"c");
+	value = json_object_get(input, tokens, 0, "c");
 	TEST_ASSERT(value == 0);
 	return 0;
 }

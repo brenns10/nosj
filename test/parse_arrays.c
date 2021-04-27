@@ -19,13 +19,13 @@
 
 static int test_empty_array(void)
 {
-	wchar_t input[] = L"[]";
+	char input[] = "[]";
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_ARRAY);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 1);
@@ -37,7 +37,7 @@ static int test_empty_array(void)
 
 static int test_single_element(void)
 {
-	wchar_t input[] = L"[1]";
+	char input[] = "[1]";
 	size_t ntok = 2, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
@@ -57,7 +57,7 @@ static int test_single_element(void)
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
@@ -71,7 +71,7 @@ static int test_single_element(void)
 static int test_multiple_elements(void)
 {
 	size_t ntok = 3, i;
-	wchar_t input[] = L"[1, 2]";
+	char input[] = "[1, 2]";
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
 		{ .type = JSON_ARRAY,
@@ -96,7 +96,7 @@ static int test_multiple_elements(void)
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
@@ -109,7 +109,7 @@ static int test_multiple_elements(void)
 
 static int test_extra_comma(void)
 {
-	wchar_t input[] = L"[1,]";
+	char input[] = "[1,]";
 	size_t ntok = 2, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
@@ -129,7 +129,7 @@ static int test_extra_comma(void)
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == ntok);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
@@ -142,7 +142,7 @@ static int test_extra_comma(void)
 
 static int test_no_end(void)
 {
-	wchar_t input[] = L"[1,";
+	char input[] = "[1,";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
 	return 0;
@@ -150,7 +150,7 @@ static int test_no_end(void)
 
 static int test_error_within_list(void)
 {
-	wchar_t input[] = L"[1e,";
+	char input[] = "[1e,";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
 	return 0;
@@ -158,7 +158,7 @@ static int test_error_within_list(void)
 
 static int test_no_comma(void)
 {
-	wchar_t input[] = L"[1 2 3]";
+	char input[] = "[1 2 3]";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
 	TEST_ASSERT(p.errorarg = L',');
@@ -167,7 +167,7 @@ static int test_no_comma(void)
 
 static int test_get(void)
 {
-	wchar_t input[] = L"[1, null, true, \"hi\", {}]";
+	char input[] = "[1, null, true, \"hi\", {}]";
 	struct json_token tokens[7];
 	struct json_parser p = json_parse(input, tokens, 7);
 	size_t res;
@@ -175,7 +175,7 @@ static int test_get(void)
 	// assertions for parsing correctly
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 6);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 
 	// assertions for the results of json_array_get()
 	res = json_array_get(input, tokens, 0, 0);
@@ -206,7 +206,7 @@ static int test_get(void)
 
 static int test_get_empty(void)
 {
-	wchar_t input[] = L"[]";
+	char input[] = "[]";
 	struct json_token tokens[1];
 	json_parse(input, tokens, 1);
 

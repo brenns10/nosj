@@ -20,91 +20,91 @@
 
 static int test_normal_string(void)
 {
-	wchar_t input[] = L"\"hello\"";
-	wchar_t string[] = L"hello";
-	wchar_t buffer[6];
+	char input[] = "\"hello\"";
+	char string[] = "hello";
+	char buffer[6];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 6);
 	TEST_ASSERT(tokens[0].length == 5);
 	json_string_load(input, tokens, 0, buffer);
-	TEST_ASSERT(0 == wcscmp(buffer, string));
+	TEST_ASSERT(0 == strcmp(buffer, string));
 	return 0;
 }
 
 static int test_escape_quote(void)
 {
-	wchar_t input[] = L"\"he\\\"llo\"";
-	wchar_t string[] = L"he\"llo";
-	wchar_t buffer[7];
+	char input[] = "\"he\\\"llo\"";
+	char string[] = "he\"llo";
+	char buffer[7];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 	json_string_load(input, tokens, 0, buffer);
-	TEST_ASSERT(0 == wcscmp(buffer, string));
+	TEST_ASSERT(0 == strcmp(buffer, string));
 	return 0;
 }
 
 static int test_escape_backslash(void)
 {
-	wchar_t input[] = L"\"he\\\\llo\"";
-	wchar_t string[] = L"he\\llo";
-	wchar_t buffer[7];
+	char input[] = "\"he\\\\llo\"";
+	char string[] = "he\\llo";
+	char buffer[7];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 	json_string_load(input, tokens, 0, buffer);
-	TEST_ASSERT(0 == wcscmp(buffer, string));
+	TEST_ASSERT(0 == strcmp(buffer, string));
 	return 0;
 }
 
 static int test_unicode_escape(void)
 {
-	wchar_t input[] = L"\"he\\u006Clo\"";
-	wchar_t string[] = L"hello";
-	wchar_t buffer[6];
+	char input[] = "\"he\\u006Clo\"";
+	char string[] = "hello";
+	char buffer[6];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 11);
 	TEST_ASSERT(tokens[0].length == 5);
 	json_string_load(input, tokens, 0, buffer);
-	TEST_ASSERT(0 == wcscmp(buffer, string));
+	TEST_ASSERT(0 == strcmp(buffer, string));
 	return 0;
 }
 
 static int test_surrogate_pair(void)
 {
-	wchar_t input[] = L"\"\\uD83D\\uDCA9\"";
-	wchar_t string[] = L"💩"; // directly included poop :)
-	wchar_t buffer[2];
+	char input[] = "\"\\uD83D\\uDCA9\"";
+	char string[] = "💩"; // directly included poop :)
+	char buffer[2];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 13);
 	TEST_ASSERT(tokens[0].length == 1);
 	json_string_load(input, tokens, 0, buffer);
-	TEST_ASSERT(0 == wcscmp(buffer, string));
+	TEST_ASSERT(0 == strcmp(buffer, string));
 	return 0;
 }
 

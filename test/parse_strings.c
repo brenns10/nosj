@@ -19,27 +19,27 @@
 
 static int test_empty_string(void)
 {
-	wchar_t input[] = L"\"\"";
+	char input[] = "\"\"";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	return 0;
 }
 
 static int test_single_char(void)
 {
-	wchar_t input[] = L"\"a\"";
+	char input[] = "\"a\"";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	return 0;
 }
 
 static int test_no_end(void)
 {
-	wchar_t input[] = L"\"blah";
+	char input[] = "\"blah";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
 	return 0;
@@ -47,17 +47,17 @@ static int test_no_end(void)
 
 static int test_escape(void)
 {
-	wchar_t input[] = L"\"blah\\\"blah\"";
+	char input[] = "\"blah\\\"blah\"";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	return 0;
 }
 
 static int test_escaped_end(void)
 {
-	wchar_t input[] = L"\"blah\\";
+	char input[] = "\"blah\\";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
 	return 0;
@@ -65,17 +65,17 @@ static int test_escaped_end(void)
 
 static int test_valid_uesc(void)
 {
-	wchar_t input[] = L"\"blah\\u1a2Bblah\"";
+	char input[] = "\"blah\\u1a2Bblah\"";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	return 0;
 }
 
 static int test_too_short_uesc(void)
 {
-	wchar_t input[] = L"\"blah\\u1a\"";
+	char input[] = "\"blah\\u1a\"";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -83,7 +83,7 @@ static int test_too_short_uesc(void)
 
 static int test_string_end_uesc(void)
 {
-	wchar_t input[] = L"\"blah\\u1a";
+	char input[] = "\"blah\\u1a";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
 	return 0;
@@ -91,7 +91,7 @@ static int test_string_end_uesc(void)
 
 static int test_invalid_char_uesc(void)
 {
-	wchar_t input[] = L"\"blah\\u1aG-\"";
+	char input[] = "\"blah\\u1aG-\"";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -99,8 +99,8 @@ static int test_invalid_char_uesc(void)
 
 static int test_valid_esc(void)
 {
-	wchar_t input[] = L"\"\\a\"";
-	wchar_t valid[] = L"\"\\/bfnrt";
+	char input[] = "\"\\a\"";
+	char valid[] = "\"\\/bfnrt";
 	size_t i;
 	struct json_parser p;
 	for (i = 0; valid[i] != L'\0'; i++) {
@@ -108,15 +108,15 @@ static int test_valid_esc(void)
 		p = json_parse(input, NULL, 0);
 		TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 		TEST_ASSERT(p.tokenidx == 1);
-		TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+		TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	}
 	return 0;
 }
 
 static int test_invalid_esc(void)
 {
-	wchar_t input[] = L"\"\\a\"";
-	wchar_t valid[] = L"aAB12.,[(%!"; // something of a cross-section!
+	char input[] = "\"\\a\"";
+	char valid[] = "aAB12.,[(%!"; // something of a cross-section!
 	size_t i;
 	struct json_parser p;
 	for (i = 0; valid[i] != L'\0'; i++) {

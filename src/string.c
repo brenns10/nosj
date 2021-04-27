@@ -42,7 +42,7 @@ struct parser_arg;
    @param out The next parsed character in the string.
    @param data Any data the setter might need.
  */
-typedef void (*output_setter)(struct parser_arg *a, wchar_t out, void *data);
+typedef void (*output_setter)(struct parser_arg *a, char out, void *data);
 
 /**
    @brief States of the parser.
@@ -60,7 +60,7 @@ struct parser_arg {
 	/**
 	   @brief Input text.
 	 */
-	const wchar_t *text;
+	const char *text;
 	/**
 	   @brief Current index of the text we're parsing.
 	 */
@@ -85,11 +85,11 @@ struct parser_arg {
 	   putting them in literally), you have to do the UTF-16 surrogate pair.
 	   What a pain.
 	 */
-	wchar_t prev;
+	char prev;
 	/**
 	   @brief Unicode escape character we are currently parsing.
 	 */
-	wchar_t curr;
+	char curr;
 	/**
 	   @brief Any error we want to report.
 	 */
@@ -105,7 +105,7 @@ struct parser_arg {
 /**
    @brief Return true if c is a valid character to come after a backslash.
  */
-static wchar_t json_escape(wchar_t c)
+static char json_escape(char c)
 {
 	switch (c) {
 	case L'\"':
@@ -135,7 +135,7 @@ static wchar_t json_escape(wchar_t c)
    The JSON spec explicitly states that these are the only hex characters it
    accepts, so I've written my own to explicitly cover only those.
  */
-static unsigned char json_xdigit(wchar_t c)
+static unsigned char json_xdigit(char c)
 {
 	if (L'0' <= c && c <= L'9') {
 		return (unsigned char)(c - L'0');
@@ -157,7 +157,7 @@ static unsigned char json_xdigit(wchar_t c)
    doesn't happen, the original first character is preserved.  After that, it
    calls the output setter and increments the index.
  */
-static void set_output(struct parser_arg *a, wchar_t out)
+static void set_output(struct parser_arg *a, char out)
 {
 	// don't forget to flush the "buffered" potential surrogate pair
 	if (a->prev != 0) {
@@ -191,7 +191,7 @@ static void set_state(struct parser_arg *a, enum parser_st state)
    @param a Parser data.
    @param wc Character.
  */
-static void json_string_start(struct parser_arg *a, wchar_t wc)
+static void json_string_start(struct parser_arg *a, char wc)
 {
 	if (wc == L'"') {
 		set_state(a, INSTRING);
@@ -207,7 +207,7 @@ static void json_string_start(struct parser_arg *a, wchar_t wc)
    @param a Parser data.
    @param wc Character.
  */
-static void json_string_instring(struct parser_arg *a, wchar_t wc)
+static void json_string_instring(struct parser_arg *a, char wc)
 {
 	if (wc == L'\\') {
 		set_state(a, ESCAPE);
@@ -227,9 +227,9 @@ static void json_string_instring(struct parser_arg *a, wchar_t wc)
    @param a Parser data.
    @param wc Character.
  */
-static void json_string_escape(struct parser_arg *a, wchar_t wc)
+static void json_string_escape(struct parser_arg *a, char wc)
 {
-	wchar_t esc = json_escape(wc);
+	char esc = json_escape(wc);
 	if (wc == L'\0') {
 		set_state(a, END);
 		a->error = JSONERR_PREMATURE_EOF;
@@ -251,7 +251,7 @@ static void json_string_escape(struct parser_arg *a, wchar_t wc)
    @param a Parser data.
    @param wc Character.
  */
-static void json_string_uesc(struct parser_arg *a, wchar_t wc)
+static void json_string_uesc(struct parser_arg *a, char wc)
 {
 	if (wc == L'\0') {
 		set_state(a, END);
@@ -262,6 +262,8 @@ static void json_string_uesc(struct parser_arg *a, wchar_t wc)
 		a->error = JSONERR_UNEXPECTED_TOKEN;
 		a->textidx--;
 	} else {
+		/* improve this */
+		fprintf(stderr, "nosj warning: encountered unicode escape!\n");
 		a->curr = a->curr << 4;
 		a->curr |= json_xdigit(wc);
 		if (a->state < UESC3) {
@@ -312,10 +314,10 @@ static void json_string_uesc(struct parser_arg *a, wchar_t wc)
    @param setter Function to call with each character.
    @param setarg Argument to give to the setter function.
  */
-static struct parser_arg json_string(const wchar_t *text, size_t idx,
+static struct parser_arg json_string(const char *text, size_t idx,
                                      output_setter setter, void *setarg)
 {
-	wchar_t wc;
+	char wc;
 	struct parser_arg a = { .state = START,
 		                .text = text,
 		                .textidx = idx,
@@ -371,7 +373,7 @@ static struct parser_arg json_string(const wchar_t *text, size_t idx,
    @param p The parser state.
    @returns Parser state after parsing the string.
  */
-struct json_parser json_parse_string(wchar_t *text, struct json_token *arr,
+struct json_parser json_parse_string(char *text, struct json_token *arr,
                                      size_t maxtoken, struct json_parser p)
 {
 	struct json_token tok;
@@ -401,7 +403,7 @@ struct string_compare_arg {
 	/**
 	   @brief String we're comparing to.
 	 */
-	const wchar_t *other;
+	const char *other;
 	/**
 	   @brief Whether or not the string has evaluated to equal so far.
 	 */
@@ -418,15 +420,15 @@ struct string_compare_arg {
    character in the other string.  It stores the result in the arg, which will
    be examined after the fact.
  */
-static void json_string_comparator(struct parser_arg *a, wchar_t wc, void *arg)
+static void json_string_comparator(struct parser_arg *a, char wc, void *arg)
 {
 	struct string_compare_arg *ca = arg;
 	// we are depending on short-circuit evaluation here :)
 	ca->equal = ca->equal && (wc == ca->other[a->outidx]);
 }
 
-bool json_string_match(const wchar_t *json, const struct json_token *tokens,
-                       size_t index, const wchar_t *other)
+bool json_string_match(const char *json, const struct json_token *tokens,
+                       size_t index, const char *other)
 {
 	struct string_compare_arg ca = {
 		.other = other,
@@ -451,15 +453,15 @@ bool json_string_match(const wchar_t *json, const struct json_token *tokens,
    character in the other string.  It stores the result in the arg, which will
    be examined after the fact.
  */
-static void json_string_loader(struct parser_arg *a, wchar_t wc, void *arg)
+static void json_string_loader(struct parser_arg *a, char wc, void *arg)
 {
-	wchar_t *str = arg;
+	char *str = arg;
 	// we are depending on short-circuit evaluation here :)
 	str[a->outidx] = wc;
 }
 
-void json_string_load(const wchar_t *json, const struct json_token *tokens,
-                      size_t index, wchar_t *buffer)
+void json_string_load(const char *json, const struct json_token *tokens,
+                      size_t index, char *buffer)
 {
 	struct parser_arg pa = json_string(json, tokens[index].start,
 	                                   &json_string_loader, buffer);

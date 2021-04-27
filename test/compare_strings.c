@@ -18,13 +18,13 @@
 
 static int test_normal_string(void)
 {
-	wchar_t input[] = L"\"hello\"";
-	wchar_t string[] = L"hello";
+	char input[] = "\"hello\"";
+	char string[] = "hello";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 6);
@@ -34,13 +34,13 @@ static int test_normal_string(void)
 
 static int test_normal_nomatch(void)
 {
-	wchar_t input[] = L"\"hello\"";
-	wchar_t string[] = L"hellO";
+	char input[] = "\"hello\"";
+	char string[] = "hellO";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 6);
@@ -50,13 +50,13 @@ static int test_normal_nomatch(void)
 
 static int test_normal_too_long(void)
 {
-	wchar_t input[] = L"\"hello\"";
-	wchar_t string[] = L"hello there";
+	char input[] = "\"hello\"";
+	char string[] = "hello there";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 6);
@@ -66,13 +66,13 @@ static int test_normal_too_long(void)
 
 static int test_normal_too_short(void)
 {
-	wchar_t input[] = L"\"hello\"";
-	wchar_t string[] = L"he";
+	char input[] = "\"hello\"";
+	char string[] = "he";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 6);
@@ -82,13 +82,13 @@ static int test_normal_too_short(void)
 
 static int test_escape_quote(void)
 {
-	wchar_t input[] = L"\"he\\\"llo\"";
-	wchar_t string[] = L"he\"llo";
+	char input[] = "\"he\\\"llo\"";
+	char string[] = "he\"llo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -98,13 +98,13 @@ static int test_escape_quote(void)
 
 static int test_escape_backslash(void)
 {
-	wchar_t input[] = L"\"he\\\\llo\"";
-	wchar_t string[] = L"he\\llo";
+	char input[] = "\"he\\\\llo\"";
+	char string[] = "he\\llo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -114,13 +114,13 @@ static int test_escape_backslash(void)
 
 static int test_escape_slash(void)
 {
-	wchar_t input[] = L"\"he\\/llo\"";
-	wchar_t string[] = L"he/llo";
+	char input[] = "\"he\\/llo\"";
+	char string[] = "he/llo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -130,13 +130,13 @@ static int test_escape_slash(void)
 
 static int test_escape_backspace(void)
 {
-	wchar_t input[] = L"\"he\\bllo\"";
-	wchar_t string[] = L"he\bllo";
+	char input[] = "\"he\\bllo\"";
+	char string[] = "he\bllo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -146,13 +146,13 @@ static int test_escape_backspace(void)
 
 static int test_escape_formfeed(void)
 {
-	wchar_t input[] = L"\"he\\fllo\"";
-	wchar_t string[] = L"he\fllo";
+	char input[] = "\"he\\fllo\"";
+	char string[] = "he\fllo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -162,13 +162,13 @@ static int test_escape_formfeed(void)
 
 static int test_escape_newline(void)
 {
-	wchar_t input[] = L"\"he\\nllo\"";
-	wchar_t string[] = L"he\nllo";
+	char input[] = "\"he\\nllo\"";
+	char string[] = "he\nllo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -178,13 +178,13 @@ static int test_escape_newline(void)
 
 static int test_escape_carriage_return(void)
 {
-	wchar_t input[] = L"\"he\\rllo\"";
-	wchar_t string[] = L"he\rllo";
+	char input[] = "\"he\\rllo\"";
+	char string[] = "he\rllo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -194,13 +194,13 @@ static int test_escape_carriage_return(void)
 
 static int test_escape_tab(void)
 {
-	wchar_t input[] = L"\"he\\tllo\"";
-	wchar_t string[] = L"he\tllo";
+	char input[] = "\"he\\tllo\"";
+	char string[] = "he\tllo";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 8);
@@ -210,13 +210,13 @@ static int test_escape_tab(void)
 
 static int test_unicode_escape(void)
 {
-	wchar_t input[] = L"\"he\\u006Clo\"";
-	wchar_t string[] = L"hello";
+	char input[] = "\"he\\u006Clo\"";
+	char string[] = "hello";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 11);
@@ -226,13 +226,13 @@ static int test_unicode_escape(void)
 
 static int test_surrogate_pair(void)
 {
-	wchar_t input[] = L"\"\\uD83D\\uDCA9\"";
-	wchar_t string[] = L"💩"; // directly included poop :)
+	char input[] = "\"\\uD83D\\uDCA9\"";
+	char string[] = "💩"; // directly included poop :)
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 13);
@@ -242,7 +242,7 @@ static int test_surrogate_pair(void)
 
 static int test_incomplete_surrogate(void)
 {
-	wchar_t input[] = L"\"\\uD83D\"";
+	char input[] = "\"\\uD83D\"";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_INVALID_SURROGATE);
@@ -251,7 +251,7 @@ static int test_incomplete_surrogate(void)
 
 static int test_invalid_surrogate_char(void)
 {
-	wchar_t input[] = L"\"\\uD83Da\"";
+	char input[] = "\"\\uD83Da\"";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_INVALID_SURROGATE);
@@ -260,8 +260,8 @@ static int test_invalid_surrogate_char(void)
 
 static int test_invalid_surrogate_pair(void)
 {
-	wchar_t input[] = L"\"\\uD83D\\u1234\""; // 1234 is not a valid
-	                                         // surrogate to follow
+	char input[] = "\"\\uD83D\\u1234\""; // 1234 is not a valid
+	                                     // surrogate to follow
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_INVALID_SURROGATE);

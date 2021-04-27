@@ -19,7 +19,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <wchar.h>
+#include <string.h>
 
 /**
    @brief Enumeration for all possible types of JSON values.
@@ -178,7 +178,7 @@ struct json_parser {
    @param n The number of slots in the arr buffer.
    @returns A parser result.
  */
-struct json_parser json_parse(wchar_t *json, struct json_token *arr, size_t n);
+struct json_parser json_parse(char *json, struct json_token *arr, size_t n);
 
 /**
    @brief Print a list of JSON tokens.
@@ -207,8 +207,8 @@ void json_print_error(FILE *f, struct json_parser p);
    @param other The other string to compare to.
    @return True if they are equal, false otherwise.
  */
-bool json_string_match(const wchar_t *json, const struct json_token *tokens,
-                       size_t index, const wchar_t *other);
+bool json_string_match(const char *json, const struct json_token *tokens,
+                       size_t index, const char *other);
 
 /**
    @brief Load a string into a buffer.
@@ -221,8 +221,8 @@ bool json_string_match(const wchar_t *json, const struct json_token *tokens,
    of at least size `tokens[index].length + 1` (room for the text and a NULL
    character).
  */
-void json_string_load(const wchar_t *json, const struct json_token *tokens,
-                      size_t index, wchar_t *buffer);
+void json_string_load(const char *json, const struct json_token *tokens,
+                      size_t index, char *buffer);
 
 /**
    @brief Return the value associated with a key in a JSON object.
@@ -232,8 +232,8 @@ void json_string_load(const wchar_t *json, const struct json_token *tokens,
    @param key The key you're searching for.
    @return the index of the value token, or 0 if not found.
  */
-size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
-                       size_t index, const wchar_t *key);
+size_t json_object_get(const char *json, const struct json_token *tokens,
+                       size_t index, const char *key);
 
 /**
    @brief Return the value at a certain index within a JSON array.
@@ -243,7 +243,7 @@ size_t json_object_get(const wchar_t *json, const struct json_token *tokens,
    @param array_index The index to lookup in the JSON array.
    @return the index of the value's token, or 0 if not found.
  */
-size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
+size_t json_array_get(const char *json, const struct json_token *tokens,
                       size_t index, size_t array_index);
 
 /**
@@ -253,7 +253,7 @@ size_t json_array_get(const wchar_t *json, const struct json_token *tokens,
    @param index The index of the number in the token buffer.
    @returns the value as a double-precision float
  */
-double json_number_get(const wchar_t *json, const struct json_token *tokens,
+double json_number_get(const char *json, const struct json_token *tokens,
                        size_t index);
 
 #endif // SMB_JSON

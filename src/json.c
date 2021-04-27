@@ -17,29 +17,29 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <wchar.h>
+#include <string.h>
 
 #include "json_private.h"
 #include "nosj.h"
 
 // forward declaration of the main parser
-static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
+static struct json_parser json_parse_rec(char *text, struct json_token *arr,
                                          size_t maxtoken, struct json_parser p);
 
 /**
    @brief Return true if c is a whitespace character according to the JSON spec.
  */
-static bool json_isspace(wchar_t c)
+static bool json_isspace(char c)
 {
-	return (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n');
+	return (c == ' ' || c == '\t' || c == '\r' || c == '\n');
 }
 
 /**
    @brief Return true if c could be the beginning of a JSON number.
  */
-static bool json_isnumber(wchar_t c)
+static bool json_isnumber(char c)
 {
-	return (c == L'-' || (L'0' <= c && c <= L'9'));
+	return (c == '-' || ('0' <= c && c <= '9'));
 }
 
 /**
@@ -147,8 +147,7 @@ static void json_setlength(struct json_token *arr, size_t tokidx, size_t length,
    @param p The current parser state
    @returns The new parser state
  */
-static struct json_parser json_skip_whitespace(wchar_t *text,
-                                               struct json_parser p)
+static struct json_parser json_skip_whitespace(char *text, struct json_parser p)
 {
 	while (json_isspace(text[p.textidx]) && text[p.textidx] != '\0') {
 		p.textidx++;
@@ -164,7 +163,7 @@ static struct json_parser json_skip_whitespace(wchar_t *text,
    @param p The parser state.
    @returns Parser state after parsing true.
  */
-static struct json_parser json_parse_true(wchar_t *text, struct json_token *arr,
+static struct json_parser json_parse_true(char *text, struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
 	struct json_token tok;
@@ -174,7 +173,7 @@ static struct json_parser json_parse_true(wchar_t *text, struct json_token *arr,
 	tok.length = 0;
 	tok.child = 0;
 	tok.next = 0;
-	if (wcsncmp(L"true", text + p.textidx, 4) == 0) {
+	if (strncmp("true", text + p.textidx, 4) == 0) {
 		json_settoken(arr, tok, p, maxtoken);
 		p.textidx += 4;
 		p.tokenidx += 1;
@@ -193,8 +192,7 @@ static struct json_parser json_parse_true(wchar_t *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing false.
  */
-static struct json_parser json_parse_false(wchar_t *text,
-                                           struct json_token *arr,
+static struct json_parser json_parse_false(char *text, struct json_token *arr,
                                            size_t maxtoken,
                                            struct json_parser p)
 {
@@ -206,7 +204,7 @@ static struct json_parser json_parse_false(wchar_t *text,
 	tok.length = 0;
 	tok.child = 0;
 	tok.next = 0;
-	if (wcsncmp(L"false", text + p.textidx, 5) == 0) {
+	if (strncmp("false", text + p.textidx, 5) == 0) {
 		json_settoken(arr, tok, p, maxtoken);
 		p.textidx += 5;
 		p.tokenidx += 1;
@@ -225,7 +223,7 @@ static struct json_parser json_parse_false(wchar_t *text,
    @param p The parser state.
    @returns Parser state after parsing null.
  */
-static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
+static struct json_parser json_parse_null(char *text, struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
 	struct json_token tok;
@@ -235,7 +233,7 @@ static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
 	tok.length = 0;
 	tok.child = 0;
 	tok.next = 0;
-	if (wcsncmp(L"null", text + p.textidx, 4) == 0) {
+	if (strncmp("null", text + p.textidx, 4) == 0) {
 		json_settoken(arr, tok, p, maxtoken);
 		p.textidx += 4;
 		p.tokenidx += 1;
@@ -254,8 +252,7 @@ static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing the array.
  */
-static struct json_parser json_parse_array(wchar_t *text,
-                                           struct json_token *arr,
+static struct json_parser json_parse_array(char *text, struct json_token *arr,
                                            size_t maxtoken,
                                            struct json_parser p)
 {
@@ -277,9 +274,9 @@ static struct json_parser json_parse_array(wchar_t *text,
 
 	// Skip through whitespace.
 	p = json_skip_whitespace(text, p);
-	while (text[p.textidx] != L']') {
+	while (text[p.textidx] != ']') {
 
-		if (text[p.textidx] == L'\0') {
+		if (text[p.textidx] == '\0') {
 			p.error = JSONERR_PREMATURE_EOF;
 			return p;
 		}
@@ -309,14 +306,14 @@ static struct json_parser json_parse_array(wchar_t *text,
 
 		// Skip whitespace.
 		p = json_skip_whitespace(text, p);
-		if (text[p.textidx] == L',') {
+		if (text[p.textidx] == ',') {
 			p.textidx++;
 			p = json_skip_whitespace(text, p);
-		} else if (text[p.textidx] != L']') {
+		} else if (text[p.textidx] != ']') {
 			// If there was no comma, this better be the end of the
 			// object.
 			p.error = JSONERR_EXPECTED_TOKEN;
-			p.errorarg = L',';
+			p.errorarg = ',';
 			return p;
 		}
 	}
@@ -337,8 +334,7 @@ static struct json_parser json_parse_array(wchar_t *text,
    @param p The parser state.
    @returns Parser state after parsing the object.
  */
-static struct json_parser json_parse_object(wchar_t *text,
-                                            struct json_token *arr,
+static struct json_parser json_parse_object(char *text, struct json_token *arr,
                                             size_t maxtoken,
                                             struct json_parser p)
 {
@@ -360,9 +356,9 @@ static struct json_parser json_parse_object(wchar_t *text,
 
 	// Skip through whitespace.
 	p = json_skip_whitespace(text, p);
-	while (text[p.textidx] != L'}') {
+	while (text[p.textidx] != '}') {
 		// Make sure the string didn't end.
-		if (text[p.textidx] == L'\0') {
+		if (text[p.textidx] == '\0') {
 			p.error = JSONERR_PREMATURE_EOF;
 			return p;
 		}
@@ -375,9 +371,9 @@ static struct json_parser json_parse_object(wchar_t *text,
 			return p;
 		}
 		p = json_skip_whitespace(text, p);
-		if (text[p.textidx] != L':') {
+		if (text[p.textidx] != ':') {
 			p.error = JSONERR_EXPECTED_TOKEN;
-			p.errorarg = L':';
+			p.errorarg = ':';
 			return p;
 		}
 		p.textidx++;
@@ -406,14 +402,14 @@ static struct json_parser json_parse_object(wchar_t *text,
 
 		// Skip whitespace.
 		p = json_skip_whitespace(text, p);
-		if (text[p.textidx] == L',') {
+		if (text[p.textidx] == ',') {
 			p.textidx++;
 			p = json_skip_whitespace(text, p);
-		} else if (text[p.textidx] != L'}') {
+		} else if (text[p.textidx] != '}') {
 			// If there was no comma, this better be the end of the
 			// object.
 			p.error = JSONERR_EXPECTED_TOKEN;
-			p.errorarg = L',';
+			p.errorarg = ',';
 			return p;
 		}
 	}
@@ -441,8 +437,7 @@ char *parse_number_state[] = {
    @param p The parser state.
    @returns Parser state after parsing the number.
  */
-static struct json_parser json_parse_number(wchar_t *text,
-                                            struct json_token *arr,
+static struct json_parser json_parse_number(char *text, struct json_token *arr,
                                             size_t maxtoken,
                                             struct json_parser p)
 {
@@ -495,15 +490,15 @@ static struct json_parser json_parse_number(wchar_t *text,
 
 	// printf("input: %s\n", text + p.textidx);
 	while (state != END) {
-		wchar_t c = text[p.textidx];
+		char c = text[p.textidx];
 		// printf("state: %s\n", parse_number_state[state]);
 		switch (state) {
 		case START:
-			if (c == L'0') {
+			if (c == '0') {
 				state = ZERO;
-			} else if (c == L'-') {
+			} else if (c == '-') {
 				state = MINUS;
-			} else if (L'1' <= c && c <= L'9') {
+			} else if ('1' <= c && c <= '9') {
 				state = DIGIT;
 			} else {
 				p.error = JSONERR_INVALID_NUMBER;
@@ -511,9 +506,9 @@ static struct json_parser json_parse_number(wchar_t *text,
 			}
 			break;
 		case MINUS:
-			if (c == L'0') {
+			if (c == '0') {
 				state = ZERO;
-			} else if (L'1' <= c && c <= L'9') {
+			} else if ('1' <= c && c <= '9') {
 				state = DIGIT;
 			} else {
 				p.error = JSONERR_INVALID_NUMBER;
@@ -521,27 +516,27 @@ static struct json_parser json_parse_number(wchar_t *text,
 			}
 			break;
 		case ZERO:
-			if (c == L'.') {
+			if (c == '.') {
 				state = DECIMAL;
-			} else if (c == L'e' || c == L'E') {
+			} else if (c == 'e' || c == 'E') {
 				state = EXPONENT;
 			} else {
 				state = END;
 			}
 			break;
 		case DIGIT:
-			if (c == L'.') {
+			if (c == '.') {
 				state = DECIMAL;
-			} else if (c == L'e' || c == L'E') {
+			} else if (c == 'e' || c == 'E') {
 				state = EXPONENT;
-			} else if (L'0' <= c && c <= L'9') {
+			} else if ('0' <= c && c <= '9') {
 				state = DIGIT;
 			} else {
 				state = END;
 			}
 			break;
 		case DECIMAL:
-			if (L'0' <= c && c <= L'9') {
+			if ('0' <= c && c <= '9') {
 				state = DECIMAL_ACCEPT;
 			} else {
 				p.error = JSONERR_INVALID_NUMBER;
@@ -549,18 +544,18 @@ static struct json_parser json_parse_number(wchar_t *text,
 			}
 			break;
 		case DECIMAL_ACCEPT:
-			if (L'0' <= c && c <= L'9') {
+			if ('0' <= c && c <= '9') {
 				state = DECIMAL_ACCEPT;
-			} else if (c == L'e' || c == L'E') {
+			} else if (c == 'e' || c == 'E') {
 				state = EXPONENT;
 			} else {
 				state = END;
 			}
 			break;
 		case EXPONENT:
-			if (c == L'+' || c == L'-') {
+			if (c == '+' || c == '-') {
 				state = EXPONENT_DIGIT;
-			} else if (L'0' <= c && c <= L'9') {
+			} else if ('0' <= c && c <= '9') {
 				state = EXPONENT_DIGIT_ACCEPT;
 			} else {
 				p.error = JSONERR_INVALID_NUMBER;
@@ -568,7 +563,7 @@ static struct json_parser json_parse_number(wchar_t *text,
 			}
 			break;
 		case EXPONENT_DIGIT:
-			if (L'0' <= c && c <= L'9') {
+			if ('0' <= c && c <= '9') {
 				state = EXPONENT_DIGIT_ACCEPT;
 			} else {
 				p.error = JSONERR_INVALID_NUMBER;
@@ -576,7 +571,7 @@ static struct json_parser json_parse_number(wchar_t *text,
 			}
 			break;
 		case EXPONENT_DIGIT_ACCEPT:
-			if (L'0' <= c && c <= L'9') {
+			if ('0' <= c && c <= '9') {
 				state = EXPONENT_DIGIT_ACCEPT;
 			} else {
 				state = END;
@@ -604,7 +599,7 @@ static struct json_parser json_parse_number(wchar_t *text,
    @param p The parser state.
    @returns Parser state after parsing the value.
  */
-static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
+static struct json_parser json_parse_rec(char *text, struct json_token *arr,
                                          size_t maxtoken, struct json_parser p)
 {
 	p = json_skip_whitespace(text, p);
@@ -615,17 +610,17 @@ static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
 	}
 
 	switch (text[p.textidx]) {
-	case L'{':
+	case '{':
 		return json_parse_object(text, arr, maxtoken, p);
-	case L'[':
+	case '[':
 		return json_parse_array(text, arr, maxtoken, p);
-	case L'"':
+	case '"':
 		return json_parse_string(text, arr, maxtoken, p);
-	case L't':
+	case 't':
 		return json_parse_true(text, arr, maxtoken, p);
-	case L'f':
+	case 'f':
 		return json_parse_false(text, arr, maxtoken, p);
-	case L'n':
+	case 'n':
 		return json_parse_null(text, arr, maxtoken, p);
 	default:
 		if (json_isnumber(text[p.textidx])) {
@@ -649,7 +644,7 @@ char *json_error_str[] = {
 	"expected token '%c'",
 };
 
-struct json_parser json_parse(wchar_t *text, struct json_token *arr,
+struct json_parser json_parse(char *text, struct json_token *arr,
                               size_t maxtoken)
 {
 	struct json_parser parser = { .textidx = 0,

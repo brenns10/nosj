@@ -19,12 +19,12 @@
 
 static int test_parse_true(void)
 {
-	wchar_t input[] = L"true";
+	char input[] = "true";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_TRUE);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 3);
@@ -35,12 +35,12 @@ static int test_parse_true(void)
 
 static int test_parse_false(void)
 {
-	wchar_t input[] = L"false";
+	char input[] = "false";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_FALSE);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 4);
@@ -51,12 +51,12 @@ static int test_parse_false(void)
 
 static int test_parse_null(void)
 {
-	wchar_t input[] = L"null";
+	char input[] = "null";
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
-	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_NULL);
 	TEST_ASSERT(tokens[0].start == 0);
 	TEST_ASSERT(tokens[0].end == 3);
@@ -67,7 +67,7 @@ static int test_parse_null(void)
 
 static int test_parse_empty_string(void)
 {
-	wchar_t input[] = L"";
+	char input[] = "";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
 	return 0;
@@ -75,7 +75,7 @@ static int test_parse_empty_string(void)
 
 static int test_parse_whitespace_string(void)
 {
-	wchar_t input[] = L" \t\r\n";
+	char input[] = " \t\r\n";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
 	return 0;
@@ -83,7 +83,7 @@ static int test_parse_whitespace_string(void)
 
 static int test_parse_invalid_true(void)
 {
-	wchar_t input[] = L"trua";
+	char input[] = "trua";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -91,7 +91,7 @@ static int test_parse_invalid_true(void)
 
 static int test_parse_invalid_false(void)
 {
-	wchar_t input[] = L"flase";
+	char input[] = "flase";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;
@@ -99,7 +99,7 @@ static int test_parse_invalid_false(void)
 
 static int test_parse_invalid_null(void)
 {
-	wchar_t input[] = L"nulL";
+	char input[] = "nul";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
 	return 0;

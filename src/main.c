@@ -23,7 +23,7 @@
 int main(int argc, char *argv[])
 {
 	FILE *f;
-	wchar_t *text;
+	char *text;
 	struct json_token *tokens = NULL;
 	struct json_parser p;
 	int returncode = 0;
@@ -36,9 +36,10 @@ int main(int argc, char *argv[])
 		f = fopen(argv[1], "r");
 	}
 
-	// Read the whole contents of the file.  This uses a libstephen helper
-	// function.  http://stephen-brennan.com/libstephen/doc/api/str.html
-	text = read_filew(f);
+#define FS 8192
+	// Read the whole contents of the file (hope it's less than 8192 byte)
+	text = malloc(FS);
+	fread(text, 1, FS, f);
 
 	// Parse the first time to get the number of tokens.
 	p = json_parse(text, tokens, 0);
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
 		// We can only do this if there is a root value and it's an
 		// object.
 		printf("Searching for key \"text\" in the base object.\n");
-		size_t value = json_object_get(text, tokens, 0, L"text");
+		size_t value = json_object_get(text, tokens, 0, "text");
 
 		if (value != 0) {
 			// Non-zero means we successfully found the key!
@@ -71,11 +72,10 @@ int main(int argc, char *argv[])
 			if (tokens[value].type == JSON_STRING) {
 				// We're expecting this to be a string.  So,
 				// let's load it and print it.
-				wchar_t *string =
-				        calloc(sizeof(wchar_t),
-				               tokens[value].length + 1);
+				char *string = calloc(sizeof(char),
+				                      tokens[value].length + 1);
 				json_string_load(text, tokens, value, string);
-				printf("Value: \"%ls\"\n", string);
+				printf("Value: \"%s\"\n", string);
 				free(string);
 			} else {
 				printf("Value associated with \"text\" was not "
