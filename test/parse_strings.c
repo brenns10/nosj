@@ -1,17 +1,17 @@
-/***************************************************************************//**
+/***************************************************************************/ /**
 
-  @file         parse_strings.c
+   @file         parse_strings.c
 
-  @author       Stephen Brennan
+   @author       Stephen Brennan
 
-  @date         Created Tuesday, 24 November 2015
+   @date         Created Tuesday, 24 November 2015
 
-  @brief        Test string parsing.
+   @brief        Test string parsing.
 
-  @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the Revised
-                BSD License.  See LICENSE.txt for details.
+   @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the
+ Revised BSD License.  See LICENSE.txt for details.
 
-*******************************************************************************/
+ *******************************************************************************/
 
 #include "libstephen/ut.h"
 
@@ -19,151 +19,158 @@
 
 static int test_empty_string(void)
 {
-  wchar_t input[] = L"\"\"";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
-  return 0;
+	wchar_t input[] = L"\"\"";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.tokenidx == 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	return 0;
 }
 
 static int test_single_char(void)
 {
-  wchar_t input[] = L"\"a\"";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
-  return 0;
+	wchar_t input[] = L"\"a\"";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.tokenidx == 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	return 0;
 }
 
 static int test_no_end(void)
 {
-  wchar_t input[] = L"\"blah";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
-  return 0;
+	wchar_t input[] = L"\"blah";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
+	return 0;
 }
 
 static int test_escape(void)
 {
-  wchar_t input[] = L"\"blah\\\"blah\"";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
-  return 0;
+	wchar_t input[] = L"\"blah\\\"blah\"";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.tokenidx == 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	return 0;
 }
 
 static int test_escaped_end(void)
 {
-  wchar_t input[] = L"\"blah\\";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
-  return 0;
+	wchar_t input[] = L"\"blah\\";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
+	return 0;
 }
 
 static int test_valid_uesc(void)
 {
-  wchar_t input[] = L"\"blah\\u1a2Bblah\"";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-  TEST_ASSERT(p.tokenidx == 1);
-  TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
-  return 0;
+	wchar_t input[] = L"\"blah\\u1a2Bblah\"";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.tokenidx == 1);
+	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	return 0;
 }
 
 static int test_too_short_uesc(void)
 {
-  wchar_t input[] = L"\"blah\\u1a\"";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
-  return 0;
+	wchar_t input[] = L"\"blah\\u1a\"";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
+	return 0;
 }
 
 static int test_string_end_uesc(void)
 {
-  wchar_t input[] = L"\"blah\\u1a";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
-  return 0;
+	wchar_t input[] = L"\"blah\\u1a";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
+	return 0;
 }
 
 static int test_invalid_char_uesc(void)
 {
-  wchar_t input[] = L"\"blah\\u1aG-\"";
-  struct json_parser p = json_parse(input, NULL, 0);
-  TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
-  return 0;
+	wchar_t input[] = L"\"blah\\u1aG-\"";
+	struct json_parser p = json_parse(input, NULL, 0);
+	TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
+	return 0;
 }
 
 static int test_valid_esc(void)
 {
-  wchar_t input[] = L"\"\\a\"";
-  wchar_t valid[] = L"\"\\/bfnrt";
-  size_t i;
-  struct json_parser p;
-  for (i = 0; valid[i] != L'\0'; i++) {
-    input[2] = valid[i];
-    p = json_parse(input, NULL, 0);
-    TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-    TEST_ASSERT(p.tokenidx == 1);
-    TEST_ASSERT(p.textidx == sizeof(input)/sizeof(wchar_t) - 1);
-  }
-  return 0;
+	wchar_t input[] = L"\"\\a\"";
+	wchar_t valid[] = L"\"\\/bfnrt";
+	size_t i;
+	struct json_parser p;
+	for (i = 0; valid[i] != L'\0'; i++) {
+		input[2] = valid[i];
+		p = json_parse(input, NULL, 0);
+		TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+		TEST_ASSERT(p.tokenidx == 1);
+		TEST_ASSERT(p.textidx == sizeof(input) / sizeof(wchar_t) - 1);
+	}
+	return 0;
 }
 
 static int test_invalid_esc(void)
 {
-  wchar_t input[] = L"\"\\a\"";
-  wchar_t valid[] = L"aAB12.,[(%!"; // something of a cross-section!
-  size_t i;
-  struct json_parser p;
-  for (i = 0; valid[i] != L'\0'; i++) {
-    input[2] = valid[i];
-    p = json_parse(input, NULL, 0);
-    TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
-  }
-  return 0;
+	wchar_t input[] = L"\"\\a\"";
+	wchar_t valid[] = L"aAB12.,[(%!"; // something of a cross-section!
+	size_t i;
+	struct json_parser p;
+	for (i = 0; valid[i] != L'\0'; i++) {
+		input[2] = valid[i];
+		p = json_parse(input, NULL, 0);
+		TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
+	}
+	return 0;
 }
 
 void test_parse_strings(void)
 {
-  smb_ut_group *group = su_create_test_group("test/parse_strings.c");
+	smb_ut_group *group = su_create_test_group("test/parse_strings.c");
 
-  smb_ut_test *empty_string = su_create_test("empty_string", test_empty_string);
-  su_add_test(group, empty_string);
+	smb_ut_test *empty_string =
+	        su_create_test("empty_string", test_empty_string);
+	su_add_test(group, empty_string);
 
-  smb_ut_test *single_char = su_create_test("single_char", test_single_char);
-  su_add_test(group, single_char);
+	smb_ut_test *single_char =
+	        su_create_test("single_char", test_single_char);
+	su_add_test(group, single_char);
 
-  smb_ut_test *no_end = su_create_test("no_end", test_no_end);
-  su_add_test(group, no_end);
+	smb_ut_test *no_end = su_create_test("no_end", test_no_end);
+	su_add_test(group, no_end);
 
-  smb_ut_test *escape = su_create_test("escape", test_escape);
-  su_add_test(group, escape);
+	smb_ut_test *escape = su_create_test("escape", test_escape);
+	su_add_test(group, escape);
 
-  smb_ut_test *escaped_end = su_create_test("escaped_end", test_escaped_end);
-  su_add_test(group, escaped_end);
+	smb_ut_test *escaped_end =
+	        su_create_test("escaped_end", test_escaped_end);
+	su_add_test(group, escaped_end);
 
-  smb_ut_test *valid_uesc = su_create_test("valid_uesc", test_valid_uesc);
-  su_add_test(group, valid_uesc);
+	smb_ut_test *valid_uesc = su_create_test("valid_uesc", test_valid_uesc);
+	su_add_test(group, valid_uesc);
 
-  smb_ut_test *too_short_uesc = su_create_test("too_short_uesc", test_too_short_uesc);
-  su_add_test(group, too_short_uesc);
+	smb_ut_test *too_short_uesc =
+	        su_create_test("too_short_uesc", test_too_short_uesc);
+	su_add_test(group, too_short_uesc);
 
-  smb_ut_test *string_end_uesc = su_create_test("string_end_uesc", test_string_end_uesc);
-  su_add_test(group, string_end_uesc);
+	smb_ut_test *string_end_uesc =
+	        su_create_test("string_end_uesc", test_string_end_uesc);
+	su_add_test(group, string_end_uesc);
 
-  smb_ut_test *invalid_char_uesc = su_create_test("invalid_char_uesc", test_invalid_char_uesc);
-  su_add_test(group, invalid_char_uesc);
+	smb_ut_test *invalid_char_uesc =
+	        su_create_test("invalid_char_uesc", test_invalid_char_uesc);
+	su_add_test(group, invalid_char_uesc);
 
-  smb_ut_test *valid_esc = su_create_test("valid_esc", test_valid_esc);
-  su_add_test(group, valid_esc);
+	smb_ut_test *valid_esc = su_create_test("valid_esc", test_valid_esc);
+	su_add_test(group, valid_esc);
 
-  smb_ut_test *invalid_esc = su_create_test("invalid_esc", test_invalid_esc);
-  su_add_test(group, invalid_esc);
+	smb_ut_test *invalid_esc =
+	        su_create_test("invalid_esc", test_invalid_esc);
+	su_add_test(group, invalid_esc);
 
-  su_run_group(group);
-  su_delete_group(group);
+	su_run_group(group);
+	su_delete_group(group);
 }

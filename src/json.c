@@ -1,26 +1,26 @@
-/***************************************************************************//**
+/***************************************************************************/ /**
 
-  @file         json.c
+   @file         json.c
 
-  @author       Stephen Brennan
+   @author       Stephen Brennan
 
-  @date         Created Sunday, 22 November 2015
+   @date         Created Sunday, 22 November 2015
 
-  @brief        JSON parsing!
+   @brief        JSON parsing!
 
-  @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the Revised
-                BSD License.  See LICENSE.txt for details.
+   @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the
+ Revised BSD License.  See LICENSE.txt for details.
 
-*******************************************************************************/
+ *******************************************************************************/
 
-#include <stddef.h>
-#include <stdbool.h>
-#include <wchar.h>
-#include <stdio.h>
 #include <assert.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <wchar.h>
 
-#include "nosj.h"
 #include "json_private.h"
+#include "nosj.h"
 
 // forward declaration of the main parser
 static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
@@ -31,7 +31,7 @@ static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
  */
 static bool json_isspace(wchar_t c)
 {
-  return (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n');
+	return (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n');
 }
 
 /**
@@ -39,7 +39,7 @@ static bool json_isspace(wchar_t c)
  */
 static bool json_isnumber(wchar_t c)
 {
-  return (c == L'-' || (L'0' <= c && c <= L'9'));
+	return (c == L'-' || (L'0' <= c && c <= L'9'));
 }
 
 /**
@@ -55,10 +55,10 @@ static bool json_isnumber(wchar_t c)
 void json_settoken(struct json_token *arr, struct json_token tok,
                    struct json_parser p, size_t maxtoken)
 {
-  if (arr == NULL || p.tokenidx >= maxtoken) {
-    return;
-  }
-  arr[p.tokenidx] = tok;
+	if (arr == NULL || p.tokenidx >= maxtoken) {
+		return;
+	}
+	arr[p.tokenidx] = tok;
 }
 
 /**
@@ -73,12 +73,12 @@ void json_settoken(struct json_token *arr, struct json_token tok,
 static void json_setnext(struct json_token *arr, size_t tokidx, size_t next,
                          size_t maxtoken)
 {
-  if (arr == NULL || tokidx >= maxtoken) {
-    return;
-  }
-  struct json_token tok = arr[tokidx];
-  tok.next = next;
-  arr[tokidx] = tok;
+	if (arr == NULL || tokidx >= maxtoken) {
+		return;
+	}
+	struct json_token tok = arr[tokidx];
+	tok.next = next;
+	arr[tokidx] = tok;
 }
 
 /**
@@ -93,12 +93,12 @@ static void json_setnext(struct json_token *arr, size_t tokidx, size_t next,
 static void json_setchild(struct json_token *arr, size_t tokidx, size_t child,
                           size_t maxtoken)
 {
-  if (arr == NULL || tokidx >= maxtoken) {
-    return;
-  }
-  struct json_token tok = arr[tokidx];
-  tok.child = child;
-  arr[tokidx] = tok;
+	if (arr == NULL || tokidx >= maxtoken) {
+		return;
+	}
+	struct json_token tok = arr[tokidx];
+	tok.child = child;
+	arr[tokidx] = tok;
 }
 
 /**
@@ -113,12 +113,12 @@ static void json_setchild(struct json_token *arr, size_t tokidx, size_t child,
 static void json_setend(struct json_token *arr, size_t tokidx, size_t end,
                         size_t maxtoken)
 {
-  if (arr == NULL || tokidx >= maxtoken) {
-    return;
-  }
-  struct json_token tok = arr[tokidx];
-  tok.end = end;
-  arr[tokidx] = tok;
+	if (arr == NULL || tokidx >= maxtoken) {
+		return;
+	}
+	struct json_token tok = arr[tokidx];
+	tok.end = end;
+	arr[tokidx] = tok;
 }
 
 /**
@@ -133,12 +133,12 @@ static void json_setend(struct json_token *arr, size_t tokidx, size_t end,
 static void json_setlength(struct json_token *arr, size_t tokidx, size_t length,
                            size_t maxtoken)
 {
-  if (arr == NULL || tokidx >= maxtoken) {
-    return;
-  }
-  struct json_token tok = arr[tokidx];
-  tok.length = length;
-  arr[tokidx] = tok;
+	if (arr == NULL || tokidx >= maxtoken) {
+		return;
+	}
+	struct json_token tok = arr[tokidx];
+	tok.length = length;
+	arr[tokidx] = tok;
 }
 
 /**
@@ -147,12 +147,13 @@ static void json_setlength(struct json_token *arr, size_t tokidx, size_t length,
    @param p The current parser state
    @returns The new parser state
  */
-static struct json_parser json_skip_whitespace(wchar_t *text, struct json_parser p)
+static struct json_parser json_skip_whitespace(wchar_t *text,
+                                               struct json_parser p)
 {
-  while (json_isspace(text[p.textidx]) && text[p.textidx] != '\0') {
-    p.textidx++;
-  }
-  return p;
+	while (json_isspace(text[p.textidx]) && text[p.textidx] != '\0') {
+		p.textidx++;
+	}
+	return p;
 }
 
 /**
@@ -166,22 +167,22 @@ static struct json_parser json_skip_whitespace(wchar_t *text, struct json_parser
 static struct json_parser json_parse_true(wchar_t *text, struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
-  struct json_token tok;
-  tok.type = JSON_TRUE;
-  tok.start = p.textidx;
-  tok.end = p.textidx + 3;
-  tok.length = 0;
-  tok.child = 0;
-  tok.next = 0;
-  if (wcsncmp(L"true", text + p.textidx, 4) == 0) {
-    json_settoken(arr, tok, p, maxtoken);
-    p.textidx += 4;
-    p.tokenidx += 1;
-    return p;
-  } else {
-    p.error = JSONERR_UNEXPECTED_TOKEN;
-    return p;
-  }
+	struct json_token tok;
+	tok.type = JSON_TRUE;
+	tok.start = p.textidx;
+	tok.end = p.textidx + 3;
+	tok.length = 0;
+	tok.child = 0;
+	tok.next = 0;
+	if (wcsncmp(L"true", text + p.textidx, 4) == 0) {
+		json_settoken(arr, tok, p, maxtoken);
+		p.textidx += 4;
+		p.tokenidx += 1;
+		return p;
+	} else {
+		p.error = JSONERR_UNEXPECTED_TOKEN;
+		return p;
+	}
 }
 
 /**
@@ -192,26 +193,28 @@ static struct json_parser json_parse_true(wchar_t *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing false.
  */
-static struct json_parser json_parse_false(wchar_t *text, struct json_token *arr,
-                                           size_t maxtoken, struct json_parser p)
+static struct json_parser json_parse_false(wchar_t *text,
+                                           struct json_token *arr,
+                                           size_t maxtoken,
+                                           struct json_parser p)
 {
-  (void) maxtoken; //unused
-  struct json_token tok;
-  tok.type = JSON_FALSE;
-  tok.start = p.textidx;
-  tok.end = p.textidx + 4;
-  tok.length = 0;
-  tok.child = 0;
-  tok.next = 0;
-  if (wcsncmp(L"false", text + p.textidx, 5) == 0) {
-    json_settoken(arr, tok, p, maxtoken);
-    p.textidx += 5;
-    p.tokenidx += 1;
-    return p;
-  } else {
-    p.error = JSONERR_UNEXPECTED_TOKEN;
-    return p;
-  }
+	(void)maxtoken; // unused
+	struct json_token tok;
+	tok.type = JSON_FALSE;
+	tok.start = p.textidx;
+	tok.end = p.textidx + 4;
+	tok.length = 0;
+	tok.child = 0;
+	tok.next = 0;
+	if (wcsncmp(L"false", text + p.textidx, 5) == 0) {
+		json_settoken(arr, tok, p, maxtoken);
+		p.textidx += 5;
+		p.tokenidx += 1;
+		return p;
+	} else {
+		p.error = JSONERR_UNEXPECTED_TOKEN;
+		return p;
+	}
 }
 
 /**
@@ -225,22 +228,22 @@ static struct json_parser json_parse_false(wchar_t *text, struct json_token *arr
 static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
-  struct json_token tok;
-  tok.type = JSON_NULL;
-  tok.start = p.textidx;
-  tok.end = p.textidx + 3;
-  tok.length = 0;
-  tok.child = 0;
-  tok.next = 0;
-  if (wcsncmp(L"null", text + p.textidx, 4) == 0) {
-    json_settoken(arr, tok, p, maxtoken);
-    p.textidx += 4;
-    p.tokenidx += 1;
-    return p;
-  } else {
-    p.error = JSONERR_UNEXPECTED_TOKEN;
-    return p;
-  }
+	struct json_token tok;
+	tok.type = JSON_NULL;
+	tok.start = p.textidx;
+	tok.end = p.textidx + 3;
+	tok.length = 0;
+	tok.child = 0;
+	tok.next = 0;
+	if (wcsncmp(L"null", text + p.textidx, 4) == 0) {
+		json_settoken(arr, tok, p, maxtoken);
+		p.textidx += 4;
+		p.tokenidx += 1;
+		return p;
+	} else {
+		p.error = JSONERR_UNEXPECTED_TOKEN;
+		return p;
+	}
 }
 
 /**
@@ -251,72 +254,79 @@ static struct json_parser json_parse_null(wchar_t *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing the array.
  */
-static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr,
-                                           size_t maxtoken, struct json_parser p)
+static struct json_parser json_parse_array(wchar_t *text,
+                                           struct json_token *arr,
+                                           size_t maxtoken,
+                                           struct json_parser p)
 {
-  size_t array_tokenidx = p.tokenidx, prev_tokenidx, curr_tokenidx, length=0;
-  struct json_token tok = {
-    .type = JSON_ARRAY,
-    .start = p.textidx,
-    .length = 0,
-    .end = 0,
-    .child = 0,
-    .next = 0,
-  };
-  json_settoken(arr, tok, p, maxtoken);
+	size_t array_tokenidx = p.tokenidx, prev_tokenidx, curr_tokenidx,
+	       length = 0;
+	struct json_token tok = {
+		.type = JSON_ARRAY,
+		.start = p.textidx,
+		.length = 0,
+		.end = 0,
+		.child = 0,
+		.next = 0,
+	};
+	json_settoken(arr, tok, p, maxtoken);
 
-  // current char is [, so we need to go past it.
-  p.textidx++;
-  p.tokenidx++;
+	// current char is [, so we need to go past it.
+	p.textidx++;
+	p.tokenidx++;
 
-  // Skip through whitespace.
-  p = json_skip_whitespace(text, p);
-  while (text[p.textidx] != L']') {
+	// Skip through whitespace.
+	p = json_skip_whitespace(text, p);
+	while (text[p.textidx] != L']') {
 
-    if (text[p.textidx] == L'\0') {
-      p.error = JSONERR_PREMATURE_EOF;
-      return p;
-    }
-    // Parse a value.
-    prev_tokenidx = curr_tokenidx;
-    curr_tokenidx = p.tokenidx;
-    p = json_parse_rec(text, arr, maxtoken, p);
-    if (p.error != JSONERR_NO_ERROR) {
-      return p;
-    }
+		if (text[p.textidx] == L'\0') {
+			p.error = JSONERR_PREMATURE_EOF;
+			return p;
+		}
+		// Parse a value.
+		prev_tokenidx = curr_tokenidx;
+		curr_tokenidx = p.tokenidx;
+		p = json_parse_rec(text, arr, maxtoken, p);
+		if (p.error != JSONERR_NO_ERROR) {
+			return p;
+		}
 
-    // Now set some bookkeeping of previous values.
-    if (tok.child == 0) {
-      // If this is the first element of the list, set the list's child to point
-      // to it.
-      tok.child = curr_tokenidx;
-      json_setchild(arr, array_tokenidx, curr_tokenidx, maxtoken);
-    } else {
-      // Otherwise set the previous element's next pointer to point to it.
-      json_setnext(arr, prev_tokenidx, curr_tokenidx, maxtoken);
-    }
+		// Now set some bookkeeping of previous values.
+		if (tok.child == 0) {
+			// If this is the first element of the list, set the
+			// list's child to point to it.
+			tok.child = curr_tokenidx;
+			json_setchild(arr, array_tokenidx, curr_tokenidx,
+			              maxtoken);
+		} else {
+			// Otherwise set the previous element's next pointer to
+			// point to it.
+			json_setnext(arr, prev_tokenidx, curr_tokenidx,
+			             maxtoken);
+		}
 
-    length++;
+		length++;
 
-    // Skip whitespace.
-    p = json_skip_whitespace(text, p);
-    if (text[p.textidx] == L',') {
-      p.textidx++;
-      p = json_skip_whitespace(text, p);
-    } else if (text[p.textidx] != L']') {
-      // If there was no comma, this better be the end of the object.
-      p.error = JSONERR_EXPECTED_TOKEN;
-      p.errorarg = L',';
-      return p;
-    }
-  }
+		// Skip whitespace.
+		p = json_skip_whitespace(text, p);
+		if (text[p.textidx] == L',') {
+			p.textidx++;
+			p = json_skip_whitespace(text, p);
+		} else if (text[p.textidx] != L']') {
+			// If there was no comma, this better be the end of the
+			// object.
+			p.error = JSONERR_EXPECTED_TOKEN;
+			p.errorarg = L',';
+			return p;
+		}
+	}
 
-  // Set the end of the array token to point to the closing bracket, then move
-  // it up.
-  json_setend(arr, array_tokenidx, p.textidx, maxtoken);
-  json_setlength(arr, array_tokenidx, length, maxtoken);
-  p.textidx++;
-  return p;
+	// Set the end of the array token to point to the closing bracket, then
+	// move it up.
+	json_setend(arr, array_tokenidx, p.textidx, maxtoken);
+	json_setlength(arr, array_tokenidx, length, maxtoken);
+	p.textidx++;
+	return p;
 }
 
 /**
@@ -327,91 +337,100 @@ static struct json_parser json_parse_array(wchar_t *text, struct json_token *arr
    @param p The parser state.
    @returns Parser state after parsing the object.
  */
-static struct json_parser json_parse_object(wchar_t *text, struct json_token *arr,
-                                            size_t maxtoken, struct json_parser p)
+static struct json_parser json_parse_object(wchar_t *text,
+                                            struct json_token *arr,
+                                            size_t maxtoken,
+                                            struct json_parser p)
 {
-  size_t object_tokenidx = p.tokenidx, prev_keyidx, curr_keyidx, length=0;
-  struct json_token tok = {
-    .type  = JSON_OBJECT,
-    .start = p.textidx,
-    .length = 0,
-    .end   = 0,
-    .child = 0,
-    .next  = 0,
-  };
-  json_settoken(arr, tok, p, maxtoken);
+	size_t object_tokenidx = p.tokenidx, prev_keyidx, curr_keyidx,
+	       length = 0;
+	struct json_token tok = {
+		.type = JSON_OBJECT,
+		.start = p.textidx,
+		.length = 0,
+		.end = 0,
+		.child = 0,
+		.next = 0,
+	};
+	json_settoken(arr, tok, p, maxtoken);
 
-  // current char is {, so we need to go past it.
-  p.textidx++;
-  p.tokenidx++;
+	// current char is {, so we need to go past it.
+	p.textidx++;
+	p.tokenidx++;
 
-  // Skip through whitespace.
-  p = json_skip_whitespace(text, p);
-  while (text[p.textidx] != L'}') {
-    // Make sure the string didn't end.
-    if (text[p.textidx] == L'\0') {
-      p.error = JSONERR_PREMATURE_EOF;
-      return p;
-    }
+	// Skip through whitespace.
+	p = json_skip_whitespace(text, p);
+	while (text[p.textidx] != L'}') {
+		// Make sure the string didn't end.
+		if (text[p.textidx] == L'\0') {
+			p.error = JSONERR_PREMATURE_EOF;
+			return p;
+		}
 
-    // Parse a string (key) and value.
-    prev_keyidx = curr_keyidx;
-    curr_keyidx = p.tokenidx;
-    p = json_parse_string(text, arr, maxtoken, p);
-    if (p.error != JSONERR_NO_ERROR) {
-      return p;
-    }
-    p = json_skip_whitespace(text, p);
-    if (text[p.textidx] != L':') {
-      p.error = JSONERR_EXPECTED_TOKEN;
-      p.errorarg = L':';
-      return p;
-    }
-    p.textidx++;
-    p = json_parse_rec(text, arr, maxtoken, p);
-    if (p.error != JSONERR_NO_ERROR) {
-      return p;
-    }
+		// Parse a string (key) and value.
+		prev_keyidx = curr_keyidx;
+		curr_keyidx = p.tokenidx;
+		p = json_parse_string(text, arr, maxtoken, p);
+		if (p.error != JSONERR_NO_ERROR) {
+			return p;
+		}
+		p = json_skip_whitespace(text, p);
+		if (text[p.textidx] != L':') {
+			p.error = JSONERR_EXPECTED_TOKEN;
+			p.errorarg = L':';
+			return p;
+		}
+		p.textidx++;
+		p = json_parse_rec(text, arr, maxtoken, p);
+		if (p.error != JSONERR_NO_ERROR) {
+			return p;
+		}
 
-    // Now set some bookkeeping of previous values.
-    if (tok.child == 0) {
-      // If this is the first element of the list, set the list's child to point
-      // to it.
-      tok.child = curr_keyidx;
-      json_setchild(arr, object_tokenidx, curr_keyidx, maxtoken);
-    } else {
-      // Otherwise set the previous element's next pointer to point to it.
-      json_setnext(arr, prev_keyidx, curr_keyidx, maxtoken);
-    }
-    // Set the key's child pointer to point at its value.  Just cause we can.
-    json_setchild(arr, curr_keyidx, curr_keyidx + 1, maxtoken);
+		// Now set some bookkeeping of previous values.
+		if (tok.child == 0) {
+			// If this is the first element of the list, set the
+			// list's child to point to it.
+			tok.child = curr_keyidx;
+			json_setchild(arr, object_tokenidx, curr_keyidx,
+			              maxtoken);
+		} else {
+			// Otherwise set the previous element's next pointer to
+			// point to it.
+			json_setnext(arr, prev_keyidx, curr_keyidx, maxtoken);
+		}
+		// Set the key's child pointer to point at its value.  Just
+		// cause we can.
+		json_setchild(arr, curr_keyidx, curr_keyidx + 1, maxtoken);
 
-    length++;
+		length++;
 
-    // Skip whitespace.
-    p = json_skip_whitespace(text, p);
-    if (text[p.textidx] == L',') {
-      p.textidx++;
-      p = json_skip_whitespace(text, p);
-    } else if (text[p.textidx] != L'}') {
-      // If there was no comma, this better be the end of the object.
-      p.error = JSONERR_EXPECTED_TOKEN;
-      p.errorarg = L',';
-      return p;
-    }
-  }
+		// Skip whitespace.
+		p = json_skip_whitespace(text, p);
+		if (text[p.textidx] == L',') {
+			p.textidx++;
+			p = json_skip_whitespace(text, p);
+		} else if (text[p.textidx] != L'}') {
+			// If there was no comma, this better be the end of the
+			// object.
+			p.error = JSONERR_EXPECTED_TOKEN;
+			p.errorarg = L',';
+			return p;
+		}
+	}
 
-  // Set the end of the array token to point to the closing bracket, then move
-  // it up.
-  json_setend(arr, object_tokenidx, p.textidx, maxtoken);
-  json_setlength(arr, object_tokenidx, length, maxtoken);
-  p.textidx++;
-  return p;
+	// Set the end of the array token to point to the closing bracket, then
+	// move it up.
+	json_setend(arr, object_tokenidx, p.textidx, maxtoken);
+	json_setlength(arr, object_tokenidx, length, maxtoken);
+	p.textidx++;
+	return p;
 }
 
 char *parse_number_state[] = {
-  "START", "MINUS", "ZERO", "DIGIT", "DECIMAL", "DECIMAL_ACCEPT", "EXPONENT",
-  "EXPONENT_DIGIT", "EXPONENT_DIGIT_ACCEPT", "END"
+	"START",    "MINUS",          "ZERO",
+	"DIGIT",    "DECIMAL",        "DECIMAL_ACCEPT",
+	"EXPONENT", "EXPONENT_DIGIT", "EXPONENT_DIGIT_ACCEPT",
+	"END"
 };
 
 /**
@@ -422,151 +441,159 @@ char *parse_number_state[] = {
    @param p The parser state.
    @returns Parser state after parsing the number.
  */
-static struct json_parser json_parse_number(wchar_t *text, struct json_token *arr,
-                                            size_t maxtoken, struct json_parser p)
+static struct json_parser json_parse_number(wchar_t *text,
+                                            struct json_token *arr,
+                                            size_t maxtoken,
+                                            struct json_parser p)
 {
-  struct json_token tok = {
-    .type  = JSON_NUMBER,
-    .start = p.textidx,
-    .length = 0, // not used
-    .end   = 0,
-    .child = 0,
-    .next  = 0
-  };
-  enum state {
-    START, MINUS, ZERO, DIGIT, DECIMAL, DECIMAL_ACCEPT, EXPONENT,
-    EXPONENT_DIGIT, EXPONENT_DIGIT_ACCEPT, END
-  } state = START;
+	struct json_token tok = { .type = JSON_NUMBER,
+		                  .start = p.textidx,
+		                  .length = 0, // not used
+		                  .end = 0,
+		                  .child = 0,
+		                  .next = 0 };
+	enum state {
+		START,
+		MINUS,
+		ZERO,
+		DIGIT,
+		DECIMAL,
+		DECIMAL_ACCEPT,
+		EXPONENT,
+		EXPONENT_DIGIT,
+		EXPONENT_DIGIT_ACCEPT,
+		END
+	} state = START;
 
-  /*
-    This function is completely described by this FSM.  States marked by
-    asterisk are accepting.  Unexpected input at accepting states ends the
-    number, and unexpected input at rejecting states causes an error.  This
-    state machine is designed to accept any input given by the diagram in the
-    ECMA JSON spec.
+	/*
+	  This function is completely described by this FSM.  States marked by
+	  asterisk are accepting.  Unexpected input at accepting states ends the
+	  number, and unexpected input at rejecting states causes an error. This
+	  state machine is designed to accept any input given by the diagram in
+	  the ECMA JSON spec.
 
-                         -----START-----
-                        /       | (-)   \
-                       /        v        \
-                   (0) | +----MINUS----+ | (1-9)
-                       v v (0)   (1-9) v v
-                    *ZERO*            *DIGIT*--------
-                     |  \ (.)       (.) / |-\ (0-9)  \
-                     |   --->DECIMAL<---              \
-                     |          |                      \
-                     |          v (0-9)  /----\ (0-9)  |
-                     |   *DECIMAL_ACCEPT* ----/        |
-                     |          |                     /
-                     |(e,E)     v (e,E)   (e,E)      /
-                     +-----> EXPONENT <-------------
-                           /        \
-                      (+,-)v        v (0-9)
-              EXPONENT_DIGIT        *EXPONENT_DIGIT_ACCEPT*
-                          \-----------/         \    /(0-9)
-                                 (0-9)           \--/
-   */
+	                       -----START-----
+	                      /       | (-)   \
+	                     /        v        \
+	                 (0) | +----MINUS----+ | (1-9)
+	                     v v (0)   (1-9) v v
+	                  *ZERO*            *DIGIT*--------
+	                   |  \ (.)       (.) / |-\ (0-9)  \
+	                   |   --->DECIMAL<---              \
+	                   |          |                      \
+	                   |          v (0-9)  /----\ (0-9)  |
+	                   |   *DECIMAL_ACCEPT* ----/        |
+	                   |          |                     /
+	                   |(e,E)     v (e,E)   (e,E)      /
+	                   +-----> EXPONENT <-------------
+	                         /        \
+	                    (+,-)v        v (0-9)
+	            EXPONENT_DIGIT        *EXPONENT_DIGIT_ACCEPT*
+	                        \-----------/         \    /(0-9)
+	                               (0-9)           \--/
+	 */
 
-  //printf("input: %s\n", text + p.textidx);
-  while (state != END) {
-    wchar_t c = text[p.textidx];
-    //printf("state: %s\n", parse_number_state[state]);
-    switch (state) {
-    case START:
-      if (c == L'0') {
-        state = ZERO;
-      } else if (c == L'-') {
-        state = MINUS;
-      } else if (L'1' <= c && c <= L'9') {
-        state = DIGIT;
-      } else {
-        p.error = JSONERR_INVALID_NUMBER;
-        state = END; // ERROR
-      }
-      break;
-    case MINUS:
-      if (c == L'0') {
-        state = ZERO;
-      } else if (L'1' <= c && c <= L'9') {
-        state = DIGIT;
-      } else {
-        p.error = JSONERR_INVALID_NUMBER;
-        state = END; // ERROR
-      }
-      break;
-    case ZERO:
-      if (c == L'.') {
-        state = DECIMAL;
-      } else if (c == L'e' || c == L'E') {
-        state = EXPONENT;
-      } else {
-        state = END;
-      }
-      break;
-    case DIGIT:
-      if (c == L'.') {
-        state = DECIMAL;
-      } else if (c == L'e' || c == L'E') {
-        state = EXPONENT;
-      } else if (L'0' <= c && c <= L'9') {
-        state = DIGIT;
-      } else {
-        state = END;
-      }
-      break;
-    case DECIMAL:
-      if (L'0' <= c && c <= L'9') {
-        state = DECIMAL_ACCEPT;
-      } else {
-        p.error = JSONERR_INVALID_NUMBER;
-        state = END; // ERROR
-      }
-      break;
-    case DECIMAL_ACCEPT:
-      if (L'0' <= c && c <= L'9') {
-        state = DECIMAL_ACCEPT;
-      } else if (c == L'e' || c == L'E') {
-        state = EXPONENT;
-      } else {
-        state = END;
-      }
-      break;
-    case EXPONENT:
-      if (c == L'+' || c == L'-') {
-        state = EXPONENT_DIGIT;
-      } else if (L'0' <= c && c <= L'9') {
-        state = EXPONENT_DIGIT_ACCEPT;
-      } else {
-        p.error = JSONERR_INVALID_NUMBER;
-        state = END; // ERROR
-      }
-      break;
-    case EXPONENT_DIGIT:
-      if (L'0' <= c && c <= L'9') {
-        state = EXPONENT_DIGIT_ACCEPT;
-      } else {
-        p.error = JSONERR_INVALID_NUMBER;
-        state = END; // ERROR
-      }
-      break;
-    case EXPONENT_DIGIT_ACCEPT:
-      if (L'0' <= c && c <= L'9') {
-        state = EXPONENT_DIGIT_ACCEPT;
-      } else {
-        state = END;
-      }
-      break;
-    case END:
-      // never happens
-      assert(false);
-    }
-    p.textidx++;
-  }
+	// printf("input: %s\n", text + p.textidx);
+	while (state != END) {
+		wchar_t c = text[p.textidx];
+		// printf("state: %s\n", parse_number_state[state]);
+		switch (state) {
+		case START:
+			if (c == L'0') {
+				state = ZERO;
+			} else if (c == L'-') {
+				state = MINUS;
+			} else if (L'1' <= c && c <= L'9') {
+				state = DIGIT;
+			} else {
+				p.error = JSONERR_INVALID_NUMBER;
+				state = END; // ERROR
+			}
+			break;
+		case MINUS:
+			if (c == L'0') {
+				state = ZERO;
+			} else if (L'1' <= c && c <= L'9') {
+				state = DIGIT;
+			} else {
+				p.error = JSONERR_INVALID_NUMBER;
+				state = END; // ERROR
+			}
+			break;
+		case ZERO:
+			if (c == L'.') {
+				state = DECIMAL;
+			} else if (c == L'e' || c == L'E') {
+				state = EXPONENT;
+			} else {
+				state = END;
+			}
+			break;
+		case DIGIT:
+			if (c == L'.') {
+				state = DECIMAL;
+			} else if (c == L'e' || c == L'E') {
+				state = EXPONENT;
+			} else if (L'0' <= c && c <= L'9') {
+				state = DIGIT;
+			} else {
+				state = END;
+			}
+			break;
+		case DECIMAL:
+			if (L'0' <= c && c <= L'9') {
+				state = DECIMAL_ACCEPT;
+			} else {
+				p.error = JSONERR_INVALID_NUMBER;
+				state = END; // ERROR
+			}
+			break;
+		case DECIMAL_ACCEPT:
+			if (L'0' <= c && c <= L'9') {
+				state = DECIMAL_ACCEPT;
+			} else if (c == L'e' || c == L'E') {
+				state = EXPONENT;
+			} else {
+				state = END;
+			}
+			break;
+		case EXPONENT:
+			if (c == L'+' || c == L'-') {
+				state = EXPONENT_DIGIT;
+			} else if (L'0' <= c && c <= L'9') {
+				state = EXPONENT_DIGIT_ACCEPT;
+			} else {
+				p.error = JSONERR_INVALID_NUMBER;
+				state = END; // ERROR
+			}
+			break;
+		case EXPONENT_DIGIT:
+			if (L'0' <= c && c <= L'9') {
+				state = EXPONENT_DIGIT_ACCEPT;
+			} else {
+				p.error = JSONERR_INVALID_NUMBER;
+				state = END; // ERROR
+			}
+			break;
+		case EXPONENT_DIGIT_ACCEPT:
+			if (L'0' <= c && c <= L'9') {
+				state = EXPONENT_DIGIT_ACCEPT;
+			} else {
+				state = END;
+			}
+			break;
+		case END:
+			// never happens
+			assert(false);
+		}
+		p.textidx++;
+	}
 
-  p.textidx--; // the character we failed on
-  tok.end = p.textidx - 1; // the previous character
-  json_settoken(arr, tok, p, maxtoken);
-  p.tokenidx++;
-  return p;
+	p.textidx--;             // the character we failed on
+	tok.end = p.textidx - 1; // the previous character
+	json_settoken(arr, tok, p, maxtoken);
+	p.tokenidx++;
+	return p;
 }
 
 /**
@@ -580,79 +607,72 @@ static struct json_parser json_parse_number(wchar_t *text, struct json_token *ar
 static struct json_parser json_parse_rec(wchar_t *text, struct json_token *arr,
                                          size_t maxtoken, struct json_parser p)
 {
-  p = json_skip_whitespace(text, p);
+	p = json_skip_whitespace(text, p);
 
-  if (text[p.textidx] == '\0') {
-    p.error = JSONERR_PREMATURE_EOF;
-    return p;
-  }
+	if (text[p.textidx] == '\0') {
+		p.error = JSONERR_PREMATURE_EOF;
+		return p;
+	}
 
-  switch (text[p.textidx]) {
-  case L'{':
-    return json_parse_object(text, arr, maxtoken, p);
-  case L'[':
-    return json_parse_array(text, arr, maxtoken, p);
-  case L'"':
-    return json_parse_string(text, arr, maxtoken, p);
-  case L't':
-    return json_parse_true(text, arr, maxtoken, p);
-  case L'f':
-    return json_parse_false(text, arr, maxtoken, p);
-  case L'n':
-    return json_parse_null(text, arr, maxtoken, p);
-  default:
-    if (json_isnumber(text[p.textidx])) {
-      return json_parse_number(text, arr, maxtoken, p);
-    } else {
-      p.error = JSONERR_UNEXPECTED_TOKEN;
-      return p;
-    }
-  }
+	switch (text[p.textidx]) {
+	case L'{':
+		return json_parse_object(text, arr, maxtoken, p);
+	case L'[':
+		return json_parse_array(text, arr, maxtoken, p);
+	case L'"':
+		return json_parse_string(text, arr, maxtoken, p);
+	case L't':
+		return json_parse_true(text, arr, maxtoken, p);
+	case L'f':
+		return json_parse_false(text, arr, maxtoken, p);
+	case L'n':
+		return json_parse_null(text, arr, maxtoken, p);
+	default:
+		if (json_isnumber(text[p.textidx])) {
+			return json_parse_number(text, arr, maxtoken, p);
+		} else {
+			p.error = JSONERR_UNEXPECTED_TOKEN;
+			return p;
+		}
+	}
 }
 
-char *json_type_str[] = {
-  "object",
-  "array",
-  "number",
-  "string",
-  "true",
-  "false",
-  "null"
-};
+char *json_type_str[] = { "object", "array", "number", "string",
+	                  "true",   "false", "null" };
 
 char *json_error_str[] = {
-  "no error",
-  "encountered an invalid numeric literal",
-  "string ended prematurely",
-  "unexpected token",
-  "invalid surrogate pair",
-  "expected token '%c'",
+	"no error",
+	"encountered an invalid numeric literal",
+	"string ended prematurely",
+	"unexpected token",
+	"invalid surrogate pair",
+	"expected token '%c'",
 };
 
-struct json_parser json_parse(wchar_t *text, struct json_token *arr, size_t maxtoken)
+struct json_parser json_parse(wchar_t *text, struct json_token *arr,
+                              size_t maxtoken)
 {
-  struct json_parser parser = {
-    .textidx = 0,
-    .tokenidx = 0,
-    .error = JSONERR_NO_ERROR,
-    .errorarg = 0
-  };
-  return json_parse_rec(text, arr, maxtoken, parser);
+	struct json_parser parser = { .textidx = 0,
+		                      .tokenidx = 0,
+		                      .error = JSONERR_NO_ERROR,
+		                      .errorarg = 0 };
+	return json_parse_rec(text, arr, maxtoken, parser);
 }
 
 void json_print(struct json_token *arr, size_t n)
 {
-  size_t i;
-  for (i = 0; i < n; i++) {
-    printf("%03lu: %6s\t%04lu-%04lu,\tlength=%lu,\tchild=%lu,\tnext=%lu\n", i,
-           json_type_str[arr[i].type], arr[i].start, arr[i].end, arr[i].length,
-           arr[i].child, arr[i].next);
-  }
+	size_t i;
+	for (i = 0; i < n; i++) {
+		printf("%03lu: "
+		       "%6s\t%04lu-%04lu,\tlength=%lu,\tchild=%lu,\tnext=%lu\n",
+		       i, json_type_str[arr[i].type], arr[i].start, arr[i].end,
+		       arr[i].length, arr[i].child, arr[i].next);
+	}
 }
 
 void json_print_error(FILE *f, struct json_parser p)
 {
-  fprintf(f, "at character %lu: ", p.textidx);
-  fprintf(f, json_error_str[p.error], p.errorarg);
-  fprintf(f, "\n");
+	fprintf(f, "at character %lu: ", p.textidx);
+	fprintf(f, json_error_str[p.error], p.errorarg);
+	fprintf(f, "\n");
 }

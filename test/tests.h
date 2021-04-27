@@ -1,17 +1,17 @@
-/***************************************************************************//**
+/***************************************************************************/ /**
 
-  @file         tests.h
+   @file         tests.h
 
-  @author       Stephen Brennan
+   @author       Stephen Brennan
 
-  @date         Created Tuesday, 24 November 2015
+   @date         Created Tuesday, 24 November 2015
 
-  @brief        Test declarations.
+   @brief        Test declarations.
 
-  @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the Revised
-                BSD License.  See LICENSE.txt for details.
+   @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the
+ Revised BSD License.  See LICENSE.txt for details.
 
-*******************************************************************************/
+ *******************************************************************************/
 
 #ifndef SMB_JSON_TEST_H
 #define SMB_JSON_TEST_H

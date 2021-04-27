@@ -1,24 +1,24 @@
-/***************************************************************************//**
+/***************************************************************************/ /**
 
-  @file         json.h
+   @file         json.h
 
-  @author       Stephen Brennan
+   @author       Stephen Brennan
 
-  @date         Created Sunday, 22 November 2015
+   @date         Created Sunday, 22 November 2015
 
-  @brief        JSON parsing!
+   @brief        JSON parsing!
 
-  @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the Revised
-                BSD License.  See LICENSE.txt for details.
+   @copyright    Copyright (c) 2015, Stephen Brennan.  Released under the
+ Revised BSD License.  See LICENSE.txt for details.
 
-*******************************************************************************/
+ *******************************************************************************/
 
 #ifndef SMB_JSON
 #define SMB_JSON
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <wchar.h>
 
 /**
@@ -32,13 +32,13 @@
    actually are each their own type (as is null).
  */
 enum json_type {
-  JSON_OBJECT=0,
-  JSON_ARRAY,
-  JSON_NUMBER,
-  JSON_STRING,
-  JSON_TRUE,
-  JSON_FALSE,
-  JSON_NULL
+	JSON_OBJECT = 0,
+	JSON_ARRAY,
+	JSON_NUMBER,
+	JSON_STRING,
+	JSON_TRUE,
+	JSON_FALSE,
+	JSON_NULL
 };
 
 /**
@@ -54,76 +54,78 @@ enum json_type {
  */
 struct json_token {
 
-  /**
-     @brief Type of the token.
-   */
-  enum json_type type;
-  /**
-     @brief Index of the first character of the token in the string.
-   */
-  size_t start;
-  /**
-     @brief Index of the last character of the token in the string.
-   */
-  size_t end;
-  /**
-     @brief For tokens that can have a length, this is the length!
+	/**
+	   @brief Type of the token.
+	 */
+	enum json_type type;
+	/**
+	   @brief Index of the first character of the token in the string.
+	 */
+	size_t start;
+	/**
+	   @brief Index of the last character of the token in the string.
+	 */
+	size_t end;
+	/**
+	   @brief For tokens that can have a length, this is the length!
 
-     More specifically, this value represents:
-     - For arrays, the number of elements.
-     - For objects, the number of key, value pairs.
-     - For strings, the number of Unicode code points.
-   */
-  size_t length;
-  /**
-     @brief Index of the first "child" value.
+	   More specifically, this value represents:
+	   - For arrays, the number of elements.
+	   - For objects, the number of key, value pairs.
+	   - For strings, the number of Unicode code points.
+	 */
+	size_t length;
+	/**
+	   @brief Index of the first "child" value.
 
-     A "child value" can mean slightly different things in different situations:
-     - For an array, the child is the first element of the array.
-     - For an object, the child is the first key of the object.
-     - For strings that are keys in an object, the child is the value
-       corresponding to that key.
-   */
-  size_t child;
-  /**
-     @brief Index of the next value in the sequence.
+	   A "child value" can mean slightly different things in different
+	   situations:
+	   - For an array, the child is the first element of the array.
+	   - For an object, the child is the first key of the object.
+	   - For strings that are keys in an object, the child is the value
+	     corresponding to that key.
+	 */
+	size_t child;
+	/**
+	   @brief Index of the next value in the sequence.
 
-     Within lists, "next" refers to the next value in the list.  Within objects,
-     the "next" attribute of a key refers to the next key in the object.
-   */
-  size_t next;
+	   Within lists, "next" refers to the next value in the list.  Within
+	   objects, the "next" attribute of a key refers to the next key in the
+	   object.
+	 */
+	size_t next;
 };
 
 /**
    @brief Errors that could be encountered in JSON parsing.
  */
 enum json_error {
-  /**
-    @brief No error!
-   */
-  JSONERR_NO_ERROR,
-  /**
-     @brief An error was encountered while parsing a number.
-   */
-  JSONERR_INVALID_NUMBER,
-  /**
-     @brief The string ended unexpectedly.
-   */
-  JSONERR_PREMATURE_EOF,
-  /**
-     @brief Parser encountered a token that was not expected.
-   */
-  JSONERR_UNEXPECTED_TOKEN,
-  /**
-     @brief Parser encountered an invalid surrogate pair.
-   */
-  JSONERR_INVALID_SURROGATE,
-  /**
-     @brief Parser did not encounter an expected token.
+	/**
+	  @brief No error!
+	 */
+	JSONERR_NO_ERROR,
+	/**
+	   @brief An error was encountered while parsing a number.
+	 */
+	JSONERR_INVALID_NUMBER,
+	/**
+	   @brief The string ended unexpectedly.
+	 */
+	JSONERR_PREMATURE_EOF,
+	/**
+	   @brief Parser encountered a token that was not expected.
+	 */
+	JSONERR_UNEXPECTED_TOKEN,
+	/**
+	   @brief Parser encountered an invalid surrogate pair.
+	 */
+	JSONERR_INVALID_SURROGATE,
+	/**
+	   @brief Parser did not encounter an expected token.
 
-     This error has an argument (e.g. expected ':').
-   */
-  JSONERR_EXPECTED_TOKEN,
+	   This error has an argument (e.g. expected ':').
+	 */
+	JSONERR_EXPECTED_TOKEN,
 };
 
 /**
@@ -133,29 +135,31 @@ enum json_error {
    internally throughout parsing to represent the current state of the parser.
  */
 struct json_parser {
-  /**
-     @brief The index of the next "unhandled" character.
+	/**
+	   @brief The index of the next "unhandled" character.
 
-     On return from `json_parse()`, this is the index of the first character
-     that wasn't parsed.  Or, equivalently, this is the number of input
-     characters parsed.
-   */
-  size_t textidx;
-  /**
-     @brief The index of the next slot to stick a token in our array.
+	   On return from `json_parse()`, this is the index of the first
+	   character that wasn't parsed.  Or, equivalently, this is the number
+	   of input characters parsed.
+	 */
+	size_t textidx;
+	/**
+	   @brief The index of the next slot to stick a token in our array.
 
-     On return from `json_parse()`, this is the first index of the token array
-     that was not used.  Equivalently, this is the number of tokens parsed.
-   */
-  size_t tokenidx;
-  /**
-     @brief Error code.  This *must* be checked the first time you parse.
-   */
-  enum json_error error;
-  /**
-     @brief Argument to the error code.  Useful for printing error messages.
-   */
-  size_t errorarg;
+	   On return from `json_parse()`, this is the first index of the token
+	   array that was not used.  Equivalently, this is the number of tokens
+	   parsed.
+	 */
+	size_t tokenidx;
+	/**
+	   @brief Error code.  This *must* be checked the first time you parse.
+	 */
+	enum json_error error;
+	/**
+	   @brief Argument to the error code.  Useful for printing error
+	   messages.
+	 */
+	size_t errorarg;
 };
 
 /**
