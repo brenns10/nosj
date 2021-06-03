@@ -13,10 +13,21 @@
 
  *******************************************************************************/
 
-#include "libstephen/ut.h"
+#include <unity.h>
+
 #include "nosj.h"
 
-static int test_single_digit(void)
+void setUp(void)
+{
+	// set stuff up here
+}
+
+void tearDown(void)
+{
+	// clean stuff up here
+}
+
+static void test_single_digit(void)
 {
 	char input[] = "0";
 	size_t ntok = 1;
@@ -26,10 +37,9 @@ static int test_single_digit(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.0);
-	return 0;
 }
 
-static int test_multiple_digit(void)
+static void test_multiple_digit(void)
 {
 	char input[] = "12";
 	size_t ntok = 1;
@@ -39,10 +49,9 @@ static int test_multiple_digit(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 12.0);
-	return 0;
 }
 
-static int test_starts_with_zero(void)
+static void test_starts_with_zero(void)
 {
 	/*
 	  It would be nicer if this input actually failed.  But the way the
@@ -58,10 +67,9 @@ static int test_starts_with_zero(void)
 	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == 1); // ONLY PARSED ONE CHARACTER
-	return 0;
 }
 
-static int test_decimal(void)
+static void test_decimal(void)
 {
 	char input[] = "1.1";
 	size_t ntok = 1;
@@ -71,10 +79,9 @@ static int test_decimal(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 1.1);
-	return 0;
 }
 
-static int test_zero_decimal(void)
+static void test_zero_decimal(void)
 {
 	char input[] = "0.1";
 	size_t ntok = 1;
@@ -84,10 +91,9 @@ static int test_zero_decimal(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.1);
-	return 0;
 }
 
-static int test_negative_sign(void)
+static void test_negative_sign(void)
 {
 	char input[] = "-1";
 	size_t ntok = 1;
@@ -97,10 +103,9 @@ static int test_negative_sign(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == -1.0);
-	return 0;
 }
 
-static int test_exponent_upper(void)
+static void test_exponent_upper(void)
 {
 	char input[] = "1E5";
 	size_t ntok = 1;
@@ -110,10 +115,9 @@ static int test_exponent_upper(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e5);
-	return 0;
 }
 
-static int test_exponent_lower(void)
+static void test_exponent_lower(void)
 {
 	char input[] = "1e5";
 	size_t ntok = 1;
@@ -123,10 +127,9 @@ static int test_exponent_lower(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e5);
-	return 0;
 }
 
-static int test_exponent_plus(void)
+static void test_exponent_plus(void)
 {
 	char input[] = "1e+5";
 	size_t ntok = 1;
@@ -136,10 +139,9 @@ static int test_exponent_plus(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e5);
-	return 0;
 }
 
-static int test_exponent_minus(void)
+static void test_exponent_minus(void)
 {
 	char input[] = "1e-5";
 	size_t ntok = 1;
@@ -149,10 +151,9 @@ static int test_exponent_minus(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e-5);
-	return 0;
 }
 
-static int test_sign_decimal_exponent(void)
+static void test_sign_decimal_exponent(void)
 {
 	char input[] = "-1.5e+5";
 	size_t ntok = 1;
@@ -162,42 +163,37 @@ static int test_sign_decimal_exponent(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == -1.5e5);
-	return 0;
 }
 
-static int test_sign_alone(void)
+static void test_sign_alone(void)
 {
 	char input[] = "-";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
-	return 0;
 }
 
-static int test_decimal_without_digits(void)
+static void test_decimal_without_digits(void)
 {
 	char input[] = "1.";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
-	return 0;
 }
 
-static int test_exponent_without_digits(void)
+static void test_exponent_without_digits(void)
 {
 	char input[] = "1e";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
-	return 0;
 }
 
-static int test_exponent_sign_without_digits(void)
+static void test_exponent_sign_without_digits(void)
 {
 	char input[] = "1e+";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
-	return 0;
 }
 
-static int test_negative_zero(void)
+static void test_negative_zero(void)
 {
 	char input[] = "-0"; // believe it or not, this is valid JSON.
 	size_t ntok = 1;
@@ -207,10 +203,9 @@ static int test_negative_zero(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.0);
-	return 0;
 }
 
-static int test_zero_exp(void)
+static void test_zero_exp(void)
 {
 	char input[] = "0e5"; // again, doesn't make sense, but is valid
 	size_t ntok = 1;
@@ -220,10 +215,9 @@ static int test_zero_exp(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.0);
-	return 0;
 }
 
-static int test_double_digit_decimal(void)
+static void test_double_digit_decimal(void)
 {
 	char input[] = "1.23";
 	size_t ntok = 1;
@@ -233,10 +227,9 @@ static int test_double_digit_decimal(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 1.23);
-	return 0;
 }
 
-static int test_double_digit_exp(void)
+static void test_double_digit_exp(void)
 {
 	char input[] = "1e23";
 	size_t ntok = 1;
@@ -246,87 +239,31 @@ static int test_double_digit_exp(void)
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e23);
-	return 0;
 }
 
-void test_parse_numbers(void)
+int main(void)
 {
-	smb_ut_group *group = su_create_test_group("test/parse_numbers.c");
+	UNITY_BEGIN();
 
-	smb_ut_test *single_digit =
-	        su_create_test("single_digit", test_single_digit);
-	su_add_test(group, single_digit);
+	RUN_TEST(test_single_digit);
+	RUN_TEST(test_multiple_digit);
+	RUN_TEST(test_starts_with_zero);
+	RUN_TEST(test_decimal);
+	RUN_TEST(test_zero_decimal);
+	RUN_TEST(test_negative_sign);
+	RUN_TEST(test_exponent_upper);
+	RUN_TEST(test_exponent_lower);
+	RUN_TEST(test_exponent_plus);
+	RUN_TEST(test_exponent_minus);
+	RUN_TEST(test_sign_decimal_exponent);
+	RUN_TEST(test_sign_alone);
+	RUN_TEST(test_decimal_without_digits);
+	RUN_TEST(test_exponent_without_digits);
+	RUN_TEST(test_exponent_sign_without_digits);
+	RUN_TEST(test_negative_zero);
+	RUN_TEST(test_zero_exp);
+	RUN_TEST(test_double_digit_decimal);
+	RUN_TEST(test_double_digit_exp);
 
-	smb_ut_test *multiple_digit =
-	        su_create_test("multiple_digit", test_multiple_digit);
-	su_add_test(group, multiple_digit);
-
-	smb_ut_test *starts_with_zero =
-	        su_create_test("starts_with_zero", test_starts_with_zero);
-	su_add_test(group, starts_with_zero);
-
-	smb_ut_test *decimal = su_create_test("decimal", test_decimal);
-	su_add_test(group, decimal);
-
-	smb_ut_test *zero_decimal =
-	        su_create_test("zero_decimal", test_zero_decimal);
-	su_add_test(group, zero_decimal);
-
-	smb_ut_test *negative_sign =
-	        su_create_test("negative_sign", test_negative_sign);
-	su_add_test(group, negative_sign);
-
-	smb_ut_test *exponent_upper =
-	        su_create_test("exponent_upper", test_exponent_upper);
-	su_add_test(group, exponent_upper);
-
-	smb_ut_test *exponent_lower =
-	        su_create_test("exponent_lower", test_exponent_lower);
-	su_add_test(group, exponent_lower);
-
-	smb_ut_test *exponent_plus =
-	        su_create_test("exponent_plus", test_exponent_plus);
-	su_add_test(group, exponent_plus);
-
-	smb_ut_test *exponent_minus =
-	        su_create_test("exponent_minus", test_exponent_minus);
-	su_add_test(group, exponent_minus);
-
-	smb_ut_test *sign_decimal_exponent = su_create_test(
-	        "sign_decimal_exponent", test_sign_decimal_exponent);
-	su_add_test(group, sign_decimal_exponent);
-
-	smb_ut_test *sign_alone = su_create_test("sign_alone", test_sign_alone);
-	su_add_test(group, sign_alone);
-
-	smb_ut_test *decimal_without_digits = su_create_test(
-	        "decimal_without_digits", test_decimal_without_digits);
-	su_add_test(group, decimal_without_digits);
-
-	smb_ut_test *exponent_without_digits = su_create_test(
-	        "exponent_without_digits", test_exponent_without_digits);
-	su_add_test(group, exponent_without_digits);
-
-	smb_ut_test *exponent_sign_without_digits =
-	        su_create_test("exponent_sign_without_digits",
-	                       test_exponent_sign_without_digits);
-	su_add_test(group, exponent_sign_without_digits);
-
-	smb_ut_test *negative_zero =
-	        su_create_test("negative_zero", test_negative_zero);
-	su_add_test(group, negative_zero);
-
-	smb_ut_test *zero_exp = su_create_test("zero_exp", test_zero_exp);
-	su_add_test(group, zero_exp);
-
-	smb_ut_test *double_digit_decimal = su_create_test(
-	        "double_digit_decimal", test_double_digit_decimal);
-	su_add_test(group, double_digit_decimal);
-
-	smb_ut_test *double_digit_exp =
-	        su_create_test("double_digit_exp", test_double_digit_exp);
-	su_add_test(group, double_digit_exp);
-
-	su_run_group(group);
-	su_delete_group(group);
+	return UNITY_END();
 }

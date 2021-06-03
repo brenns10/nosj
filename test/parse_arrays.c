@@ -13,11 +13,21 @@
 
  *******************************************************************************/
 
-#include "libstephen/ut.h"
+#include <unity.h>
 
 #include "nosj.h"
 
-static int test_empty_array(void)
+void setUp(void)
+{
+	// set stuff up here
+}
+
+void tearDown(void)
+{
+	// clean stuff up here
+}
+
+static void test_empty_array(void)
 {
 	char input[] = "[]";
 	size_t ntok = 1;
@@ -32,10 +42,9 @@ static int test_empty_array(void)
 	TEST_ASSERT(tokens[0].length == 0);
 	TEST_ASSERT(tokens[0].child == 0);
 	TEST_ASSERT(tokens[0].next == 0);
-	return 0;
 }
 
-static int test_single_element(void)
+static void test_single_element(void)
 {
 	char input[] = "[1]";
 	size_t ntok = 2, i;
@@ -65,10 +74,9 @@ static int test_single_element(void)
 		TEST_ASSERT(tokens[i].child == expected[i].child);
 		TEST_ASSERT(tokens[i].next == expected[i].next);
 	}
-	return 0;
 }
 
-static int test_multiple_elements(void)
+static void test_multiple_elements(void)
 {
 	size_t ntok = 3, i;
 	char input[] = "[1, 2]";
@@ -104,10 +112,9 @@ static int test_multiple_elements(void)
 		TEST_ASSERT(tokens[i].child == expected[i].child);
 		TEST_ASSERT(tokens[i].next == expected[i].next);
 	}
-	return 0;
 }
 
-static int test_extra_comma(void)
+static void test_extra_comma(void)
 {
 	char input[] = "[1,]";
 	size_t ntok = 2, i;
@@ -137,35 +144,31 @@ static int test_extra_comma(void)
 		TEST_ASSERT(tokens[i].child == expected[i].child);
 		TEST_ASSERT(tokens[i].next == expected[i].next);
 	}
-	return 0;
 }
 
-static int test_no_end(void)
+static void test_no_end(void)
 {
 	char input[] = "[1,";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_PREMATURE_EOF);
-	return 0;
 }
 
-static int test_error_within_list(void)
+static void test_error_within_list(void)
 {
 	char input[] = "[1e,";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_INVALID_NUMBER);
-	return 0;
 }
 
-static int test_no_comma(void)
+static void test_no_comma(void)
 {
 	char input[] = "[1 2 3]";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
 	TEST_ASSERT(p.errorarg = L',');
-	return 0;
 }
 
-static int test_get(void)
+static void test_get(void)
 {
 	char input[] = "[1, null, true, \"hi\", {}]";
 	struct json_token tokens[7];
@@ -200,56 +203,30 @@ static int test_get(void)
 
 	res = json_array_get(input, tokens, 0, 5);
 	TEST_ASSERT(res == 0);
-
-	return 0;
 }
 
-static int test_get_empty(void)
+static void test_get_empty(void)
 {
 	char input[] = "[]";
 	struct json_token tokens[1];
 	json_parse(input, tokens, 1);
 
 	TEST_ASSERT(0 == json_array_get(input, tokens, 0, 0));
-	return 0;
 }
 
-void test_parse_arrays(void)
+int main(void)
 {
-	smb_ut_group *group = su_create_test_group("test/parse_arrays.c");
+	UNITY_BEGIN();
 
-	smb_ut_test *empty_array =
-	        su_create_test("empty_array", test_empty_array);
-	su_add_test(group, empty_array);
+	RUN_TEST(test_empty_array);
+	RUN_TEST(test_single_element);
+	RUN_TEST(test_multiple_elements);
+	RUN_TEST(test_extra_comma);
+	RUN_TEST(test_no_end);
+	RUN_TEST(test_error_within_list);
+	RUN_TEST(test_no_comma);
+	RUN_TEST(test_get);
+	RUN_TEST(test_get_empty);
 
-	smb_ut_test *single_element =
-	        su_create_test("single_element", test_single_element);
-	su_add_test(group, single_element);
-
-	smb_ut_test *multiple_elements =
-	        su_create_test("multiple_elements", test_multiple_elements);
-	su_add_test(group, multiple_elements);
-
-	smb_ut_test *extra_comma =
-	        su_create_test("extra_comma", test_extra_comma);
-	su_add_test(group, extra_comma);
-
-	smb_ut_test *no_end = su_create_test("no_end", test_no_end);
-	su_add_test(group, no_end);
-
-	smb_ut_test *error_within_list =
-	        su_create_test("error_within_list", test_error_within_list);
-	su_add_test(group, error_within_list);
-
-	smb_ut_test *no_comma = su_create_test("no_comma", test_no_comma);
-	su_add_test(group, no_comma);
-
-	smb_ut_test *get = su_create_test("get", test_get);
-	su_add_test(group, get);
-
-	smb_ut_test *get_empty = su_create_test("get_empty", test_get_empty);
-	su_add_test(group, get_empty);
-
-	su_run_group(group);
-	su_delete_group(group);
+	return UNITY_END();
 }

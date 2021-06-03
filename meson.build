@@ -3,6 +3,8 @@ project(
   version : '0.0.1',
 )
 
+fs = import('fs')
+
 sources = [
   'src/json.c',
   'src/string.c',
@@ -35,3 +37,22 @@ pkg.generate(
 
 # For each public header in "include/":
 install_headers('inc/nosj.h')
+
+tests = [
+  'test/compare_strings.c',
+  'test/load_strings.c',
+  'test/parse_arrays.c',
+  'test/parse_atomics.c',
+  'test/parse_numbers.c',
+  'test/parse_objects.c',
+  'test/parse_strings.c',
+]
+unity_dep = dependency(
+    'Unity',
+    fallback: ['Unity', 'unity_dep'],
+)
+foreach t: tests
+  testname = fs.stem(fs.name(t))
+  exe = executable('test_' + testname, t, dependencies : [libnosj_dep, unity_dep])
+  test('TEST_' + testname, exe)
+endforeach

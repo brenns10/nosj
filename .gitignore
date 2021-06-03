@@ -7,3 +7,7 @@ obj
 cov
 doc/xml
 doc/_build
+build
+.clangd
+subprojects/*
+!subprojects/*.wrap

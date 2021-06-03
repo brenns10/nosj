@@ -13,12 +13,21 @@
 
  *******************************************************************************/
 
-#include <wchar.h>
+#include <unity.h>
 
-#include "libstephen/ut.h"
 #include "nosj.h"
 
-static int test_normal_string(void)
+void setUp(void)
+{
+	// set stuff up here
+}
+
+void tearDown(void)
+{
+	// clean stuff up here
+}
+
+static void test_normal_string(void)
 {
 	char input[] = "\"hello\"";
 	char string[] = "hello";
@@ -33,10 +42,9 @@ static int test_normal_string(void)
 	TEST_ASSERT(tokens[0].length == 5);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
-	return 0;
 }
 
-static int test_escape_quote(void)
+static void test_escape_quote(void)
 {
 	char input[] = "\"he\\\"llo\"";
 	char string[] = "he\"llo";
@@ -51,10 +59,9 @@ static int test_escape_quote(void)
 	TEST_ASSERT(tokens[0].length == 6);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
-	return 0;
 }
 
-static int test_escape_backslash(void)
+static void test_escape_backslash(void)
 {
 	char input[] = "\"he\\\\llo\"";
 	char string[] = "he\\llo";
@@ -69,10 +76,9 @@ static int test_escape_backslash(void)
 	TEST_ASSERT(tokens[0].length == 6);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
-	return 0;
 }
 
-static int test_unicode_escape(void)
+static void test_unicode_escape(void)
 {
 	char input[] = "\"he\\u006Clo\"";
 	char string[] = "hello";
@@ -87,10 +93,9 @@ static int test_unicode_escape(void)
 	TEST_ASSERT(tokens[0].length == 5);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
-	return 0;
 }
 
-static int test_surrogate_pair(void)
+static void test_surrogate_pair(void)
 {
 	char input[] = "\"\\uD83D\\uDCA9\"";
 	char string[] = "💩"; // directly included poop :)
@@ -105,33 +110,15 @@ static int test_surrogate_pair(void)
 	TEST_ASSERT(tokens[0].length == 1);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
-	return 0;
 }
 
-void test_load_strings(void)
+int main(void)
 {
-	smb_ut_group *group = su_create_test_group("test/load_strings.c");
-
-	smb_ut_test *normal_string =
-	        su_create_test("normal_string", test_normal_string);
-	su_add_test(group, normal_string);
-
-	smb_ut_test *escape_quote =
-	        su_create_test("escape_quote", test_escape_quote);
-	su_add_test(group, escape_quote);
-
-	smb_ut_test *escape_backslash =
-	        su_create_test("escape_backslash", test_escape_backslash);
-	su_add_test(group, escape_backslash);
-
-	smb_ut_test *unicode_escape =
-	        su_create_test("unicode_escape", test_unicode_escape);
-	su_add_test(group, unicode_escape);
-
-	smb_ut_test *surrogate_pair =
-	        su_create_test("surrogate_pair", test_surrogate_pair);
-	su_add_test(group, surrogate_pair);
-
-	su_run_group(group);
-	su_delete_group(group);
+	UNITY_BEGIN();
+	RUN_TEST(test_normal_string);
+	RUN_TEST(test_escape_quote);
+	RUN_TEST(test_escape_backslash);
+	RUN_TEST(test_unicode_escape);
+	RUN_TEST(test_surrogate_pair);
+	return UNITY_END();
 }
