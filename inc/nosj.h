@@ -256,4 +256,31 @@ size_t json_array_get(const char *json, const struct json_token *tokens,
 double json_number_get(const char *json, const struct json_token *tokens,
                        size_t index);
 
+/**
+ * @brief Lookup values from JSON array using an expression language
+ *
+ * The expression language starts relative to the tok parameter (which may be an
+ * object or array). Objects keys are traversed by using a ".keyname". Arrays
+ * are indexed via "[NUM]". An example of such an expression might be:
+ *
+ *    "data.entries[5].name"
+ *
+ * For the most part, this expression language should be familiar to C-like
+ * language users. It should be particularly familiar to the way which a JSON
+ * object could be traversed in Javascript itself. One "key" difference (ha) is
+ * that there are fewer restrictions on object key names. This function accepts
+ * any object key which does not contain one of {'.', '[', '\0'}. Even an end
+ * bracket is legal, although not recommended.
+ *
+ * @param json The original JSON text buffer
+ * @param arr The parsed tokens array
+ * @param index Token which the expression will be evaluated relative to
+ * @param key The key, as a JSON-traversing expression
+ * @returns 0 when the item is not found (due to any reason, including
+ * expression syntax error, or index/key not found), non-0 on success, which
+ * indicates the index of the target value.
+ */
+size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
+                   const char *key);
+
 #endif // SMB_JSON

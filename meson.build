@@ -46,6 +46,7 @@ tests = [
   'test/parse_numbers.c',
   'test/parse_objects.c',
   'test/parse_strings.c',
+  'test/lookup.c',
 ]
 unity_dep = dependency(
     'Unity',
