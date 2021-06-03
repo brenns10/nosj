@@ -17,7 +17,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "libstephen/str.h" // for read_filew()
 #include "nosj.h"
 
 int main(int argc, char *argv[])
