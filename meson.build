@@ -53,7 +53,7 @@ unity_dep = dependency(
     fallback: ['Unity', 'unity_dep'],
 )
 foreach t: tests
-  testname = fs.stem(fs.name(t))
+  testname = fs.name(t)
   exe = executable('test_' + testname, t, dependencies : [libnosj_dep, unity_dep])
   test('TEST_' + testname, exe)
 endforeach
