@@ -1,52 +1,55 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>NOSJ Documentation &mdash; NOSJ 0.1 documentation</title>
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
   
 
   
 
   
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="NOSJ 0.1 documentation" href="index.html"/>
-        <link rel="next" title="NOSJ API Reference" href="api.html"/>
-        <link rel="prev" title="Welcome to NOSJ’s documentation!" href="index.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="NOSJ API Reference" href="api.html" />
+    <link rel="prev" title="Welcome to NOSJ’s documentation!" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -77,17 +80,20 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
             
-                <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">NOSJ Documentation</a><ul>
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NOSJ Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction-to-json">Introduction to JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#motivation">Motivation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nosj-basics">NOSJ Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#unicode-support">Unicode Support</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">NOSJ API Reference</a></li>
@@ -96,40 +102,63 @@
             
           
         </div>
+        
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">NOSJ</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NOSJ</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="index.html">Docs</a> &raquo;</li>
-      
-    <li>NOSJ Documentation</li>
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>NOSJ Documentation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/doc.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/doc.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -140,35 +169,35 @@
 <div class="section" id="introduction-to-json">
 <h2>Introduction to JSON<a class="headerlink" href="#introduction-to-json" title="Permalink to this headline">¶</a></h2>
 <p>NOSJ is a C library for parsing data encoded in the JSON (JavaScript Object
-Notation) format.  In case you&#8217;re not familiar, JSON is a simple format for
+Notation) format.  In case you’re not familiar, JSON is a simple format for
 saving and transferring structured data.  One common use of JSON is in the
 responses of many REST APIs (such as the Twitter API), although there are many
 other applications.  Here is an example of some JSON data:</p>
-<div class="code json highlight-c"><div class="highlight"><pre><span class="p">{</span>
-  <span class="s">&quot;coordinates&quot;</span><span class="o">:</span> <span class="n">null</span><span class="p">,</span>
-  <span class="s">&quot;favorited&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
-  <span class="s">&quot;entities&quot;</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s">&quot;urls&quot;</span><span class="o">:</span> <span class="p">[</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;coordinates&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;favorited&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;urls&quot;</span><span class="p">:</span> <span class="p">[</span>
       <span class="p">{</span>
-        <span class="s">&quot;expanded_url&quot;</span><span class="o">:</span> <span class="s">&quot;https://dev.twitter.com/terms/display-guidelines&quot;</span><span class="p">,</span>
-        <span class="s">&quot;url&quot;</span><span class="o">:</span> <span class="s">&quot;https://t.co/Ed4omjYs&quot;</span><span class="p">,</span>
-        <span class="s">&quot;indices&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="nt">&quot;expanded_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://dev.twitter.com/terms/display-guidelines&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://t.co/Ed4omjYs&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;indices&quot;</span><span class="p">:</span> <span class="p">[</span>
           <span class="mi">76</span><span class="p">,</span>
           <span class="mi">97</span>
         <span class="p">],</span>
-        <span class="s">&quot;display_url&quot;</span><span class="o">:</span> <span class="s">&quot;dev.twitter.com/terms/display-</span><span class="se">\u2026</span><span class="s">&quot;</span>
+        <span class="nt">&quot;display_url&quot;</span><span class="p">:</span> <span class="s2">&quot;dev.twitter.com/terms/display-\u2026&quot;</span>
       <span class="p">}</span>
     <span class="p">],</span>
-    <span class="s">&quot;hashtags&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="nt">&quot;hashtags&quot;</span><span class="p">:</span> <span class="p">[</span>
       <span class="p">{</span>
-        <span class="s">&quot;text&quot;</span><span class="o">:</span> <span class="s">&quot;Twitterbird&quot;</span><span class="p">,</span>
-        <span class="s">&quot;indices&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Twitterbird&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;indices&quot;</span><span class="p">:</span> <span class="p">[</span>
           <span class="mi">19</span><span class="p">,</span>
           <span class="mi">31</span>
         <span class="p">]</span>
       <span class="p">}</span>
     <span class="p">],</span>
-    <span class="s">&quot;user_mentions&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="nt">&quot;user_mentions&quot;</span><span class="p">:</span> <span class="p">[</span>
 
     <span class="p">]</span>
   <span class="p">},</span>
@@ -178,16 +207,16 @@ other applications.  Here is an example of some JSON data:</p>
 <p>This is a truncated selection from a larger example Twitter API response.  From
 it, you can see that JSON has the following data types:</p>
 <ul class="simple">
-<li>Null (really a placeholder value that means &#8220;nothing&#8221;).</li>
-<li>Booleans, AKA true or false.</li>
-<li>Numbers, which can be integer or have additional precision.</li>
-<li>Strings, which should be capable of representing any sequence of Unicode code
-points.</li>
-<li>Arrays, which are lists of values surrounded by <code class="docutils literal"><span class="pre">[]</span></code> brackets.</li>
-<li>Objects, which map string keys to values of any type.  These are surrounded by
-<code class="docutils literal"><span class="pre">{}</span></code> braces.</li>
+<li><p>Null (really a placeholder value that means “nothing”).</p></li>
+<li><p>Booleans, AKA true or false.</p></li>
+<li><p>Numbers, which can be integer or have additional precision.</p></li>
+<li><p>Strings, which should be capable of representing any sequence of Unicode code
+points.</p></li>
+<li><p>Arrays, which are lists of values surrounded by <code class="docutils literal notranslate"><span class="pre">[]</span></code> brackets.</p></li>
+<li><p>Objects, which map string keys to values of any type.  These are surrounded by
+<code class="docutils literal notranslate"><span class="pre">{}</span></code> braces.</p></li>
 </ul>
-<p>A full description of JSON&#8217;s syntax is beyond the scope of this document, but
+<p>A full description of JSON’s syntax is beyond the scope of this document, but
 you can find JSON standards at <a class="reference external" href="http://json.org">http://json.org</a> .</p>
 </div>
 <div class="section" id="motivation">
@@ -195,210 +224,124 @@ you can find JSON standards at <a class="reference external" href="http://json.o
 <p>JSON offers very few surprises, especially to those familiar with the data
 structures typically provided by high level languages.  These languages
 typically have no trouble integrating JSON parsing very simply into their
-built-in data structures.  Unfortunately, C doesn&#8217;t have built-in data
-structures to match all of these features.  What&#8217;s worse, C requires manual
+built-in data structures.  Unfortunately, C doesn’t have built-in data
+structures to match all of these features.  What’s worse, C requires manual
 memory management, which means that every single bit of memory allocated for
-these data structures needs to be freed when it&#8217;s no longer used.  This can be
+these data structures needs to be freed when it’s no longer used.  This can be
 very costly in all of the following ways:</p>
 <ul class="simple">
-<li>Memory usage: complex JSON requires allocating space, and potentially a lot of
-it, for data structures.</li>
-<li>Memory allocations: memory allocation is not a simple or efficient task.
+<li><p>Memory usage: complex JSON requires allocating space, and potentially a lot of
+it, for data structures.</p></li>
+<li><p>Memory allocations: memory allocation is not a simple or efficient task.
 Frequent allocations (one for each JSON value or data structure) can be very
-inefficient.</li>
-<li>Programmer time: memory allocations by a library need to be freed at the
+inefficient.</p></li>
+<li><p>Programmer time: memory allocations by a library need to be freed at the
 correct time.  It can be difficult for a programmer to grasp the memory
 management strategies of other libraries, and even worse to try to integrate
-those strategies into their own application&#8217;s strategy.</li>
-<li>Locality: when many data structures are allocated separately, they end up
+those strategies into their own application’s strategy.</p></li>
+<li><p>Locality: when many data structures are allocated separately, they end up
 sprinkled throughout the memory space of the application.  Chasing pointers
-through these data structures can result in more frequent page faults.</li>
+through these data structures can result in more frequent page faults.</p></li>
 </ul>
 <p>While there are certainly situations where these inefficiencies are acceptable
 or necessary, they probably do not make up the majority of use cases for JSON.
 Many times, a programmer only wants a few values out of an API response, not the
 whole data structure.  NOSJ is a library that aims to satisfy that use case.  It
-doesn&#8217;t do any memory allocation on its own, leaving those decisions up to the
+doesn’t do any memory allocation on its own, leaving those decisions up to the
 user.  It only loads values into memory when asked to.</p>
 </div>
 <div class="section" id="nosj-basics">
 <h2>NOSJ Basics<a class="headerlink" href="#nosj-basics" title="Permalink to this headline">¶</a></h2>
 <p>Getting information from JSON with NOSJ is a two step process.  The first step
-is parsing.  You do this with the function <a class="reference internal" href="api.html#c.json_parse" title="json_parse"><code class="xref c c-func docutils literal"><span class="pre">json_parse()</span></code></a>.  NOSJ needs
+is parsing.  You do this with the function <a class="reference internal" href="api.html#c.json_parse" title="json_parse"><code class="xref c c-func docutils literal notranslate"><span class="pre">json_parse()</span></code></a>.  NOSJ needs
 to read through the JSON buffer and determine the structure: namely, what types
-of objects are where.  It stores this information in an array of <a class="reference internal" href="api.html#c.json_token" title="json_token"><code class="xref c c-func docutils literal"><span class="pre">struct</span>
-<span class="pre">json_token</span></code></a>.  These &#8220;tokens&#8221; are not tokens in the sense of lexical
+of objects are where.  It stores this information in an array of <a class="reference internal" href="api.html#c.json_token" title="json_token"><code class="xref c c-func docutils literal notranslate"><span class="pre">struct</span>
+<span class="pre">json_token</span></code></a>.  These “tokens” are not tokens in the sense of lexical
 analysis.  Instead, every token represents a JSON value.  So, the following
 input would have 3 tokens:</p>
-<div class="code json highlight-c"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="o">:</span> <span class="mi">3</span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The first token would be the object.  The second token is the key &#8220;a&#8221;, and the
+<p>The first token would be the object.  The second token is the key “a”, and the
 third token is the number 3.  As you can see, tokens (i.e. JSON values) can be
 nested within one another in a tree structure.  NOSJ stores these tokens in an
-array using a <a class="reference external" href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order">pre-order traversal</a>.  These tokens don&#8217;t
+array using a <a class="reference external" href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order">pre-order traversal</a>.  These tokens don’t
 actually hold any of the JSON values.  They simply represent the structure of
 the JSON document, and they hold the indices of each object in the input string.
 For all the other NOSJ functions, you need to have both the input string and the
 token array (along with the index of a token in the array) to do things.</p>
 <p>When NOSJ parses your input, it only parses one complete JSON value.  This value
 will always be at the root (index 0) of the token array.  Typically, this JSON
-value is going to be something like an object or a list.  From there, you&#8217;ll
-probably want to get items of a particular index (if it&#8217;s a list) or with a
-certain key (if it&#8217;s an object).  You can do the following operations on your
+value is going to be something like an object or a list.  From there, you’ll
+probably want to get items of a particular index (if it’s a list) or with a
+certain key (if it’s an object).  You can do the following operations on your
 parsed JSON:</p>
 <ul class="simple">
-<li>Index into a JSON list with <a class="reference internal" href="api.html#c.json_array_get" title="json_array_get"><code class="xref c c-func docutils literal"><span class="pre">json_array_get()</span></code></a>.  This will return to
+<li><p>Index into a JSON list with <a class="reference internal" href="api.html#c.json_array_get" title="json_array_get"><code class="xref c c-func docutils literal notranslate"><span class="pre">json_array_get()</span></code></a>.  This will return to
 you the index of the correct token in the token array.  Note that this has to
-go item by item through the list, so it takes <code class="docutils literal"><span class="pre">O(n)</span></code> time.</li>
-<li>Get the value associated with a key from an object with
-<a class="reference internal" href="api.html#c.json_object_get" title="json_object_get"><code class="xref c c-func docutils literal"><span class="pre">json_object_get()</span></code></a>.  Again, this will return the index of the value in
+go item by item through the list, so it takes <code class="docutils literal notranslate"><span class="pre">O(n)</span></code> time.</p></li>
+<li><p>Get the value associated with a key from an object with
+<a class="reference internal" href="api.html#c.json_object_get" title="json_object_get"><code class="xref c c-func docutils literal notranslate"><span class="pre">json_object_get()</span></code></a>.  Again, this will return the index of the value in
 the token array.  Also, this does a linear search through the keys of the
 object.  While this would be inefficient in general (if you were constantly
 looking up keys in the object), it is cheaper for a few accesses than it is to
 build a hash table or binary tree.  I may add the ability to create a hash table
-in order to improve lookup times, if this functionality becomes necessary.</li>
-<li>If you have the index of a string, you can use <a class="reference internal" href="api.html#c.json_string_load" title="json_string_load"><code class="xref c c-func docutils literal"><span class="pre">json_string_load()</span></code></a> to
-load it (processing all escape sequences properly) into memory.</li>
-<li>If you have the index of a number, you can use <a class="reference internal" href="api.html#c.json_number_get" title="json_number_get"><code class="xref c c-func docutils literal"><span class="pre">json_number_get()</span></code></a> to
-return its value (as a double).</li>
+in order to improve lookup times, if this functionality becomes necessary.</p></li>
+<li><p>If you have the index of a string, you can use <a class="reference internal" href="api.html#c.json_string_load" title="json_string_load"><code class="xref c c-func docutils literal notranslate"><span class="pre">json_string_load()</span></code></a> to
+load it (processing all escape sequences properly) into memory.</p></li>
+<li><p>If you have the index of a number, you can use <a class="reference internal" href="api.html#c.json_number_get" title="json_number_get"><code class="xref c c-func docutils literal notranslate"><span class="pre">json_number_get()</span></code></a> to
+return its value (as a double).</p></li>
 </ul>
-<p>True, false, and null are all represented as separate <a class="reference internal" href="api.html#c.json_type" title="json_type"><code class="xref c c-func docutils literal"><span class="pre">types</span></code></a> in NOSJ.  These types are stored as metadata in the token array, so
-you don&#8217;t even need a function to load those values into memory.</p>
+<p>True, false, and null are all represented as separate <a class="reference internal" href="api.html#c.json_type" title="json_type"><code class="xref c c-func docutils literal notranslate"><span class="pre">types</span></code></a> in NOSJ.  These types are stored as metadata in the token array, so
+you don’t even need a function to load those values into memory.</p>
 <p>With these few functions, you can get any information out of a JSON data
 structure, all with minimal memory allocation.</p>
 </div>
 <div class="section" id="unicode-support">
 <h2>Unicode Support<a class="headerlink" href="#unicode-support" title="Permalink to this headline">¶</a></h2>
-<p>The JSON specification indicates that the JSON file format is a &#8220;sequence of
-Unicode code points&#8221;.  It doesn&#8217;t specify a particular encoding.  Therefore, the
-most obvious choice I could make when implementing the library was to require
-all inputs be internally represented using UCS-4 (that is, each character
-represented as a Unicode code point in a <code class="docutils literal"><span class="pre">wchar_t</span></code>).  It is the responsibility
-of the library user to identify (or know ahead of time) the encoding of the
-input, and to decode it into an array of <code class="docutils literal"><span class="pre">wchar_t</span></code>.  You may want to use
-libraries such as <code class="docutils literal"><span class="pre">iconv</span></code> for this task.</p>
-<p>The other way you can do this is to use standard C&#8217;s built-in functions.  Your
-system should have a locale configured, which includes a setting for
-<code class="docutils literal"><span class="pre">LC_CTYPE</span></code>.  Mine is configured to <code class="docutils literal"><span class="pre">en_US.UTF-8</span></code>.  If the encoding of your
-input matches the system&#8217;s locale setting, you can usually read it directly
-using wide characters (see the <code class="docutils literal"><span class="pre">fgetwc()</span></code> family of functions).  If you have a
-buffer of <code class="docutils literal"><span class="pre">char</span></code> encoded using the system&#8217;s locale setting, you can convert it
-using the standard <code class="docutils literal"><span class="pre">mbstowcs()</span></code> function.</p>
-<p>If the above paragraphs don&#8217;t make sense to you, you may need to stop and read
-up about Unicode and its various encodings.  I would recommend Joel Spolsky&#8217;s
-<a class="reference external" href="http://www.joelonsoftware.com/articles/Unicode.html">excellent</a> piece on it,
-and this <a class="reference external" href="http://kunststube.net/encoding/">additional</a> piece seems to go into
-slightly more detail (although it has a focus on PHP).</p>
-</div>
-<div class="section" id="complete-example">
-<h2>Complete Example<a class="headerlink" href="#complete-example" title="Permalink to this headline">¶</a></h2>
-<p>Here is a complete example of how to use NOSJ to parse a JSON file and load
-specific parts of it.</p>
-<div class="code C highlight-c"><div class="highlight"><pre><span class="cp">#include &lt;stdlib.h&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;string.h&gt;</span>
-
-<span class="cp">#include &quot;libstephen/str.h&quot; </span><span class="c1">// for read_filew()</span>
-<span class="cp">#include &quot;nosj.h&quot;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-  <span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span><span class="p">;</span>
-  <span class="kt">wchar_t</span> <span class="o">*</span><span class="n">text</span><span class="p">;</span>
-  <span class="k">struct</span> <span class="n">json_token</span> <span class="o">*</span><span class="n">tokens</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-  <span class="k">struct</span> <span class="n">json_parser</span> <span class="n">p</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">returncode</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-  <span class="c1">// When no filename specified, or &quot;-&quot; specified, use STDIN.  Else, use the</span>
-  <span class="c1">// specified filename as input.</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">||</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;-&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">stdin</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;r&quot;</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="c1">// Read the whole contents of the file.  This uses a libstephen helper</span>
-  <span class="c1">// function.  http://stephen-brennan.com/libstephen/doc/api/str.html</span>
-  <span class="n">text</span> <span class="o">=</span> <span class="n">read_filew</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
-
-  <span class="c1">// Parse the first time to get the number of tokens.</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">!=</span> <span class="n">JSONERR_NO_ERROR</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">json_print_error</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
-    <span class="n">returncode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">goto</span> <span class="n">cleanup_text</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="c1">// Then allocate and parse to save the tokens.</span>
-  <span class="n">tokens</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">json_token</span><span class="p">));</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span><span class="p">);</span>
-
-  <span class="c1">// Finally, print the entire token array.</span>
-  <span class="n">json_print</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span><span class="p">);</span>
-
-  <span class="c1">// Now, let&#39;s look for the key &quot;text&quot; in the root object.</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">JSON_OBJECT</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// We can only do this if there is a root value and it&#39;s an object.</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Searching for key </span><span class="se">\&quot;</span><span class="s">text</span><span class="se">\&quot;</span><span class="s"> in the base object.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="kt">size_t</span> <span class="n">value</span> <span class="o">=</span> <span class="n">json_object_get</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">L&quot;text&quot;</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="c1">// Non-zero means we successfully found the key!</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Found key </span><span class="se">\&quot;</span><span class="s">text</span><span class="se">\&quot;</span><span class="s">.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-      <span class="n">json_print</span><span class="p">(</span><span class="n">tokens</span> <span class="o">+</span> <span class="n">value</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// print just that one token</span>
-
-      <span class="k">if</span> <span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">value</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">JSON_STRING</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// We&#39;re expecting this to be a string.  So, let&#39;s load it and print it.</span>
-        <span class="kt">wchar_t</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">wchar_t</span><span class="p">),</span> <span class="n">tokens</span><span class="p">[</span><span class="n">value</span><span class="p">].</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">json_string_load</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">string</span><span class="p">);</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Value: </span><span class="se">\&quot;</span><span class="s">%ls</span><span class="se">\&quot;\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">);</span>
-        <span class="n">free</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Value associated with </span><span class="se">\&quot;</span><span class="s">text</span><span class="se">\&quot;</span><span class="s"> was not a string.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Key </span><span class="se">\&quot;</span><span class="s">text</span><span class="se">\&quot;</span><span class="s"> not found in base object.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="n">free</span><span class="p">(</span><span class="n">tokens</span><span class="p">);</span>
- <span class="nl">cleanup_text</span><span class="p">:</span>
-  <span class="n">free</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">returncode</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<p>When handling text, you always should be thinking about how to handle characters
+beyond the ASCII range. The JSON specification indicates that the JSON file
+format is a “sequence of Unicode code points”.  It doesn’t specify a particular
+encoding.</p>
+<p>In the world of Linux, (and broadly on the Internet) the most common character
+encoding is UTF-8. NOSJ follows suit, and expects that your input is either
+ASCII or UTF-8, and may optionally contain Unicode escape sequences within it.
+NOSJ further assumes that you will only want to handle UTF-8 encoded data in
+memory. Therefore, as it reads strings, NOSJ transparently handles Unicode
+escape sequences such that they are converted into their corresponding UTF-8.</p>
+<p>This is a major breaking change from the previous behavior of NOSJ. The library
+no longer deals in terms of <code class="docutils literal notranslate"><span class="pre">wchar_t</span></code>.</p>
 </div>
 </div>
 
 
            </div>
+           
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="api.html" class="btn btn-neutral float-right" title="NOSJ API Reference" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral" title="Welcome to NOSJ’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="api.html" class="btn btn-neutral float-right" title="NOSJ API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to NOSJ’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015, Stephen Brennan.
+        &#169; Copyright 2015, Stephen Brennan.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -407,36 +350,15 @@ specific parts of it.</p>
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>
