@@ -259,7 +259,7 @@ double json_number_get(const char *json, const struct json_token *tokens,
  *
  * @param json The original JSON text buffer
  * @param arr The parsed tokens array
- * @param index Token which the expression will be evaluated relative to
+ * @param tok Token which the expression will be evaluated relative to
  * @param key The key, as a JSON-traversing expression
  * @returns 0 when the item is not found (due to any reason, including
  * expression syntax error, or index/key not found), non-0 on success, which
