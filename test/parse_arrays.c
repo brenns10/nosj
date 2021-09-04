@@ -165,7 +165,7 @@ static void test_no_comma(void)
 	char input[] = "[1 2 3]";
 	struct json_parser p = json_parse(input, NULL, 0);
 	TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
-	TEST_ASSERT(p.errorarg = L',');
+	TEST_ASSERT(p.errorarg = ',');
 }
 
 static void test_get(void)

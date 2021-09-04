@@ -104,7 +104,7 @@ static void test_valid_esc(void)
 	char valid[] = "\"\\/bfnrt";
 	size_t i;
 	struct json_parser p;
-	for (i = 0; valid[i] != L'\0'; i++) {
+	for (i = 0; valid[i] != '\0'; i++) {
 		input[2] = valid[i];
 		p = json_parse(input, NULL, 0);
 		TEST_ASSERT(p.error == JSONERR_NO_ERROR);
@@ -119,7 +119,7 @@ static void test_invalid_esc(void)
 	char valid[] = "aAB12.,[(%!"; // something of a cross-section!
 	size_t i;
 	struct json_parser p;
-	for (i = 0; valid[i] != L'\0'; i++) {
+	for (i = 0; valid[i] != '\0'; i++) {
 		input[2] = valid[i];
 		p = json_parse(input, NULL, 0);
 		TEST_ASSERT(p.error == JSONERR_UNEXPECTED_TOKEN);
