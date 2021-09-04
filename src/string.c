@@ -108,22 +108,22 @@ struct parser_arg {
 static char json_escape(char c)
 {
 	switch (c) {
-	case L'\"':
-	case L'\\':
-	case L'/':
+	case '\"':
+	case '\\':
+	case '/':
 		return c;
-	case L'b':
-		return L'\b';
-	case L'f':
-		return L'\f';
-	case L'n':
-		return L'\n';
-	case L'r':
-		return L'\r';
-	case L't':
-		return L'\t';
+	case 'b':
+		return '\b';
+	case 'f':
+		return '\f';
+	case 'n':
+		return '\n';
+	case 'r':
+		return '\r';
+	case 't':
+		return '\t';
 	default:
-		return L'\0';
+		return '\0';
 	}
 }
 
@@ -137,12 +137,12 @@ static char json_escape(char c)
  */
 static unsigned char json_xdigit(char c)
 {
-	if (L'0' <= c && c <= L'9') {
-		return (unsigned char)(c - L'0');
-	} else if (L'a' <= c && c <= L'f') {
-		return (unsigned char)(10 + c - L'a');
-	} else if (L'A' <= c && c <= L'F') {
-		return (unsigned char)(10 + c - L'A');
+	if ('0' <= c && c <= '9') {
+		return (unsigned char)(c - '0');
+	} else if ('a' <= c && c <= 'f') {
+		return (unsigned char)(10 + c - 'a');
+	} else if ('A' <= c && c <= 'F') {
+		return (unsigned char)(10 + c - 'A');
 	} else {
 		return 0xFF;
 	}
@@ -193,7 +193,7 @@ static void set_state(struct parser_arg *a, enum parser_st state)
  */
 static void json_string_start(struct parser_arg *a, char wc)
 {
-	if (wc == L'"') {
+	if (wc == '"') {
 		set_state(a, INSTRING);
 	} else {
 		set_state(a, END);
@@ -209,11 +209,11 @@ static void json_string_start(struct parser_arg *a, char wc)
  */
 static void json_string_instring(struct parser_arg *a, char wc)
 {
-	if (wc == L'\\') {
+	if (wc == '\\') {
 		set_state(a, ESCAPE);
-	} else if (wc == L'"') {
+	} else if (wc == '"') {
 		set_state(a, END);
-	} else if (wc == L'\0') {
+	} else if (wc == '\0') {
 		set_state(a, END);
 		a->error = JSONERR_PREMATURE_EOF;
 		a->textidx--;
@@ -230,13 +230,13 @@ static void json_string_instring(struct parser_arg *a, char wc)
 static void json_string_escape(struct parser_arg *a, char wc)
 {
 	char esc = json_escape(wc);
-	if (wc == L'\0') {
+	if (wc == '\0') {
 		set_state(a, END);
 		a->error = JSONERR_PREMATURE_EOF;
 		a->textidx--;
-	} else if (wc == L'u') {
+	} else if (wc == 'u') {
 		set_state(a, UESC0);
-	} else if (esc != L'\0') {
+	} else if (esc != '\0') {
 		set_state(a, INSTRING);
 		set_output(a, esc);
 	} else {
@@ -253,7 +253,7 @@ static void json_string_escape(struct parser_arg *a, char wc)
  */
 static void json_string_uesc(struct parser_arg *a, char wc)
 {
-	if (wc == L'\0') {
+	if (wc == '\0') {
 		set_state(a, END);
 		a->error = JSONERR_PREMATURE_EOF;
 		a->textidx--;
@@ -440,7 +440,7 @@ bool json_string_match(const char *json, const struct json_token *tokens,
 	// They are equal if every previous character matches, and the next
 	// character in the other string is the null character, signifying the
 	// end.
-	return ca.equal && (other[pa.outidx] == L'\0');
+	return ca.equal && (other[pa.outidx] == '\0');
 }
 
 /**
@@ -466,5 +466,5 @@ void json_string_load(const char *json, const struct json_token *tokens,
 	struct parser_arg pa = json_string(json, tokens[index].start,
 	                                   &json_string_loader, buffer);
 
-	buffer[pa.outidx] = L'\0';
+	buffer[pa.outidx] = '\0';
 }
