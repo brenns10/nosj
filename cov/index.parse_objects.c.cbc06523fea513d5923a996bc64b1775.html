@@ -26,7 +26,7 @@
     </tr>
     <tr>
       <th scope="row">Date:</th>
-      <td>2021-09-04 00:10:17</td>
+      <td>2021-09-04 00:13:15</td>
     </tr>
   </table>
 </div>
@@ -222,7 +222,7 @@
       <td class="lineno"><a id="l20" href="#l20">20</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">32</td>
+      <td class="linecount coveredLine">16</td>
       <td class="src coveredLine"><span class="kt">void</span> <span class="nf">setUp</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -246,7 +246,7 @@
       <td class="lineno"><a id="l23" href="#l23">23</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">32</td>
+      <td class="linecount coveredLine">16</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -262,7 +262,7 @@
       <td class="lineno"><a id="l25" href="#l25">25</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">32</td>
+      <td class="linecount coveredLine">16</td>
       <td class="src coveredLine"><span class="kt">void</span> <span class="nf">tearDown</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -286,7 +286,7 @@
       <td class="lineno"><a id="l28" href="#l28">28</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">32</td>
+      <td class="linecount coveredLine">16</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -302,7 +302,7 @@
       <td class="lineno"><a id="l30" href="#l30">30</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_empty_object</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -310,7 +310,7 @@
       <td class="lineno"><a id="l31" href="#l31">31</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">{</span></td>
     </tr>
 
@@ -318,7 +318,7 @@
       <td class="lineno"><a id="l32" href="#l32">32</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -326,7 +326,7 @@
       <td class="lineno"><a id="l33" href="#l33">33</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">size_t</span> <span class="n">ntok</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></td>
     </tr>
 
@@ -334,7 +334,7 @@
       <td class="lineno"><a id="l34" href="#l34">34</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_token</span> <span class="n">tokens</span><span class="p">[</span><span class="n">ntok</span><span class="p">];</span></td>
     </tr>
 
@@ -342,7 +342,7 @@
       <td class="lineno"><a id="l35" href="#l35">35</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -353,11 +353,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_NO_ERROR</span><span class="p">);</span></td>
     </tr>
 
@@ -368,11 +368,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span> <span class="o">==</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -383,11 +383,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">textidx</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span></td>
     </tr>
 
@@ -398,11 +398,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">JSON_OBJECT</span><span class="p">);</span></td>
     </tr>
 
@@ -413,11 +413,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">start</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -428,11 +428,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">end</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span></td>
     </tr>
 
@@ -443,11 +443,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -458,11 +458,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">child</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -473,11 +473,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">next</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -485,7 +485,7 @@
       <td class="lineno"><a id="l45" href="#l45">45</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -501,7 +501,7 @@
       <td class="lineno"><a id="l47" href="#l47">47</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_single_element</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -509,7 +509,7 @@
       <td class="lineno"><a id="l48" href="#l48">48</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">{</span></td>
     </tr>
 
@@ -517,7 +517,7 @@
       <td class="lineno"><a id="l49" href="#l49">49</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">: 1}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -525,7 +525,7 @@
       <td class="lineno"><a id="l50" href="#l50">50</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">size_t</span> <span class="n">ntok</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span></td>
     </tr>
 
@@ -533,7 +533,7 @@
       <td class="lineno"><a id="l51" href="#l51">51</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_token</span> <span class="n">tokens</span><span class="p">[</span><span class="n">ntok</span><span class="p">];</span></td>
     </tr>
 
@@ -541,7 +541,7 @@
       <td class="lineno"><a id="l52" href="#l52">52</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_token</span> <span class="n">expected</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span></td>
     </tr>
 
@@ -701,7 +701,7 @@
       <td class="lineno"><a id="l72" href="#l72">72</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -712,11 +712,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_NO_ERROR</span><span class="p">);</span></td>
     </tr>
 
@@ -727,11 +727,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span> <span class="o">==</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -742,11 +742,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">textidx</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span></td>
     </tr>
 
@@ -756,12 +756,12 @@
         <details class="linebranchDetails">
         <summary class="linebranchSummary">2/2</summary>
         <div class="linebranchContents">
-          <div class="takenBranch">&check; Branch 0 taken 6 times.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 0 taken 3 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">8</td>
+      <td class="linecount coveredLine">4</td>
       <td class="src coveredLine">	<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ntok</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span></td>
     </tr>
 
@@ -772,11 +772,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span><span class="p">);</span></td>
     </tr>
 
@@ -787,11 +787,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start</span><span class="p">);</span></td>
     </tr>
 
@@ -802,11 +802,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span><span class="p">);</span></td>
     </tr>
 
@@ -817,11 +817,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span><span class="p">);</span></td>
     </tr>
 
@@ -832,11 +832,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span><span class="p">);</span></td>
     </tr>
 
@@ -847,11 +847,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">next</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">next</span><span class="p">);</span></td>
     </tr>
 
@@ -867,7 +867,7 @@
       <td class="lineno"><a id="l84" href="#l84">84</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -883,7 +883,7 @@
       <td class="lineno"><a id="l86" href="#l86">86</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_multiple_elements</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -891,7 +891,7 @@
       <td class="lineno"><a id="l87" href="#l87">87</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">{</span></td>
     </tr>
 
@@ -899,7 +899,7 @@
       <td class="lineno"><a id="l88" href="#l88">88</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">: 1, </span><span class="se">\&quot;</span><span class="s">b</span><span class="se">\&quot;</span><span class="s">: 2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -907,7 +907,7 @@
       <td class="lineno"><a id="l89" href="#l89">89</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">size_t</span> <span class="n">ntok</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span></td>
     </tr>
 
@@ -915,7 +915,7 @@
       <td class="lineno"><a id="l90" href="#l90">90</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_token</span> <span class="n">tokens</span><span class="p">[</span><span class="n">ntok</span><span class="p">];</span></td>
     </tr>
 
@@ -923,7 +923,7 @@
       <td class="lineno"><a id="l91" href="#l91">91</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_token</span> <span class="n">expected</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span></td>
     </tr>
 
@@ -1179,7 +1179,7 @@
       <td class="lineno"><a id="l123" href="#l123">123</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -1190,11 +1190,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_NO_ERROR</span><span class="p">);</span></td>
     </tr>
 
@@ -1205,11 +1205,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span> <span class="o">==</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -1220,11 +1220,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">textidx</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span></td>
     </tr>
 
@@ -1234,12 +1234,12 @@
         <details class="linebranchDetails">
         <summary class="linebranchSummary">2/2</summary>
         <div class="linebranchContents">
-          <div class="takenBranch">&check; Branch 0 taken 10 times.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 0 taken 5 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">12</td>
+      <td class="linecount coveredLine">6</td>
       <td class="src coveredLine">	<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ntok</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span></td>
     </tr>
 
@@ -1250,11 +1250,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 10 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">10</td>
+      <td class="linecount coveredLine">5</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span><span class="p">);</span></td>
     </tr>
 
@@ -1265,11 +1265,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 10 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">10</td>
+      <td class="linecount coveredLine">5</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start</span><span class="p">);</span></td>
     </tr>
 
@@ -1280,11 +1280,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 10 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">10</td>
+      <td class="linecount coveredLine">5</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span><span class="p">);</span></td>
     </tr>
 
@@ -1295,11 +1295,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 10 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">10</td>
+      <td class="linecount coveredLine">5</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span><span class="p">);</span></td>
     </tr>
 
@@ -1310,11 +1310,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 10 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">10</td>
+      <td class="linecount coveredLine">5</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span><span class="p">);</span></td>
     </tr>
 
@@ -1325,11 +1325,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 10 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 5 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">10</td>
+      <td class="linecount coveredLine">5</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">next</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">next</span><span class="p">);</span></td>
     </tr>
 
@@ -1345,7 +1345,7 @@
       <td class="lineno"><a id="l135" href="#l135">135</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -1361,7 +1361,7 @@
       <td class="lineno"><a id="l137" href="#l137">137</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_extra_comma</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -1369,7 +1369,7 @@
       <td class="lineno"><a id="l138" href="#l138">138</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">{</span></td>
     </tr>
 
@@ -1377,7 +1377,7 @@
       <td class="lineno"><a id="l139" href="#l139">139</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">: 1,}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -1385,7 +1385,7 @@
       <td class="lineno"><a id="l140" href="#l140">140</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">size_t</span> <span class="n">ntok</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span></td>
     </tr>
 
@@ -1393,7 +1393,7 @@
       <td class="lineno"><a id="l141" href="#l141">141</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_token</span> <span class="n">tokens</span><span class="p">[</span><span class="n">ntok</span><span class="p">];</span></td>
     </tr>
 
@@ -1401,7 +1401,7 @@
       <td class="lineno"><a id="l142" href="#l142">142</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_token</span> <span class="n">expected</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span></td>
     </tr>
 
@@ -1561,7 +1561,7 @@
       <td class="lineno"><a id="l162" href="#l162">162</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -1572,11 +1572,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_NO_ERROR</span><span class="p">);</span></td>
     </tr>
 
@@ -1587,11 +1587,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span> <span class="o">==</span> <span class="n">ntok</span><span class="p">);</span></td>
     </tr>
 
@@ -1602,11 +1602,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">textidx</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span></td>
     </tr>
 
@@ -1616,12 +1616,12 @@
         <details class="linebranchDetails">
         <summary class="linebranchSummary">2/2</summary>
         <div class="linebranchContents">
-          <div class="takenBranch">&check; Branch 0 taken 6 times.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 0 taken 3 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">8</td>
+      <td class="linecount coveredLine">4</td>
       <td class="src coveredLine">	<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ntok</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span></td>
     </tr>
 
@@ -1632,11 +1632,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span><span class="p">);</span></td>
     </tr>
 
@@ -1647,11 +1647,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start</span><span class="p">);</span></td>
     </tr>
 
@@ -1662,11 +1662,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span><span class="p">);</span></td>
     </tr>
 
@@ -1677,11 +1677,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span><span class="p">);</span></td>
     </tr>
 
@@ -1692,11 +1692,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span><span class="p">);</span></td>
     </tr>
 
@@ -1707,11 +1707,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 6 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 3 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">6</td>
+      <td class="linecount coveredLine">3</td>
       <td class="src coveredLine">		<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">next</span> <span class="o">==</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">next</span><span class="p">);</span></td>
     </tr>
 
@@ -1727,7 +1727,7 @@
       <td class="lineno"><a id="l174" href="#l174">174</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -1743,7 +1743,7 @@
       <td class="lineno"><a id="l176" href="#l176">176</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_no_end</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -1759,7 +1759,7 @@
       <td class="lineno"><a id="l178" href="#l178">178</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">: 1,&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -1767,7 +1767,7 @@
       <td class="lineno"><a id="l179" href="#l179">179</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -1778,11 +1778,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_PREMATURE_EOF</span><span class="p">);</span></td>
     </tr>
 
@@ -1790,7 +1790,7 @@
       <td class="lineno"><a id="l181" href="#l181">181</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -1806,7 +1806,7 @@
       <td class="lineno"><a id="l183" href="#l183">183</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_no_colon</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -1822,7 +1822,7 @@
       <td class="lineno"><a id="l185" href="#l185">185</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">blah</span><span class="se">\&quot;</span><span class="s"> 2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -1830,7 +1830,7 @@
       <td class="lineno"><a id="l186" href="#l186">186</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -1841,11 +1841,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_EXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -1856,11 +1856,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">errorarg</span> <span class="o">==</span> <span class="sc">&#39;:&#39;</span><span class="p">);</span></td>
     </tr>
 
@@ -1868,7 +1868,7 @@
       <td class="lineno"><a id="l189" href="#l189">189</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -1884,7 +1884,7 @@
       <td class="lineno"><a id="l191" href="#l191">191</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_missing_value</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -1900,7 +1900,7 @@
       <td class="lineno"><a id="l193" href="#l193">193</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">blah</span><span class="se">\&quot;</span><span class="s">:}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -1908,7 +1908,7 @@
       <td class="lineno"><a id="l194" href="#l194">194</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -1919,11 +1919,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -1931,7 +1931,7 @@
       <td class="lineno"><a id="l196" href="#l196">196</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -1947,7 +1947,7 @@
       <td class="lineno"><a id="l198" href="#l198">198</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_no_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -1963,7 +1963,7 @@
       <td class="lineno"><a id="l200" href="#l200">200</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{:2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -1971,7 +1971,7 @@
       <td class="lineno"><a id="l201" href="#l201">201</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -1982,11 +1982,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -1994,7 +1994,7 @@
       <td class="lineno"><a id="l203" href="#l203">203</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2010,7 +2010,7 @@
       <td class="lineno"><a id="l205" href="#l205">205</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_number_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2026,7 +2026,7 @@
       <td class="lineno"><a id="l207" href="#l207">207</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{1:2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2034,7 +2034,7 @@
       <td class="lineno"><a id="l208" href="#l208">208</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2045,11 +2045,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -2057,7 +2057,7 @@
       <td class="lineno"><a id="l210" href="#l210">210</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2073,7 +2073,7 @@
       <td class="lineno"><a id="l212" href="#l212">212</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_true_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2089,7 +2089,7 @@
       <td class="lineno"><a id="l214" href="#l214">214</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{true:2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2097,7 +2097,7 @@
       <td class="lineno"><a id="l215" href="#l215">215</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2108,11 +2108,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -2120,7 +2120,7 @@
       <td class="lineno"><a id="l217" href="#l217">217</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2136,7 +2136,7 @@
       <td class="lineno"><a id="l219" href="#l219">219</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_false_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2152,7 +2152,7 @@
       <td class="lineno"><a id="l221" href="#l221">221</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{false:2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2160,7 +2160,7 @@
       <td class="lineno"><a id="l222" href="#l222">222</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2171,11 +2171,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -2183,7 +2183,7 @@
       <td class="lineno"><a id="l224" href="#l224">224</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2199,7 +2199,7 @@
       <td class="lineno"><a id="l226" href="#l226">226</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_null_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2215,7 +2215,7 @@
       <td class="lineno"><a id="l228" href="#l228">228</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{null:2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2223,7 +2223,7 @@
       <td class="lineno"><a id="l229" href="#l229">229</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2234,11 +2234,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -2246,7 +2246,7 @@
       <td class="lineno"><a id="l231" href="#l231">231</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2262,7 +2262,7 @@
       <td class="lineno"><a id="l233" href="#l233">233</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_list_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2278,7 +2278,7 @@
       <td class="lineno"><a id="l235" href="#l235">235</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{[]:2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2286,7 +2286,7 @@
       <td class="lineno"><a id="l236" href="#l236">236</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2297,11 +2297,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -2309,7 +2309,7 @@
       <td class="lineno"><a id="l238" href="#l238">238</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2325,7 +2325,7 @@
       <td class="lineno"><a id="l240" href="#l240">240</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_object_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2341,7 +2341,7 @@
       <td class="lineno"><a id="l242" href="#l242">242</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{{}:2}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2349,7 +2349,7 @@
       <td class="lineno"><a id="l243" href="#l243">243</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2360,11 +2360,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_UNEXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -2372,7 +2372,7 @@
       <td class="lineno"><a id="l245" href="#l245">245</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2388,7 +2388,7 @@
       <td class="lineno"><a id="l247" href="#l247">247</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_no_comma</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2404,7 +2404,7 @@
       <td class="lineno"><a id="l249" href="#l249">249</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">:2 </span><span class="se">\&quot;</span><span class="s">b</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">blah</span><span class="se">\&quot;</span><span class="s">}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2412,7 +2412,7 @@
       <td class="lineno"><a id="l250" href="#l250">250</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2423,11 +2423,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_EXPECTED_TOKEN</span><span class="p">);</span></td>
     </tr>
 
@@ -2438,11 +2438,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">errorarg</span> <span class="o">==</span> <span class="sc">&#39;,&#39;</span><span class="p">);</span></td>
     </tr>
 
@@ -2450,7 +2450,7 @@
       <td class="lineno"><a id="l253" href="#l253">253</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2466,7 +2466,7 @@
       <td class="lineno"><a id="l255" href="#l255">255</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="k">static</span> <span class="kt">void</span> <span class="n">test_get_object</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2482,7 +2482,7 @@
       <td class="lineno"><a id="l257" href="#l257">257</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">char</span> <span class="n">input</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">:2, </span><span class="se">\&quot;</span><span class="s">b</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">blah</span><span class="se">\&quot;</span><span class="s">}&quot;</span><span class="p">;</span></td>
     </tr>
 
@@ -2498,7 +2498,7 @@
       <td class="lineno"><a id="l259" href="#l259">259</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">struct</span> <span class="nc">json_parser</span> <span class="n">p</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span></td>
     </tr>
 
@@ -2509,11 +2509,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">JSONERR_NO_ERROR</span><span class="p">);</span></td>
     </tr>
 
@@ -2524,11 +2524,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">tokenidx</span> <span class="o">==</span> <span class="mi">5</span><span class="p">);</span></td>
     </tr>
 
@@ -2539,11 +2539,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">textidx</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span></td>
     </tr>
 
@@ -2551,7 +2551,7 @@
       <td class="lineno"><a id="l263" href="#l263">263</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="kt">size_t</span> <span class="n">value</span> <span class="o">=</span> <span class="n">json_object_get</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">);</span></td>
     </tr>
 
@@ -2562,11 +2562,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span></td>
     </tr>
 
@@ -2577,11 +2577,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">value</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">JSON_NUMBER</span><span class="p">);</span></td>
     </tr>
 
@@ -2589,7 +2589,7 @@
       <td class="lineno"><a id="l266" href="#l266">266</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">value</span> <span class="o">=</span> <span class="n">json_object_get</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">);</span></td>
     </tr>
 
@@ -2600,11 +2600,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span></td>
     </tr>
 
@@ -2615,11 +2615,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">value</span><span class="p">].</span><span class="n">type</span> <span class="o">==</span> <span class="n">JSON_STRING</span><span class="p">);</span></td>
     </tr>
 
@@ -2630,11 +2630,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">value</span><span class="p">].</span><span class="n">start</span> <span class="o">==</span> <span class="mi">12</span><span class="p">);</span></td>
     </tr>
 
@@ -2642,7 +2642,7 @@
       <td class="lineno"><a id="l270" href="#l270">270</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">value</span> <span class="o">=</span> <span class="n">json_object_get</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">);</span></td>
     </tr>
 
@@ -2653,11 +2653,11 @@
         <summary class="linebranchSummary">1/2</summary>
         <div class="linebranchContents">
           <div class="notTakenBranch">&cross; Branch 0 not taken.</div>
-          <div class="takenBranch">&check; Branch 1 taken 2 times.</div>
+          <div class="takenBranch">&check; Branch 1 taken 1 times.</div>
         </div>
         </details>
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">TEST_ASSERT</span><span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span></td>
     </tr>
 
@@ -2665,7 +2665,7 @@
       <td class="lineno"><a id="l272" href="#l272">272</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="p">}</span></td>
     </tr>
 
@@ -2681,7 +2681,7 @@
       <td class="lineno"><a id="l274" href="#l274">274</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine"><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></td>
     </tr>
 
@@ -2697,7 +2697,7 @@
       <td class="lineno"><a id="l276" href="#l276">276</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">UNITY_BEGIN</span><span class="p">();</span></td>
     </tr>
 
@@ -2713,7 +2713,7 @@
       <td class="lineno"><a id="l278" href="#l278">278</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_empty_object</span><span class="p">);</span></td>
     </tr>
 
@@ -2721,7 +2721,7 @@
       <td class="lineno"><a id="l279" href="#l279">279</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_single_element</span><span class="p">);</span></td>
     </tr>
 
@@ -2729,7 +2729,7 @@
       <td class="lineno"><a id="l280" href="#l280">280</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_multiple_elements</span><span class="p">);</span></td>
     </tr>
 
@@ -2737,7 +2737,7 @@
       <td class="lineno"><a id="l281" href="#l281">281</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_extra_comma</span><span class="p">);</span></td>
     </tr>
 
@@ -2745,7 +2745,7 @@
       <td class="lineno"><a id="l282" href="#l282">282</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_no_end</span><span class="p">);</span></td>
     </tr>
 
@@ -2753,7 +2753,7 @@
       <td class="lineno"><a id="l283" href="#l283">283</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_no_colon</span><span class="p">);</span></td>
     </tr>
 
@@ -2761,7 +2761,7 @@
       <td class="lineno"><a id="l284" href="#l284">284</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_missing_value</span><span class="p">);</span></td>
     </tr>
 
@@ -2769,7 +2769,7 @@
       <td class="lineno"><a id="l285" href="#l285">285</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_no_key</span><span class="p">);</span></td>
     </tr>
 
@@ -2777,7 +2777,7 @@
       <td class="lineno"><a id="l286" href="#l286">286</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_number_key</span><span class="p">);</span></td>
     </tr>
 
@@ -2785,7 +2785,7 @@
       <td class="lineno"><a id="l287" href="#l287">287</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_true_key</span><span class="p">);</span></td>
     </tr>
 
@@ -2793,7 +2793,7 @@
       <td class="lineno"><a id="l288" href="#l288">288</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_false_key</span><span class="p">);</span></td>
     </tr>
 
@@ -2801,7 +2801,7 @@
       <td class="lineno"><a id="l289" href="#l289">289</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_null_key</span><span class="p">);</span></td>
     </tr>
 
@@ -2809,7 +2809,7 @@
       <td class="lineno"><a id="l290" href="#l290">290</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_list_key</span><span class="p">);</span></td>
     </tr>
 
@@ -2817,7 +2817,7 @@
       <td class="lineno"><a id="l291" href="#l291">291</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_object_key</span><span class="p">);</span></td>
     </tr>
 
@@ -2825,7 +2825,7 @@
       <td class="lineno"><a id="l292" href="#l292">292</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_no_comma</span><span class="p">);</span></td>
     </tr>
 
@@ -2833,7 +2833,7 @@
       <td class="lineno"><a id="l293" href="#l293">293</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="n">RUN_TEST</span><span class="p">(</span><span class="n">test_get_object</span><span class="p">);</span></td>
     </tr>
 
@@ -2849,7 +2849,7 @@
       <td class="lineno"><a id="l295" href="#l295">295</a></td>
       <td class="linebranch">
       </td>
-      <td class="linecount coveredLine">2</td>
+      <td class="linecount coveredLine">1</td>
       <td class="src coveredLine">	<span class="k">return</span> <span class="nf">UNITY_END</span><span class="p">();</span></td>
     </tr>
 
