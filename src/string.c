@@ -85,11 +85,11 @@ struct parser_arg {
 	   putting them in literally), you have to do the UTF-16 surrogate pair.
 	   What a pain.
 	 */
-	char prev;
+	wchar_t prev;
 	/**
 	   @brief Unicode escape character we are currently parsing.
 	 */
-	char curr;
+	wchar_t curr;
 	/**
 	   @brief Any error we want to report.
 	 */
@@ -152,25 +152,52 @@ static unsigned char json_xdigit(char c)
    @brief Register the output character.
    @param a Parser data.
    @param out The output character.
+   @param from_uesc Whether this came from a unicode escape
 
-   Always "flushes" the previous character so that in case a surrogate pair
-   doesn't happen, the original first character is preserved.  After that, it
-   calls the output setter and increments the index.
+   The nosj approach to JSON is: all data is UTF-8. Unfortunately, JSON can
+   contain Unicode escape sequences, which we have to manually translate into
+   valid UTF-8 here. However, if we translated *all* bytes into UTF-8 naively,
+   then we'd end up botching valid UTF-8 multi-byte sequences which already
+   exist. So, when from_uesc is true, we treat the output as a potential
+   multibyte sequence to translate to UTF-8. When from_uesc is false, we treat
+   it as a byte.
  */
-static void set_output(struct parser_arg *a, char out)
+static void set_output(struct parser_arg *a, wchar_t out, bool from_uesc)
 {
 	// don't forget to flush the "buffered" potential surrogate pair
-	if (a->prev != 0) {
+	char bytes[4];
+	int nbytes = 0;
+	int i;
+	if (a->prev != 0 || out > 0x1FFFFF) {
 		a->state = END;
 		a->error = JSONERR_INVALID_SURROGATE;
 		return;
 	}
-
-	if (a->setter != NULL) {
-		a->setter(a, out, a->setter_arg);
+	if (!from_uesc) {
+		bytes[0] = out & 0xFF;
+		nbytes = 1;
+	} else if (out > 0xFFFF) {
+		bytes[0] = ((out >> 18) & 0x7) | 0xF0;
+		nbytes = 4;
+	} else if (out > 0x7FF) {
+		bytes[0] = ((out >> 12) & 0xF) | 0xE0;
+		nbytes = 3;
+	} else if (out > 0x7F) {
+		bytes[0] = ((out >> 6) & 0x1F) | 0xC0;
+		nbytes = 2;
+	} else {
+		bytes[0] = out & 0x7F;
+		nbytes = 1;
 	}
-
-	a->outidx++;
+	for (i = nbytes - 1; i > 0; i--) {
+		bytes[i] = (out & 0x3F) | 0x80;
+		out >>= 6;
+	}
+	for (i = 0; i < nbytes; i++) {
+		if (a->setter)
+			a->setter(a, bytes[i], a->setter_arg);
+		a->outidx++;
+	}
 }
 
 static void set_state(struct parser_arg *a, enum parser_st state)
@@ -218,7 +245,7 @@ static void json_string_instring(struct parser_arg *a, char wc)
 		a->error = JSONERR_PREMATURE_EOF;
 		a->textidx--;
 	} else {
-		set_output(a, wc);
+		set_output(a, wc, false);
 	}
 }
 
@@ -238,7 +265,7 @@ static void json_string_escape(struct parser_arg *a, char wc)
 		set_state(a, UESC0);
 	} else if (esc != '\0') {
 		set_state(a, INSTRING);
-		set_output(a, esc);
+		set_output(a, esc, false);
 	} else {
 		set_state(a, END);
 		a->error = JSONERR_UNEXPECTED_TOKEN;
@@ -262,8 +289,6 @@ static void json_string_uesc(struct parser_arg *a, char wc)
 		a->error = JSONERR_UNEXPECTED_TOKEN;
 		a->textidx--;
 	} else {
-		/* improve this */
-		fprintf(stderr, "nosj warning: encountered unicode escape!\n");
 		a->curr = a->curr << 4;
 		a->curr |= json_xdigit(wc);
 		if (a->state < UESC3) {
@@ -280,7 +305,7 @@ static void json_string_uesc(struct parser_arg *a, char wc)
 					a->prev = a->curr;
 				} else {
 					// nope, keep going
-					set_output(a, a->curr);
+					set_output(a, a->curr, true);
 				}
 			} else {
 				// there was a previous starting surrogate
@@ -293,7 +318,7 @@ static void json_string_uesc(struct parser_arg *a, char wc)
 					        0x10000; // apparently this
 					                 // needs to happen (?)
 					a->prev = 0;
-					set_output(a, a->curr);
+					set_output(a, a->curr, true);
 				} else {
 					// not a legal surrogate to match
 					// previous surrogate.

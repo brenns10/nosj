@@ -228,13 +228,13 @@ static void test_surrogate_pair(void)
 	char string[] = "💩"; // directly included poop :)
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
-	TEST_ASSERT(p.tokenidx == 1);
+	TEST_ASSERT_EQUAL_INT(JSONERR_NO_ERROR, p.error);
+	TEST_ASSERT_EQUAL_INT(1, p.tokenidx);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(json_string_match(input, tokens, 0, string));
-	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 13);
-	TEST_ASSERT(tokens[0].length == 1);
+	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);
+	TEST_ASSERT_EQUAL_INT(13, tokens[0].end);
+	TEST_ASSERT_EQUAL_INT(4, tokens[0].length);
 }
 
 static void test_incomplete_surrogate(void)
