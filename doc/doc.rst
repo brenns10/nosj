@@ -1,12 +1,6 @@
 NOSJ Documentation
 ==================
 
-.. warning::
-
-   This documentation is out of date! It needs to be updated with several major
-   recent changes. Until then, please be sure to refer to the headers for
-   up-to-date APIs.
-
 Introduction to JSON
 --------------------
 
@@ -152,25 +146,17 @@ structure, all with minimal memory allocation.
 Unicode Support
 ---------------
 
-The JSON specification indicates that the JSON file format is a "sequence of
-Unicode code points".  It doesn't specify a particular encoding.  Therefore, the
-most obvious choice I could make when implementing the library was to require
-all inputs be internally represented using UCS-4 (that is, each character
-represented as a Unicode code point in a ``wchar_t``).  It is the responsibility
-of the library user to identify (or know ahead of time) the encoding of the
-input, and to decode it into an array of ``wchar_t``.  You may want to use
-libraries such as ``iconv`` for this task.
+When handling text, you always should be thinking about how to handle characters
+beyond the ASCII range. The JSON specification indicates that the JSON file
+format is a "sequence of Unicode code points".  It doesn't specify a particular
+encoding.
 
-The other way you can do this is to use standard C's built-in functions.  Your
-system should have a locale configured, which includes a setting for
-``LC_CTYPE``.  Mine is configured to ``en_US.UTF-8``.  If the encoding of your
-input matches the system's locale setting, you can usually read it directly
-using wide characters (see the ``fgetwc()`` family of functions).  If you have a
-buffer of ``char`` encoded using the system's locale setting, you can convert it
-using the standard ``mbstowcs()`` function.
+In the world of Linux, (and broadly on the Internet) the most common character
+encoding is UTF-8. NOSJ follows suit, and expects that your input is either
+ASCII or UTF-8, and may optionally contain Unicode escape sequences within it.
+NOSJ further assumes that you will only want to handle UTF-8 encoded data in
+memory. Therefore, as it reads strings, NOSJ transparently handles Unicode
+escape sequences such that they are converted into their corresponding UTF-8.
 
-If the above paragraphs don't make sense to you, you may need to stop and read
-up about Unicode and its various encodings.  I would recommend Joel Spolsky's
-`excellent <http://www.joelonsoftware.com/articles/Unicode.html>`_ piece on it,
-and this `additional <http://kunststube.net/encoding/>`_ piece seems to go into
-slightly more detail (although it has a focus on PHP).
+This is a major breaking change from the previous behavior of NOSJ. The library
+no longer deals in terms of ``wchar_t``.
