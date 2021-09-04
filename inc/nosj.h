@@ -268,4 +268,22 @@ double json_number_get(const char *json, const struct json_token *tokens,
 size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
                    const char *key);
 
+/**
+ * @brief Loop through each value in a JSON array
+ *
+ * Example:
+ * @code
+ * size_t elem;
+ * json_array_for_each(elem, tokens, 0) {
+ *   printf("Element at index %lu\n", elem);
+ * }
+ * @endcode
+ *
+ * @param var A variable (size_t) which will contain the index of each token
+ * @param tok_arr The JSON token array
+ * @param start The index of the JSON array in the token array
+ */
+#define json_array_for_each(var, tok_arr, start)                               \
+	for (var = tok_arr[start].child; var != 0; var = tok_arr[var].next)
+
 #endif // SMB_JSON
