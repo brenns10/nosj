@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.1.0 -- 2022-11-14
+
+Add `json_easy` API: provisional.
+
 ## v1.0.0 -- 2021-09-03
 
 First stable release.
