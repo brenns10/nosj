@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v1.1.0 -- 2022-11-14
+## v1.1.0, v1.1.1 -- 2022-11-14
 
 Add `json_easy` API: provisional.
 
