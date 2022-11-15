@@ -114,6 +114,8 @@ enum json_error {
 	 * @brief Missing colon between object key and value
 	 */
 	JSONERR_MISSING_COLON,
+
+	_LAST_JSONERR,
 };
 
 /**

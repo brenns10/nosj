@@ -413,7 +413,7 @@ static struct json_parser json_parse_object(const char *text,
 		} else if (text[p.textidx] != '}') {
 			// If there was no comma, this better be the end of the
 			// object.
-			p.error = JSONERR_EXPECTED_TOKEN;
+			p.error = JSONERR_MISSING_COMMA;
 			return p;
 		}
 	}

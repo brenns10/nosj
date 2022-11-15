@@ -184,8 +184,7 @@ static void test_no_colon(void)
 {
 	char input[] = "{\"blah\" 2}";
 	struct json_parser p = json_parse(input, NULL, 0);
-	TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
-	TEST_ASSERT(p.errorarg == ':');
+	TEST_ASSERT(p.error == JSONERR_MISSING_COLON);
 }
 
 static void test_missing_value(void)
@@ -248,8 +247,7 @@ static void test_no_comma(void)
 {
 	char input[] = "{\"a\":2 \"b\":\"blah\"}";
 	struct json_parser p = json_parse(input, NULL, 0);
-	TEST_ASSERT(p.error == JSONERR_EXPECTED_TOKEN);
-	TEST_ASSERT(p.errorarg == ',');
+	TEST_ASSERT(p.error == JSONERR_MISSING_COMMA);
 }
 
 static void test_get_object(void)

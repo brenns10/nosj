@@ -26,7 +26,7 @@ extern char *json_type_str[JSON_NULL + 1];
 /**
    @brief Array mapping error to printf format string.
  */
-extern char *json_error_str[JSONERR_EXPECTED_TOKEN + 1];
+extern char *json_error_str[_LAST_JSONERR];
 
 void json_settoken(struct json_token *arr, struct json_token tok,
                    struct json_parser p, size_t maxtoken);
