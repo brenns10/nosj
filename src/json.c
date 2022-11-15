@@ -318,8 +318,7 @@ static struct json_parser json_parse_array(const char *text,
 		} else if (text[p.textidx] != ']') {
 			// If there was no comma, this better be the end of the
 			// object.
-			p.error = JSONERR_EXPECTED_TOKEN;
-			p.errorarg = ',';
+			p.error = JSONERR_MISSING_COMMA;
 			return p;
 		}
 	}
@@ -379,8 +378,7 @@ static struct json_parser json_parse_object(const char *text,
 		}
 		p = json_skip_whitespace(text, p);
 		if (text[p.textidx] != ':') {
-			p.error = JSONERR_EXPECTED_TOKEN;
-			p.errorarg = ':';
+			p.error = JSONERR_MISSING_COLON;
 			return p;
 		}
 		p.textidx++;
@@ -416,7 +414,6 @@ static struct json_parser json_parse_object(const char *text,
 			// If there was no comma, this better be the end of the
 			// object.
 			p.error = JSONERR_EXPECTED_TOKEN;
-			p.errorarg = ',';
 			return p;
 		}
 	}
@@ -650,7 +647,8 @@ char *json_error_str[] = {
 	"string ended prematurely",
 	"unexpected token",
 	"invalid surrogate pair",
-	"expected token '%c'",
+	"expected comma between elements",
+	"expected colon between key and value",
 };
 
 struct json_parser json_parse(const char *text, struct json_token *arr,
@@ -658,8 +656,7 @@ struct json_parser json_parse(const char *text, struct json_token *arr,
 {
 	struct json_parser parser = { .textidx = 0,
 		                      .tokenidx = 0,
-		                      .error = JSONERR_NO_ERROR,
-		                      .errorarg = 0 };
+		                      .error = JSONERR_NO_ERROR };
 	return json_parse_rec(text, arr, maxtoken, parser);
 }
 
@@ -674,9 +671,13 @@ void json_print(struct json_token *arr, size_t n)
 	}
 }
 
+const char *json_strerror(enum json_error err)
+{
+	return json_error_str[err];
+}
+
 void json_print_error(FILE *f, struct json_parser p)
 {
-	fprintf(f, "at character %lu: ", p.textidx);
-	fprintf(f, json_error_str[p.error], p.errorarg);
-	fprintf(f, "\n");
+	fprintf(f, "at character %lu: %s\n", p.textidx,
+	        json_error_str[p.error]);
 }

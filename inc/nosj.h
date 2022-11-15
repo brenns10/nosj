@@ -106,11 +106,13 @@ enum json_error {
 	 */
 	JSONERR_INVALID_SURROGATE,
 	/**
-	 * @brief Parser did not encounter an expected token.
-	 *
-	 * This error has an argument (e.g. expected ':').
+	 * @brief Missing comma between list or object elements
 	 */
-	JSONERR_EXPECTED_TOKEN,
+	JSONERR_MISSING_COMMA,
+	/**
+	 * @brief Missing colon between object key and value
+	 */
+	JSONERR_MISSING_COLON,
 };
 
 /**
@@ -140,11 +142,6 @@ struct json_parser {
 	 * @brief Error code.  This *must* be checked the first time you parse.
 	 */
 	enum json_error error;
-	/**
-	 * @brief Argument to the error code.  Useful for printing error
-	 * messages.
-	 */
-	size_t errorarg;
 };
 
 /**
@@ -180,10 +177,16 @@ void json_print(struct json_token *arr, size_t n);
 
 /**
  * @brief Print out a parser error message for a parser error.
+ * This is like json_strerror() but also includes character number.
  * @param f File to print to.
  * @param p Parser return struct.
  */
 void json_print_error(FILE *f, struct json_parser p);
+
+/**
+ * @brief Return an error string for parser error
+ */
+const char *json_strerror(enum json_error err);
 
 /**
  * @brief Return whether or not a string matches a token string.
