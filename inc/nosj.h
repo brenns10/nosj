@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /**
@@ -290,4 +291,68 @@ size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
 #define json_array_for_each(var, tok_arr, start)                               \
 	for (var = tok_arr[start].child; var != 0; var = tok_arr[var].next)
 
+struct json_easy {
+	const char *input;
+	size_t input_len;
+	struct json_token *tokens;
+	size_t tokens_len;
+};
+
+#define json_easy_for_each(var, jsonp)                                         \
+	json_array_for_each(var, ((jsonp)->tokens), ((jsonp)->tokens_len))
+
+void json_easy_init(struct json_easy *, const char *input);
+static inline struct json_easy *json_easy_new(const char *input)
+{
+	struct json_easy *easy = (struct json_easy *)malloc(sizeof(*easy));
+	json_easy_init(easy, input);
+	return easy;
+}
+
+void json_easy_destroy(struct json_easy *easy);
+static inline void json_easy_free(struct json_easy *easy)
+{
+	json_easy_destroy(easy);
+	free(easy);
+}
+
+int json_easy_parse(struct json_easy *easy);
+const char *json_easy_strerror(int err);
+
+/**
+ * @brief Return the string at a given index. Returned pointer must be freed.
+ */
+char *json_easy_string_get(struct json_easy *easy, size_t index);
+
+/* Below are just like their non-easy counterparts */
+static inline size_t json_easy_lookup(struct json_easy *easy, size_t tok,
+                                      const char *key)
+{
+	return json_lookup(easy->input, easy->tokens, tok, key);
+}
+static inline double json_easy_number_get(struct json_easy *easy, size_t index)
+{
+	return json_number_get(easy->input, easy->tokens, index);
+}
+static inline bool json_easy_string_match(struct json_easy *easy, size_t index,
+                                          const char *other)
+{
+	return json_string_match(easy->input, easy->tokens, index, other);
+}
+
+static inline void json_easy_string_load(struct json_easy *easy, size_t index,
+                                         char *buffer)
+{
+	return json_string_load(easy->input, easy->tokens, index, buffer);
+}
+static inline size_t json_easy_object_get(struct json_easy *easy, size_t index,
+                                          const char *key)
+{
+	return json_object_get(easy->input, easy->tokens, index, key);
+}
+static inline size_t json_easy_array_get(struct json_easy *easy, size_t index,
+                                         size_t array_index)
+{
+	return json_array_get(easy->input, easy->tokens, index, array_index);
+}
 #endif // SMB_JSON

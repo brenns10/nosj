@@ -15,8 +15,60 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "nosj.h"
+
+void json_easy_init(struct json_easy *easy, const char *input)
+{
+	easy->input = input;
+	easy->input_len = strlen(input);
+	easy->tokens = NULL;
+	easy->tokens_len = 0;
+}
+
+int json_easy_parse(struct json_easy *easy)
+{
+	struct json_parser p;
+
+	/* Already parsed? */
+	if (easy->tokens)
+		return 0;
+
+	p = json_parse(easy->input, NULL, 0);
+	if (p.error != JSONERR_NO_ERROR)
+		return -p.error;
+
+	easy->tokens_len = p.tokenidx;
+	easy->tokens = calloc(p.tokenidx, sizeof(*easy->tokens));
+	p = json_parse(easy->input, easy->tokens, easy->tokens_len);
+
+	/* This should be impossible, but catch it anyway */
+	if (p.error != JSONERR_NO_ERROR) {
+		free(easy->tokens);
+		easy->tokens = NULL;
+		easy->tokens_len = 0;
+		return -p.error;
+	}
+	return 0;
+}
+
+void json_easy_destroy(struct json_easy *easy)
+{
+	free(easy->tokens);
+}
+
+const char *json_easy_strerror(int err)
+{
+	return json_strerror(-err);
+}
+
+char *json_easy_string_get(struct json_easy *easy, size_t index)
+{
+	char *buf = malloc(easy->tokens[index].length + 1);
+	json_easy_string_load(easy, index, buf);
+	return buf;
+}
 
 size_t json_object_get(const char *json, const struct json_token *tokens,
                        size_t index, const char *key)
