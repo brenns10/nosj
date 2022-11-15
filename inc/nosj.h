@@ -57,7 +57,7 @@ struct json_token {
 	 * More specifically, this value represents:
 	 * - For arrays, the number of elements.
 	 * - For objects, the number of key, value pairs.
-	 * - For strings, the number of Unicode code points.
+	 * - For strings, the length of the string in bytes.
 	 */
 	size_t length;
 	/**
