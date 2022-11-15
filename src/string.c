@@ -398,7 +398,7 @@ static struct parser_arg json_string(const char *text, size_t idx,
    @param p The parser state.
    @returns Parser state after parsing the string.
  */
-struct json_parser json_parse_string(char *text, struct json_token *arr,
+struct json_parser json_parse_string(const char *text, struct json_token *arr,
                                      size_t maxtoken, struct json_parser p)
 {
 	struct json_token tok;

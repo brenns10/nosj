@@ -30,7 +30,7 @@ extern char *json_error_str[JSONERR_EXPECTED_TOKEN + 1];
 
 void json_settoken(struct json_token *arr, struct json_token tok,
                    struct json_parser p, size_t maxtoken);
-struct json_parser json_parse_string(char *text, struct json_token *arr,
+struct json_parser json_parse_string(const char *text, struct json_token *arr,
                                      size_t maxtoken, struct json_parser p);
 
 #endif // SMB_JSON_PRIVATE_H

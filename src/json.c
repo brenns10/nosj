@@ -23,7 +23,8 @@
 #include "nosj.h"
 
 // forward declaration of the main parser
-static struct json_parser json_parse_rec(char *text, struct json_token *arr,
+static struct json_parser json_parse_rec(const char *text,
+                                         struct json_token *arr,
                                          size_t maxtoken, struct json_parser p);
 
 /**
@@ -147,7 +148,8 @@ static void json_setlength(struct json_token *arr, size_t tokidx, size_t length,
    @param p The current parser state
    @returns The new parser state
  */
-static struct json_parser json_skip_whitespace(char *text, struct json_parser p)
+static struct json_parser json_skip_whitespace(const char *text,
+                                               struct json_parser p)
 {
 	while (json_isspace(text[p.textidx]) && text[p.textidx] != '\0') {
 		p.textidx++;
@@ -163,7 +165,8 @@ static struct json_parser json_skip_whitespace(char *text, struct json_parser p)
    @param p The parser state.
    @returns Parser state after parsing true.
  */
-static struct json_parser json_parse_true(char *text, struct json_token *arr,
+static struct json_parser json_parse_true(const char *text,
+                                          struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
 	struct json_token tok;
@@ -192,7 +195,8 @@ static struct json_parser json_parse_true(char *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing false.
  */
-static struct json_parser json_parse_false(char *text, struct json_token *arr,
+static struct json_parser json_parse_false(const char *text,
+                                           struct json_token *arr,
                                            size_t maxtoken,
                                            struct json_parser p)
 {
@@ -223,7 +227,8 @@ static struct json_parser json_parse_false(char *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing null.
  */
-static struct json_parser json_parse_null(char *text, struct json_token *arr,
+static struct json_parser json_parse_null(const char *text,
+                                          struct json_token *arr,
                                           size_t maxtoken, struct json_parser p)
 {
 	struct json_token tok;
@@ -252,7 +257,8 @@ static struct json_parser json_parse_null(char *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing the array.
  */
-static struct json_parser json_parse_array(char *text, struct json_token *arr,
+static struct json_parser json_parse_array(const char *text,
+                                           struct json_token *arr,
                                            size_t maxtoken,
                                            struct json_parser p)
 {
@@ -334,7 +340,8 @@ static struct json_parser json_parse_array(char *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing the object.
  */
-static struct json_parser json_parse_object(char *text, struct json_token *arr,
+static struct json_parser json_parse_object(const char *text,
+                                            struct json_token *arr,
                                             size_t maxtoken,
                                             struct json_parser p)
 {
@@ -437,7 +444,8 @@ char *parse_number_state[] = {
    @param p The parser state.
    @returns Parser state after parsing the number.
  */
-static struct json_parser json_parse_number(char *text, struct json_token *arr,
+static struct json_parser json_parse_number(const char *text,
+                                            struct json_token *arr,
                                             size_t maxtoken,
                                             struct json_parser p)
 {
@@ -599,7 +607,8 @@ static struct json_parser json_parse_number(char *text, struct json_token *arr,
    @param p The parser state.
    @returns Parser state after parsing the value.
  */
-static struct json_parser json_parse_rec(char *text, struct json_token *arr,
+static struct json_parser json_parse_rec(const char *text,
+                                         struct json_token *arr,
                                          size_t maxtoken, struct json_parser p)
 {
 	p = json_skip_whitespace(text, p);
@@ -644,7 +653,7 @@ char *json_error_str[] = {
 	"expected token '%c'",
 };
 
-struct json_parser json_parse(char *text, struct json_token *arr,
+struct json_parser json_parse(const char *text, struct json_token *arr,
                               size_t maxtoken)
 {
 	struct json_parser parser = { .textidx = 0,

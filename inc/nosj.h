@@ -163,7 +163,8 @@ struct json_parser {
  * @param n The number of slots in the arr buffer.
  * @returns A parser result.
  */
-struct json_parser json_parse(char *json, struct json_token *arr, size_t n);
+struct json_parser json_parse(const char *json, struct json_token *arr,
+                              size_t n);
 
 /**
  * @brief Print a list of JSON tokens.
