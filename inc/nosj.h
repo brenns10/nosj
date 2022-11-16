@@ -208,6 +208,20 @@ void json_print_error(FILE *f, struct json_parser p);
 const char *json_strerror(int err);
 
 /**
+ * @brief Print out an error message after failing json_lookup().
+ *
+ * This will output a detailed error message highlighting exactly the point in
+ * the expression where we failed, and the particular error which we
+ * encountered.
+ *
+ * @param f File to write to, probably stderr
+ * @param expr Same expression passed to json_lookup()
+ * @param err Error returned by json_lookup()
+ * @param index Value of the out param to json_lookup()
+ */
+void json_lookup_error(FILE *f, const char *expr, int err, size_t index);
+
+/**
  * @brief Return whether or not a string matches a token string.
  * @param json The original JSON buffer.
  * @param tokens The parsed tokens.
@@ -292,7 +306,7 @@ int json_number_get(const char *json, const struct json_token *tokens,
  * where we encountered the error is stored into the variable ponited by @a
  * index. (This is unusual, all other NOSJ functions leave their out parameters
  * unmodified on error.) You can use these two items to print an informative
- * error message.
+ * error message, see json_lookup_error().
  *
  * @param json The original JSON text buffer
  * @param arr The parsed tokens array

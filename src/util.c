@@ -226,3 +226,13 @@ out:
 	}
 	return ret;
 }
+
+void json_lookup_error(FILE *f, const char *expr, int err, size_t index)
+{
+	fprintf(f, "error in lookup expression:\n");
+	fprintf(f, "  %s\n", expr);
+	for (size_t i = 0; i < index + 2; i++)
+		fputc(' ', f);
+	fputc('^', f);
+	fprintf(f, "\n%s\n", json_strerror(err));
+}
