@@ -38,7 +38,6 @@ static void test_normal_string(void)
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 6);
 	TEST_ASSERT(tokens[0].length == 5);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
@@ -55,7 +54,6 @@ static void test_escape_quote(void)
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
@@ -72,7 +70,6 @@ static void test_escape_backslash(void)
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT(0 == strcmp(buffer, string));
@@ -89,7 +86,6 @@ static void test_unicode_escape(void)
 	TEST_ASSERT_EQUAL_INT(1, p.tokenidx);
 	TEST_ASSERT_EQUAL_INT(sizeof(input) - 1, p.textidx);
 	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);
-	TEST_ASSERT_EQUAL_INT(11, tokens[0].end);
 	TEST_ASSERT_EQUAL_INT(5, tokens[0].length);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT_EQUAL_STRING(expected, buffer);
@@ -106,7 +102,6 @@ static void test_surrogate_pair(void)
 	TEST_ASSERT_EQUAL_INT(1, p.tokenidx);
 	TEST_ASSERT_EQUAL_INT(sizeof(input) - 1, p.textidx);
 	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);
-	TEST_ASSERT_EQUAL_INT(31, tokens[0].end);
 	TEST_ASSERT_EQUAL_INT(12, tokens[0].length);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT_EQUAL_STRING(expected, buffer);
@@ -123,7 +118,6 @@ static void test_unicode_undisturbed(void)
 	TEST_ASSERT_EQUAL_INT(1, p.tokenidx);
 	TEST_ASSERT_EQUAL_INT(sizeof(input) - 1, p.textidx);
 	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);
-	TEST_ASSERT_EQUAL_INT(13, tokens[0].end);
 	TEST_ASSERT_EQUAL_INT(12, tokens[0].length);
 	json_string_load(input, tokens, 0, buffer);
 	TEST_ASSERT_EQUAL_STRING(expected, buffer);

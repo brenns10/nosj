@@ -57,12 +57,13 @@ int main(int argc, char *argv[])
 
 	// Now, let's look for the key "text" in the root object.
 	if (p.tokenidx > 0 && tokens[0].type == JSON_OBJECT) {
+		uint32_t value;
 		// We can only do this if there is a root value and it's an
 		// object.
 		printf("Searching for key \"text\" in the base object.\n");
-		size_t value = json_object_get(text, tokens, 0, "text");
+		int ret = json_object_get(text, tokens, 0, "text", &value);
 
-		if (value != 0) {
+		if (ret == JSON_OK) {
 			// Non-zero means we successfully found the key!
 			printf("Found key \"text\".\n");
 			json_print(tokens + value,
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
 				       "a string.\n");
 			}
 		} else {
+			/* Technically we should check ret, but w/e */
 			printf("Key \"text\" not found in base object.\n");
 		}
 	}

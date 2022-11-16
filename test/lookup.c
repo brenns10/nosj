@@ -27,7 +27,7 @@ void tearDown(void)
 
 static void test_lookup_single(void)
 {
-	size_t r;
+	uint32_t r;
 	TEST_ASSERT(!json_lookup(j, t, 0, "favorited", &r));
 	TEST_ASSERT_NOT_EQUAL(0, r);
 	TEST_ASSERT_EQUAL(JSON_FALSE, t[r].type);
@@ -35,14 +35,14 @@ static void test_lookup_single(void)
 
 static void test_lookup_key_not_exist(void)
 {
-	size_t r;
+	uint32_t r;
 	TEST_ASSERT_EQUAL(JSONERR_LOOKUP,
 	                  json_lookup(j, t, 0, "user.foobar", &r));
 }
 
 static void test_lookup_array(void)
 {
-	size_t r;
+	uint32_t r;
 	double num;
 	TEST_ASSERT(!json_lookup(j, t, 0, "contributors[0]", &r));
 	TEST_ASSERT_NOT_EQUAL_INT(0, r);
@@ -53,7 +53,7 @@ static void test_lookup_array(void)
 
 static void test_lookup_big_chain(void)
 {
-	size_t r;
+	uint32_t r;
 	double num;
 	TEST_ASSERT(!json_lookup(j, t, 0,
 	                         "user.entities.url.urls[0].indices[1]", &r));
@@ -65,7 +65,7 @@ static void test_lookup_big_chain(void)
 
 static void test_lookup_two_index(void)
 {
-	size_t r;
+	uint32_t r;
 	double num;
 	/* no nested lists in twitapi.json :( */
 	char *lj = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, [0, 2, 4, 6, 8]]";
@@ -85,7 +85,7 @@ static void test_lookup_two_index(void)
 
 static void test_lookup_dot_not_object(void)
 {
-	size_t r;
+	uint32_t r;
 	TEST_ASSERT_EQUAL(JSONERR_TYPE,
 	                  json_lookup(j, t, 0, "retweeted.yes", &r));
 	TEST_ASSERT_EQUAL(r, 13);
@@ -93,7 +93,7 @@ static void test_lookup_dot_not_object(void)
 
 static void test_lookup_index_not_array(void)
 {
-	size_t r;
+	uint32_t r;
 	TEST_ASSERT_EQUAL(JSONERR_TYPE,
 	                  json_lookup(j, t, 0, "entities[1]", &r));
 	TEST_ASSERT_EQUAL(r, 10);
@@ -101,7 +101,7 @@ static void test_lookup_index_not_array(void)
 
 static void test_lookup_non_integer_index(void)
 {
-	size_t r;
+	uint32_t r;
 	TEST_ASSERT_EQUAL(JSONERR_BAD_EXPR,
 	                  json_lookup(j, t, 0, "entities.urls[abc]", &r));
 	TEST_ASSERT_EQUAL(r, 14);
@@ -109,7 +109,7 @@ static void test_lookup_non_integer_index(void)
 
 static void test_lookup_invalid_after_index(void)
 {
-	size_t r;
+	uint32_t r;
 	TEST_ASSERT_EQUAL(
 	        JSONERR_BAD_EXPR,
 	        json_lookup(j, t, 0, "user.entities.url.urls[0]indices", &r));
@@ -118,7 +118,7 @@ static void test_lookup_invalid_after_index(void)
 
 static void test_lookup_invalid_index(void)
 {
-	size_t r;
+	uint32_t r;
 	TEST_ASSERT_EQUAL(JSONERR_INDEX,
 	                  json_lookup(j, t, 0, "entities.urls[2]", &r));
 	TEST_ASSERT_EQUAL(r, 15);

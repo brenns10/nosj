@@ -37,8 +37,6 @@ static void test_parse_true(void)
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_TRUE);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 3);
-	TEST_ASSERT(tokens[0].child == 0);
 	TEST_ASSERT(tokens[0].next == 0);
 }
 
@@ -52,8 +50,6 @@ static void test_parse_false(void)
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_FALSE);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 4);
-	TEST_ASSERT(tokens[0].child == 0);
 	TEST_ASSERT(tokens[0].next == 0);
 }
 
@@ -67,8 +63,6 @@ static void test_parse_null(void)
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_NULL);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 3);
-	TEST_ASSERT(tokens[0].child == 0);
 	TEST_ASSERT(tokens[0].next == 0);
 }
 

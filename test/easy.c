@@ -20,7 +20,7 @@ void tearDown(void)
 static void test_basic_access(void)
 {
 	struct json_easy *easy = json_easy_new(twitapi_json);
-	size_t index;
+	uint32_t index;
 	double number;
 
 	TEST_ASSERT(!json_easy_parse(easy));
@@ -33,7 +33,7 @@ static void test_basic_access(void)
 static void test_easy_string(void)
 {
 	struct json_easy *easy = json_easy_new(twitapi_json);
-	size_t index;
+	uint32_t index;
 	char *string;
 
 	TEST_ASSERT(!json_easy_parse(easy));

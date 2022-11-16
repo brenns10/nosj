@@ -59,7 +59,7 @@ void json_easy_destroy(struct json_easy *easy)
 	free(easy->tokens);
 }
 
-int json_easy_string_get(struct json_easy *easy, size_t index, char **out)
+int json_easy_string_get(struct json_easy *easy, uint32_t index, char **out)
 {
 	char *buf = malloc(easy->tokens[index].length + 1);
 	int rv = json_easy_string_load(easy, index, buf);
@@ -72,12 +72,12 @@ int json_easy_string_get(struct json_easy *easy, size_t index, char **out)
 }
 
 int json_object_get(const char *json, const struct json_token *tokens,
-                    size_t index, const char *key, size_t *ret)
+                    uint32_t index, const char *key, uint32_t *ret)
 {
 	if (tokens[index].type != JSON_OBJECT)
 		return JSONERR_TYPE;
 
-	index = tokens[index].child;
+	index++; /* First key has index one greater than object */
 
 	while (index != 0) {
 		int rv;
@@ -86,7 +86,8 @@ int json_object_get(const char *json, const struct json_token *tokens,
 		rv = json_string_match(json, tokens, index, key, &match);
 		assert(rv == JSON_OK);
 		if (match) {
-			*ret = tokens[index].child;
+			/* Value has index one greater than key */
+			*ret = index + 1;
 			return JSON_OK;
 		}
 		index = tokens[index].next;
@@ -96,7 +97,7 @@ int json_object_get(const char *json, const struct json_token *tokens,
 }
 
 int json_array_get(const char *json, const struct json_token *tokens,
-                   size_t index, size_t array_index, size_t *result)
+                   uint32_t index, uint32_t array_index, uint32_t *result)
 {
 	(void)json;
 
@@ -105,7 +106,7 @@ int json_array_get(const char *json, const struct json_token *tokens,
 	if (array_index >= tokens[index].length)
 		return JSONERR_INDEX;
 
-	index = tokens[index].child;
+	index++; /* First element has index one greater than array */
 	while (array_index--) {
 		index = tokens[index].next;
 	}
@@ -114,7 +115,7 @@ int json_array_get(const char *json, const struct json_token *tokens,
 }
 
 int json_number_get(const char *json, const struct json_token *tokens,
-                    size_t index, double *number)
+                    uint32_t index, double *number)
 {
 	if (tokens[index].type != JSON_NUMBER)
 		return JSONERR_TYPE;
@@ -133,10 +134,10 @@ int json_number_get(const char *json, const struct json_token *tokens,
  *
  *   keyname.nextkey[123].blah
  */
-int json_lookup(const char *json, const struct json_token *arr, size_t tok,
-                const char *key, size_t *result)
+int json_lookup(const char *json, const struct json_token *arr, uint32_t tok,
+                const char *key, uint32_t *result)
 {
-	size_t start = 0, i = 0;
+	uint32_t start = 0, i = 0;
 	int state = 0;
 	int ret = JSON_OK;
 	long index;
@@ -227,11 +228,11 @@ out:
 	return ret;
 }
 
-void json_lookup_error(FILE *f, const char *expr, int err, size_t index)
+void json_lookup_error(FILE *f, const char *expr, int err, uint32_t index)
 {
 	fprintf(f, "error in lookup expression:\n");
 	fprintf(f, "  %s\n", expr);
-	for (size_t i = 0; i < index + 2; i++)
+	for (uint32_t i = 0; i < index + 2; i++)
 		fputc(' ', f);
 	fputc('^', f);
 	fprintf(f, "\n%s\n", json_strerror(err));

@@ -30,7 +30,7 @@ void tearDown(void)
 static void test_empty_object(void)
 {
 	char input[] = "{}";
-	size_t ntok = 1;
+	uint32_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSON_OK);
@@ -38,36 +38,19 @@ static void test_empty_object(void)
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_OBJECT);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 1);
 	TEST_ASSERT(tokens[0].length == 0);
-	TEST_ASSERT(tokens[0].child == 0);
 	TEST_ASSERT(tokens[0].next == 0);
 }
 
 static void test_single_element(void)
 {
 	char input[] = "{\"a\": 1}";
-	size_t ntok = 3, i;
+	uint32_t ntok = 3, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
-		{ .type = JSON_OBJECT,
-		  .start = 0,
-		  .end = 7,
-		  .length = 1,
-		  .child = 1,
-		  .next = 0 },
-		{ .type = JSON_STRING,
-		  .start = 1,
-		  .end = 3,
-		  .length = 1,
-		  .child = 2,
-		  .next = 0 },
-		{ .type = JSON_NUMBER,
-		  .start = 6,
-		  .end = 6,
-		  .length = 0,
-		  .child = 0,
-		  .next = 0 },
+		{ .type = JSON_OBJECT, .start = 0, .length = 1, .next = 0 },
+		{ .type = JSON_STRING, .start = 1, .length = 1, .next = 0 },
+		{ .type = JSON_NUMBER, .start = 6, .length = 0, .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSON_OK);
@@ -76,9 +59,7 @@ static void test_single_element(void)
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
-		TEST_ASSERT(tokens[i].end == expected[i].end);
 		TEST_ASSERT(tokens[i].length == expected[i].length);
-		TEST_ASSERT(tokens[i].child == expected[i].child);
 		TEST_ASSERT(tokens[i].next == expected[i].next);
 	}
 }
@@ -86,39 +67,14 @@ static void test_single_element(void)
 static void test_multiple_elements(void)
 {
 	char input[] = "{\"a\": 1, \"b\": 2}";
-	size_t ntok = 5, i;
+	uint32_t ntok = 5, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
-		{ .type = JSON_OBJECT,
-		  .start = 0,
-		  .end = 15,
-		  .length = 2,
-		  .child = 1,
-		  .next = 0 },
-		{ .type = JSON_STRING,
-		  .start = 1,
-		  .end = 3,
-		  .length = 1,
-		  .child = 2,
-		  .next = 3 },
-		{ .type = JSON_NUMBER,
-		  .start = 6,
-		  .end = 6,
-		  .length = 0,
-		  .child = 0,
-		  .next = 0 },
-		{ .type = JSON_STRING,
-		  .start = 9,
-		  .end = 11,
-		  .length = 1,
-		  .child = 4,
-		  .next = 0 },
-		{ .type = JSON_NUMBER,
-		  .start = 14,
-		  .end = 14,
-		  .length = 0,
-		  .child = 0,
-		  .next = 0 },
+		{ .type = JSON_OBJECT, .start = 0, .length = 2, .next = 0 },
+		{ .type = JSON_STRING, .start = 1, .length = 1, .next = 3 },
+		{ .type = JSON_NUMBER, .start = 6, .length = 0, .next = 0 },
+		{ .type = JSON_STRING, .start = 9, .length = 1, .next = 0 },
+		{ .type = JSON_NUMBER, .start = 14, .length = 0, .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSON_OK);
@@ -127,9 +83,7 @@ static void test_multiple_elements(void)
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
-		TEST_ASSERT(tokens[i].end == expected[i].end);
 		TEST_ASSERT(tokens[i].length == expected[i].length);
-		TEST_ASSERT(tokens[i].child == expected[i].child);
 		TEST_ASSERT(tokens[i].next == expected[i].next);
 	}
 }
@@ -137,27 +91,12 @@ static void test_multiple_elements(void)
 static void test_extra_comma(void)
 {
 	char input[] = "{\"a\": 1,}";
-	size_t ntok = 3, i;
+	uint32_t ntok = 3, i;
 	struct json_token tokens[ntok];
 	struct json_token expected[] = {
-		{ .type = JSON_OBJECT,
-		  .start = 0,
-		  .end = 8,
-		  .length = 1,
-		  .child = 1,
-		  .next = 0 },
-		{ .type = JSON_STRING,
-		  .start = 1,
-		  .end = 3,
-		  .length = 1,
-		  .child = 2,
-		  .next = 0 },
-		{ .type = JSON_NUMBER,
-		  .start = 6,
-		  .end = 6,
-		  .length = 0,
-		  .child = 0,
-		  .next = 0 },
+		{ .type = JSON_OBJECT, .start = 0, .length = 1, .next = 0 },
+		{ .type = JSON_STRING, .start = 1, .length = 1, .next = 0 },
+		{ .type = JSON_NUMBER, .start = 6, .length = 0, .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSON_OK);
@@ -166,9 +105,7 @@ static void test_extra_comma(void)
 	for (i = 0; i < ntok; i++) {
 		TEST_ASSERT(tokens[i].type == expected[i].type);
 		TEST_ASSERT(tokens[i].start == expected[i].start);
-		TEST_ASSERT(tokens[i].end == expected[i].end);
 		TEST_ASSERT(tokens[i].length == expected[i].length);
-		TEST_ASSERT(tokens[i].child == expected[i].child);
 		TEST_ASSERT(tokens[i].next == expected[i].next);
 	}
 }
@@ -255,7 +192,7 @@ static void test_get_object(void)
 	char input[] = "{\"a\":2, \"b\":\"blah\"}";
 	struct json_token tokens[5];
 	struct json_parser p = json_parse(input, tokens, 5);
-	size_t value;
+	uint32_t value;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 5);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);

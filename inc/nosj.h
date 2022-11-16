@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,11 +48,7 @@ struct json_token {
 	/**
 	 * @brief Index of the first character of the token in the string.
 	 */
-	size_t start;
-	/**
-	 * @brief Index of the last character of the token in the string.
-	 */
-	size_t end;
+	uint32_t start;
 	/**
 	 * @brief For tokens that can have a length, this is the length!
 	 *
@@ -60,18 +57,7 @@ struct json_token {
 	 * - For objects, the number of key, value pairs.
 	 * - For strings, the length of the string in bytes.
 	 */
-	size_t length;
-	/**
-	 * @brief Index of the first "child" value.
-	 *
-	 * A "child value" can mean slightly different things in different
-	 * situations:
-	 * - For an array, the child is the first element of the array.
-	 * - For an object, the child is the first key of the object.
-	 * - For strings that are keys in an object, the child is the value
-	 *   corresponding to that key.
-	 */
-	size_t child;
+	uint32_t length;
 	/**
 	 * @brief Index of the next value in the sequence.
 	 *
@@ -79,7 +65,7 @@ struct json_token {
 	 * objects, the "next" attribute of a key refers to the next key in the
 	 * object.
 	 */
-	size_t next;
+	uint32_t next;
 };
 
 /**
@@ -148,7 +134,7 @@ struct json_parser {
 	 * character that wasn't parsed.  Or, equivalently, this is the number
 	 * of input characters parsed.
 	 */
-	size_t textidx;
+	uint32_t textidx;
 	/**
 	 * @brief The index of the next slot to stick a token in our array.
 	 *
@@ -156,7 +142,7 @@ struct json_parser {
 	 * array that was not used.  Equivalently, this is the number of tokens
 	 * parsed.
 	 */
-	size_t tokenidx;
+	uint32_t tokenidx;
 	/**
 	 * @brief Error code.  This *must* be checked the first time you parse.
 	 */
@@ -180,7 +166,7 @@ struct json_parser {
  * @returns A parser result.
  */
 struct json_parser json_parse(const char *json, struct json_token *arr,
-                              size_t n);
+                              uint32_t n);
 
 /**
  * @brief Print a list of JSON tokens.
@@ -192,7 +178,7 @@ struct json_parser json_parse(const char *json, struct json_token *arr,
  * @param arr The array of tokens to print.
  * @param n The number of tokens in the buffer.
  */
-void json_print(struct json_token *arr, size_t n);
+void json_print(struct json_token *arr, uint32_t n);
 
 /**
  * @brief Print out a parser error message for a parser error.
@@ -219,7 +205,7 @@ const char *json_strerror(int err);
  * @param err Error returned by json_lookup()
  * @param index Value of the out param to json_lookup()
  */
-void json_lookup_error(FILE *f, const char *expr, int err, size_t index);
+void json_lookup_error(FILE *f, const char *expr, int err, uint32_t index);
 
 /**
  * @brief Return whether or not a string matches a token string.
@@ -231,7 +217,7 @@ void json_lookup_error(FILE *f, const char *expr, int err, size_t index);
  * @returns 0 (JSON_OK) on success, or JSONERR_TYPE if it's not a string
  */
 int json_string_match(const char *json, const struct json_token *tokens,
-                      size_t index, const char *other, bool *match);
+                      uint32_t index, const char *other, bool *match);
 
 /**
  * @brief Load a string into a buffer.
@@ -246,7 +232,7 @@ int json_string_match(const char *json, const struct json_token *tokens,
  * character).
  */
 int json_string_load(const char *json, const struct json_token *tokens,
-                     size_t index, char *buffer);
+                     uint32_t index, char *buffer);
 
 /**
  * @brief Return the value associated with a key in a JSON object.
@@ -258,7 +244,7 @@ int json_string_load(const char *json, const struct json_token *tokens,
  * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
  */
 int json_object_get(const char *json, const struct json_token *tokens,
-                    size_t index, const char *key, size_t *ret);
+                    uint32_t index, const char *key, uint32_t *ret);
 
 /**
  * @brief Return the value at a certain index within a JSON array.
@@ -271,7 +257,7 @@ int json_object_get(const char *json, const struct json_token *tokens,
  * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
  */
 int json_array_get(const char *json, const struct json_token *tokens,
-                   size_t index, size_t array_index, size_t *result);
+                   uint32_t index, uint32_t array_index, uint32_t *result);
 
 /**
  * @brief Return the value of a JSON number token.
@@ -282,7 +268,7 @@ int json_array_get(const char *json, const struct json_token *tokens,
  * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
  */
 int json_number_get(const char *json, const struct json_token *tokens,
-                    size_t index, double *number);
+                    uint32_t index, double *number);
 
 /**
  * @brief Lookup values from complex JSON obj/arr using an expression language
@@ -317,32 +303,32 @@ int json_number_get(const char *json, const struct json_token *tokens,
  * This could be a syntax error in the expression, or it could be an index or
  * lookup error while walking objects and arrays.
  */
-int json_lookup(const char *json, const struct json_token *arr, size_t tok,
-                const char *key, size_t *index);
+int json_lookup(const char *json, const struct json_token *arr, uint32_t tok,
+                const char *key, uint32_t *index);
 
 /**
  * @brief Loop through each value in a JSON array
  *
  * Example:
  * @code
- * size_t elem;
+ * uint32_t elem;
  * json_array_for_each(elem, tokens, 0) {
  *   printf("Element at index %lu\n", elem);
  * }
  * @endcode
  *
- * @param var A variable (size_t) which will contain the index of each token
+ * @param var A variable (uint32_t which will contain the index of each token
  * @param tok_arr The JSON token array
  * @param start The index of the JSON array in the token array
  */
 #define json_array_for_each(var, tok_arr, start)                               \
-	for (var = tok_arr[start].child; var != 0; var = tok_arr[var].next)
+	for (var = (start) + 1; var != 0; var = tok_arr[var].next)
 
 struct json_easy {
 	const char *input;
-	size_t input_len;
+	uint32_t input_len;
 	struct json_token *tokens;
-	size_t tokens_len;
+	uint32_t tokens_len;
 };
 
 #define json_easy_for_each(var, jsonp)                                         \
@@ -369,38 +355,38 @@ int json_easy_parse(struct json_easy *easy);
 /**
  * @brief Return the string at a given index. Returned pointer must be freed.
  */
-int json_easy_string_get(struct json_easy *easy, size_t index, char **out);
+int json_easy_string_get(struct json_easy *easy, uint32_t index, char **out);
 
 /* Below are just like their non-easy counterparts */
-static inline int json_easy_lookup(struct json_easy *easy, size_t tok,
-                                   const char *key, size_t *result)
+static inline int json_easy_lookup(struct json_easy *easy, uint32_t tok,
+                                   const char *key, uint32_t *result)
 {
 	return json_lookup(easy->input, easy->tokens, tok, key, result);
 }
-static inline int json_easy_number_get(struct json_easy *easy, size_t index,
+static inline int json_easy_number_get(struct json_easy *easy, uint32_t index,
                                        double *result)
 {
 	return json_number_get(easy->input, easy->tokens, index, result);
 }
-static inline int json_easy_string_match(struct json_easy *easy, size_t index,
+static inline int json_easy_string_match(struct json_easy *easy, uint32_t index,
                                          const char *other, bool *result)
 {
 	return json_string_match(easy->input, easy->tokens, index, other,
 	                         result);
 }
 
-static inline int json_easy_string_load(struct json_easy *easy, size_t index,
+static inline int json_easy_string_load(struct json_easy *easy, uint32_t index,
                                         char *buffer)
 {
 	return json_string_load(easy->input, easy->tokens, index, buffer);
 }
-static inline int json_easy_object_get(struct json_easy *easy, size_t index,
-                                       const char *key, size_t *out)
+static inline int json_easy_object_get(struct json_easy *easy, uint32_t index,
+                                       const char *key, uint32_t *out)
 {
 	return json_object_get(easy->input, easy->tokens, index, key, out);
 }
-static inline int json_easy_array_get(struct json_easy *easy, size_t index,
-                                      size_t array_index, size_t *result)
+static inline int json_easy_array_get(struct json_easy *easy, uint32_t index,
+                                      uint32_t array_index, uint32_t *result)
 {
 	return json_array_get(easy->input, easy->tokens, index, array_index,
 	                      result);

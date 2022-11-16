@@ -29,8 +29,8 @@ extern char *json_type_str[JSON_NULL + 1];
 extern char *json_error_str[_LAST_JSONERR];
 
 void json_settoken(struct json_token *arr, struct json_token tok,
-                   struct json_parser p, size_t maxtoken);
+                   struct json_parser p, uint32_t maxtoken);
 struct json_parser json_parse_string(const char *text, struct json_token *arr,
-                                     size_t maxtoken, struct json_parser p);
+                                     uint32_t maxtoken, struct json_parser p);
 
 #endif // SMB_JSON_PRIVATE_H

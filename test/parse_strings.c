@@ -102,7 +102,7 @@ static void test_valid_esc(void)
 {
 	char input[] = "\"\\a\"";
 	char valid[] = "\"\\/bfnrt";
-	size_t i;
+	uint32_t i;
 	struct json_parser p;
 	for (i = 0; valid[i] != '\0'; i++) {
 		input[2] = valid[i];
@@ -117,7 +117,7 @@ static void test_invalid_esc(void)
 {
 	char input[] = "\"\\a\"";
 	char valid[] = "aAB12.,[(%!"; // something of a cross-section!
-	size_t i;
+	uint32_t i;
 	struct json_parser p;
 	for (i = 0; valid[i] != '\0'; i++) {
 		input[2] = valid[i];

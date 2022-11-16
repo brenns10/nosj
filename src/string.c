@@ -64,7 +64,7 @@ struct parser_arg {
 	/**
 	   @brief Current index of the text we're parsing.
 	 */
-	size_t textidx;
+	uint32_t textidx;
 	/**
 	   @brief Function to call for every character we parse.
 	 */
@@ -76,7 +76,7 @@ struct parser_arg {
 	/**
 	   @brief Index in which to put the next output character.
 	 */
-	size_t outidx;
+	uint32_t outidx;
 	/**
 	   @brief Previously parsed unicode escape character.
 
@@ -339,7 +339,7 @@ static void json_string_uesc(struct parser_arg *a, char wc)
    @param setter Function to call with each character.
    @param setarg Argument to give to the setter function.
  */
-static struct parser_arg json_string(const char *text, size_t idx,
+static struct parser_arg json_string(const char *text, uint32_t idx,
                                      output_setter setter, void *setarg)
 {
 	char wc;
@@ -399,7 +399,7 @@ static struct parser_arg json_string(const char *text, size_t idx,
    @returns Parser state after parsing the string.
  */
 struct json_parser json_parse_string(const char *text, struct json_token *arr,
-                                     size_t maxtoken, struct json_parser p)
+                                     uint32_t maxtoken, struct json_parser p)
 {
 	struct json_token tok;
 	struct parser_arg a;
@@ -409,8 +409,6 @@ struct json_parser json_parse_string(const char *text, struct json_token *arr,
 
 	a = json_string(text, p.textidx, NULL, NULL);
 
-	tok.end = a.textidx - 1;
-	tok.child = 0;
 	tok.next = 0;
 	tok.length = a.outidx;
 	json_settoken(arr, tok, p, maxtoken);
@@ -453,7 +451,7 @@ static void json_string_comparator(struct parser_arg *a, char wc, void *arg)
 }
 
 int json_string_match(const char *json, const struct json_token *tokens,
-                      size_t index, const char *other, bool *match)
+                      uint32_t index, const char *other, bool *match)
 {
 	struct string_compare_arg ca = {
 		.other = other,
@@ -494,7 +492,7 @@ static void json_string_loader(struct parser_arg *a, char wc, void *arg)
 }
 
 int json_string_load(const char *json, const struct json_token *tokens,
-                     size_t index, char *buffer)
+                     uint32_t index, char *buffer)
 {
 	struct parser_arg pa;
 

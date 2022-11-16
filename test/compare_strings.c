@@ -40,7 +40,6 @@ static void test_normal_string(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 6);
 	TEST_ASSERT(tokens[0].length == 5);
 }
 
@@ -57,7 +56,6 @@ static void test_normal_nomatch(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(!match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 6);
 	TEST_ASSERT(tokens[0].length == 5);
 }
 
@@ -74,7 +72,6 @@ static void test_normal_too_long(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(!match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 6);
 	TEST_ASSERT(tokens[0].length == 5);
 }
 
@@ -91,7 +88,6 @@ static void test_normal_too_short(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(!match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 6);
 	TEST_ASSERT(tokens[0].length == 5);
 }
 
@@ -108,7 +104,6 @@ static void test_escape_quote(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -125,7 +120,6 @@ static void test_escape_backslash(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -141,7 +135,6 @@ static void test_escape_slash(void)
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -158,7 +151,6 @@ static void test_escape_backspace(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -175,7 +167,6 @@ static void test_escape_formfeed(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -192,7 +183,6 @@ static void test_escape_newline(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -209,7 +199,6 @@ static void test_escape_carriage_return(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -226,7 +215,6 @@ static void test_escape_tab(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 8);
 	TEST_ASSERT(tokens[0].length == 6);
 }
 
@@ -243,7 +231,6 @@ static void test_unicode_escape(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT(tokens[0].start == 0);
-	TEST_ASSERT(tokens[0].end == 11);
 	TEST_ASSERT(tokens[0].length == 5);
 }
 
@@ -260,7 +247,6 @@ static void test_surrogate_pair(void)
 	TEST_ASSERT(!json_string_match(input, tokens, 0, string, &match));
 	TEST_ASSERT(match);
 	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);
-	TEST_ASSERT_EQUAL_INT(13, tokens[0].end);
 	TEST_ASSERT_EQUAL_INT(4, tokens[0].length);
 }
 
