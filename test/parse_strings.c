@@ -31,7 +31,7 @@ static void test_empty_string(void)
 {
 	char input[] = "\"\"";
 	struct json_parser p = json_parse(input, NULL, 0);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 }
@@ -40,7 +40,7 @@ static void test_single_char(void)
 {
 	char input[] = "\"a\"";
 	struct json_parser p = json_parse(input, NULL, 0);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 }
@@ -56,7 +56,7 @@ static void test_escape(void)
 {
 	char input[] = "\"blah\\\"blah\"";
 	struct json_parser p = json_parse(input, NULL, 0);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 }
@@ -72,7 +72,7 @@ static void test_valid_uesc(void)
 {
 	char input[] = "\"blah\\u1a2Bblah\"";
 	struct json_parser p = json_parse(input, NULL, 0);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 }
@@ -107,7 +107,7 @@ static void test_valid_esc(void)
 	for (i = 0; valid[i] != '\0'; i++) {
 		input[2] = valid[i];
 		p = json_parse(input, NULL, 0);
-		TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+		TEST_ASSERT(p.error == JSON_OK);
 		TEST_ASSERT(p.tokenidx == 1);
 		TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	}

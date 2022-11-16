@@ -34,7 +34,7 @@ static void test_normal_string(void)
 	char buffer[6];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
@@ -51,7 +51,7 @@ static void test_escape_quote(void)
 	char buffer[7];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
@@ -68,7 +68,7 @@ static void test_escape_backslash(void)
 	char buffer[7];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].start == 0);
@@ -85,7 +85,7 @@ static void test_unicode_escape(void)
 	char buffer[6];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
-	TEST_ASSERT_EQUAL_INT(JSONERR_NO_ERROR, p.error);
+	TEST_ASSERT_EQUAL_INT(JSON_OK, p.error);
 	TEST_ASSERT_EQUAL_INT(1, p.tokenidx);
 	TEST_ASSERT_EQUAL_INT(sizeof(input) - 1, p.textidx);
 	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);
@@ -102,7 +102,7 @@ static void test_surrogate_pair(void)
 	char buffer[13];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
-	TEST_ASSERT_EQUAL_INT(JSONERR_NO_ERROR, p.error);
+	TEST_ASSERT_EQUAL_INT(JSON_OK, p.error);
 	TEST_ASSERT_EQUAL_INT(1, p.tokenidx);
 	TEST_ASSERT_EQUAL_INT(sizeof(input) - 1, p.textidx);
 	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);
@@ -119,7 +119,7 @@ static void test_unicode_undisturbed(void)
 	char buffer[13];
 	struct json_token tokens[1];
 	struct json_parser p = json_parse(input, tokens, 1);
-	TEST_ASSERT_EQUAL_INT(JSONERR_NO_ERROR, p.error);
+	TEST_ASSERT_EQUAL_INT(JSON_OK, p.error);
 	TEST_ASSERT_EQUAL_INT(1, p.tokenidx);
 	TEST_ASSERT_EQUAL_INT(sizeof(input) - 1, p.textidx);
 	TEST_ASSERT_EQUAL_INT(0, tokens[0].start);

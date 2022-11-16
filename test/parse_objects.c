@@ -33,7 +33,7 @@ static void test_empty_object(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_OBJECT);
@@ -70,7 +70,7 @@ static void test_single_element(void)
 		  .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
@@ -121,7 +121,7 @@ static void test_multiple_elements(void)
 		  .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
@@ -160,7 +160,7 @@ static void test_extra_comma(void)
 		  .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
@@ -255,18 +255,19 @@ static void test_get_object(void)
 	char input[] = "{\"a\":2, \"b\":\"blah\"}";
 	struct json_token tokens[5];
 	struct json_parser p = json_parse(input, tokens, 5);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	size_t value;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 5);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	size_t value = json_object_get(input, tokens, 0, "a");
+	TEST_ASSERT(!json_object_get(input, tokens, 0, "a", &value));
 	TEST_ASSERT(value == 2);
 	TEST_ASSERT(tokens[value].type == JSON_NUMBER);
-	value = json_object_get(input, tokens, 0, "b");
+	TEST_ASSERT(!json_object_get(input, tokens, 0, "b", &value));
 	TEST_ASSERT(value == 4);
 	TEST_ASSERT(tokens[value].type == JSON_STRING);
 	TEST_ASSERT(tokens[value].start == 12);
-	value = json_object_get(input, tokens, 0, "c");
-	TEST_ASSERT(value == 0);
+	TEST_ASSERT_EQUAL(JSONERR_LOOKUP,
+	                  json_object_get(input, tokens, 0, "c", &value));
 }
 
 int main(void)

@@ -351,7 +351,7 @@ static struct parser_arg json_string(const char *text, size_t idx,
 		                .setter_arg = setarg,
 		                .prev = 0,
 		                .curr = 0,
-		                .error = JSONERR_NO_ERROR };
+		                .error = JSON_OK };
 
 	while (a.state != END) {
 		wc = a.text[a.textidx];
@@ -452,20 +452,28 @@ static void json_string_comparator(struct parser_arg *a, char wc, void *arg)
 	ca->equal = ca->equal && (wc == ca->other[a->outidx]);
 }
 
-bool json_string_match(const char *json, const struct json_token *tokens,
-                       size_t index, const char *other)
+int json_string_match(const char *json, const struct json_token *tokens,
+                      size_t index, const char *other, bool *match)
 {
 	struct string_compare_arg ca = {
 		.other = other,
 		.equal = true,
 	};
+
+	if (tokens[index].type != JSON_STRING)
+		return JSONERR_TYPE;
+
 	struct parser_arg pa = json_string(json, tokens[index].start,
 	                                   &json_string_comparator, &ca);
+
+	if (pa.error != JSON_OK)
+		return pa.error;
 
 	// They are equal if every previous character matches, and the next
 	// character in the other string is the null character, signifying the
 	// end.
-	return ca.equal && (other[pa.outidx] == '\0');
+	*match = ca.equal && (other[pa.outidx] == '\0');
+	return JSON_OK;
 }
 
 /**
@@ -485,11 +493,19 @@ static void json_string_loader(struct parser_arg *a, char wc, void *arg)
 	str[a->outidx] = wc;
 }
 
-void json_string_load(const char *json, const struct json_token *tokens,
-                      size_t index, char *buffer)
+int json_string_load(const char *json, const struct json_token *tokens,
+                     size_t index, char *buffer)
 {
-	struct parser_arg pa = json_string(json, tokens[index].start,
-	                                   &json_string_loader, buffer);
+	struct parser_arg pa;
+
+	if (tokens[index].type != JSON_STRING)
+		return JSONERR_TYPE;
+
+	pa = json_string(json, tokens[index].start, &json_string_loader,
+	                 buffer);
+	if (pa.error != JSON_OK)
+		return pa.error;
 
 	buffer[pa.outidx] = '\0';
+	return JSON_OK;
 }

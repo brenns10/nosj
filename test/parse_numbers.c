@@ -33,10 +33,12 @@ static void test_single_digit(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.0);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(0.0, number);
 }
 
 static void test_multiple_digit(void)
@@ -45,10 +47,12 @@ static void test_multiple_digit(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 12.0);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(12.0, number);
 }
 
 static void test_starts_with_zero(void)
@@ -64,7 +68,7 @@ static void test_starts_with_zero(void)
 	 */
 	char input[] = "01";
 	struct json_parser p = json_parse(input, NULL, 0);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 1);
 	TEST_ASSERT(p.textidx == 1); // ONLY PARSED ONE CHARACTER
 }
@@ -75,10 +79,12 @@ static void test_decimal(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 1.1);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(1.1, number);
 }
 
 static void test_zero_decimal(void)
@@ -87,10 +93,12 @@ static void test_zero_decimal(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.1);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(0.1, number);
 }
 
 static void test_negative_sign(void)
@@ -99,10 +107,12 @@ static void test_negative_sign(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == -1.0);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(-1.0, number);
 }
 
 static void test_exponent_upper(void)
@@ -111,10 +121,12 @@ static void test_exponent_upper(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e5);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(1e5, number);
 }
 
 static void test_exponent_lower(void)
@@ -123,10 +135,12 @@ static void test_exponent_lower(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e5);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(1e5, number);
 }
 
 static void test_exponent_plus(void)
@@ -135,10 +149,12 @@ static void test_exponent_plus(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e5);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(1e5, number);
 }
 
 static void test_exponent_minus(void)
@@ -147,10 +163,12 @@ static void test_exponent_minus(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e-5);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(1e-5, number);
 }
 
 static void test_sign_decimal_exponent(void)
@@ -159,10 +177,12 @@ static void test_sign_decimal_exponent(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == -1.5e5);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(-1.5e5, number);
 }
 
 static void test_sign_alone(void)
@@ -199,10 +219,12 @@ static void test_negative_zero(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.0);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(0.0, number);
 }
 
 static void test_zero_exp(void)
@@ -211,10 +233,12 @@ static void test_zero_exp(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 0.0);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(0.0, number);
 }
 
 static void test_double_digit_decimal(void)
@@ -223,10 +247,12 @@ static void test_double_digit_decimal(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 1.23);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	TEST_ASSERT_EQUAL(1.23, number);
 }
 
 static void test_double_digit_exp(void)
@@ -235,10 +261,13 @@ static void test_double_digit_exp(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	double number = 0;
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
-	TEST_ASSERT(json_number_get(input, tokens, 0) == 1e23);
+	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
+	/* Something with Unity doesn't work with TEST_ASSERT_EQUAL here ... */
+	TEST_ASSERT(1e23 == number);
 }
 
 int main(void)

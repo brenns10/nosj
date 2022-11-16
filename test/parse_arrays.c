@@ -33,7 +33,7 @@ static void test_empty_array(void)
 	size_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(tokens[0].type == JSON_ARRAY);
@@ -64,7 +64,7 @@ static void test_single_element(void)
 		  .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
@@ -102,7 +102,7 @@ static void test_multiple_elements(void)
 		  .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
@@ -134,7 +134,7 @@ static void test_extra_comma(void)
 		  .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	for (i = 0; i < ntok; i++) {
@@ -173,35 +173,41 @@ static void test_get(void)
 	struct json_token tokens[7];
 	struct json_parser p = json_parse(input, tokens, 7);
 	size_t res;
+	int ret;
 
 	// assertions for parsing correctly
-	TEST_ASSERT(p.error == JSONERR_NO_ERROR);
+	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == 6);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 
 	// assertions for the results of json_array_get()
-	res = json_array_get(input, tokens, 0, 0);
+	ret = json_array_get(input, tokens, 0, 0, &res);
+	TEST_ASSERT(ret == JSON_OK);
 	TEST_ASSERT(res == 1);
 	TEST_ASSERT(tokens[res].type == JSON_NUMBER);
 
-	res = json_array_get(input, tokens, 0, 1);
+	ret = json_array_get(input, tokens, 0, 1, &res);
+	TEST_ASSERT(ret == JSON_OK);
 	TEST_ASSERT(res == 2);
 	TEST_ASSERT(tokens[res].type == JSON_NULL);
 
-	res = json_array_get(input, tokens, 0, 2);
+	ret = json_array_get(input, tokens, 0, 2, &res);
+	TEST_ASSERT(ret == JSON_OK);
 	TEST_ASSERT(res == 3);
 	TEST_ASSERT(tokens[res].type == JSON_TRUE);
 
-	res = json_array_get(input, tokens, 0, 3);
+	ret = json_array_get(input, tokens, 0, 3, &res);
+	TEST_ASSERT(ret == JSON_OK);
 	TEST_ASSERT(res == 4);
 	TEST_ASSERT(tokens[res].type == JSON_STRING);
 
-	res = json_array_get(input, tokens, 0, 4);
+	ret = json_array_get(input, tokens, 0, 4, &res);
+	TEST_ASSERT(ret == JSON_OK);
 	TEST_ASSERT(res == 5);
 	TEST_ASSERT(tokens[res].type == JSON_OBJECT);
 
-	res = json_array_get(input, tokens, 0, 5);
-	TEST_ASSERT(res == 0);
+	ret = json_array_get(input, tokens, 0, 5, &res);
+	TEST_ASSERT(ret == JSONERR_INDEX);
 }
 
 static void test_get_empty(void)
@@ -209,8 +215,10 @@ static void test_get_empty(void)
 	char input[] = "[]";
 	struct json_token tokens[1];
 	json_parse(input, tokens, 1);
+	size_t res;
 
-	TEST_ASSERT(0 == json_array_get(input, tokens, 0, 0));
+	res = json_array_get(input, tokens, 0, 0, &res);
+	TEST_ASSERT(res == JSONERR_INDEX);
 }
 
 int main(void)

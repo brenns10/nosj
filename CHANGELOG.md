@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## Unreleased (breaking major version change)
+
+Major API change:
+
+- Accessors and lookups now do type checking and may return errors.
+- To achieve this, every `json_*_get()` function now returns an int (actually,
+  an `enum json_error` but we cast is as an int for easier typing). The actual
+  return value is now an out parameter.
+- We've added several error classes to deal with lookup failures, indexes out of
+  range, type errors, and bad lookup expressions.
+- Got rid of `json_easy_strerror()` in favor of one unified one.
+
 ## v1.1.0, v1.1.1 -- 2022-11-14
 
 Add `json_easy` API: provisional.

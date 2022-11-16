@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
 	// Parse the first time to get the number of tokens.
 	p = json_parse(text, tokens, 0);
-	if (p.error != JSONERR_NO_ERROR) {
+	if (p.error != JSON_OK) {
 		json_print_error(stderr, p);
 		returncode = 1;
 		goto cleanup_text;

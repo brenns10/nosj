@@ -89,7 +89,7 @@ enum json_error {
 	/**
 	 * @brief No error!
 	 */
-	JSONERR_NO_ERROR,
+	JSON_OK = 0,
 	/**
 	 * @brief An error was encountered while parsing a number.
 	 */
@@ -114,6 +114,22 @@ enum json_error {
 	 * @brief Missing colon between object key and value
 	 */
 	JSONERR_MISSING_COLON,
+	/**
+	 * @brief Incorrect type in lookup
+	 */
+	JSONERR_TYPE,
+	/**
+	 * @brief An object key was not found
+	 */
+	JSONERR_LOOKUP,
+	/**
+	 * @brief An array index was out of bounds
+	 */
+	JSONERR_INDEX,
+	/**
+	 * @brief An error occurred parsing "lookup" expression
+	 */
+	JSONERR_BAD_EXPR,
 
 	_LAST_JSONERR,
 };
@@ -189,7 +205,7 @@ void json_print_error(FILE *f, struct json_parser p);
 /**
  * @brief Return an error string for parser error
  */
-const char *json_strerror(enum json_error err);
+const char *json_strerror(int err);
 
 /**
  * @brief Return whether or not a string matches a token string.
@@ -197,10 +213,11 @@ const char *json_strerror(enum json_error err);
  * @param tokens The parsed tokens.
  * @param index The index of the string token.
  * @param other The other string to compare to.
- * @return True if they are equal, false otherwise.
+ * @param match Result of comparison (true if equal)
+ * @returns 0 (JSON_OK) on success, or JSONERR_TYPE if it's not a string
  */
-bool json_string_match(const char *json, const struct json_token *tokens,
-                       size_t index, const char *other);
+int json_string_match(const char *json, const struct json_token *tokens,
+                      size_t index, const char *other, bool *match);
 
 /**
  * @brief Load a string into a buffer.
@@ -208,13 +225,14 @@ bool json_string_match(const char *json, const struct json_token *tokens,
  * @param tokens The parsed tokens.
  * @param index The index of the string token.
  * @param buffer The buffer to load the string into.
+ * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
  *
  * The buffer MUST NOT be null.  It must point to an already allocated buffer,
  * of at least size `tokens[index].length + 1` (room for the text and a NULL
  * character).
  */
-void json_string_load(const char *json, const struct json_token *tokens,
-                      size_t index, char *buffer);
+int json_string_load(const char *json, const struct json_token *tokens,
+                     size_t index, char *buffer);
 
 /**
  * @brief Return the value associated with a key in a JSON object.
@@ -222,10 +240,11 @@ void json_string_load(const char *json, const struct json_token *tokens,
  * @param tokens The parsed token buffer.
  * @param index The index of the JSON object.
  * @param key The key you're searching for.
- * @return the index of the value token, or 0 if not found.
+ * @param[out] ret The output index of the value token.
+ * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
  */
-size_t json_object_get(const char *json, const struct json_token *tokens,
-                       size_t index, const char *key);
+int json_object_get(const char *json, const struct json_token *tokens,
+                    size_t index, const char *key, size_t *ret);
 
 /**
  * @brief Return the value at a certain index within a JSON array.
@@ -233,23 +252,26 @@ size_t json_object_get(const char *json, const struct json_token *tokens,
  * @param tokens The parsed token buffer.
  * @param index The index of the array token within the buffer.
  * @param array_index The index to lookup in the JSON array.
+ * @param[out] result The resulting index
  * @return the index of the value's token, or 0 if not found.
+ * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
  */
-size_t json_array_get(const char *json, const struct json_token *tokens,
-                      size_t index, size_t array_index);
+int json_array_get(const char *json, const struct json_token *tokens,
+                   size_t index, size_t array_index, size_t *result);
 
 /**
  * @brief Return the value of a JSON number token.
  * @param json The original JSON buffer.
  * @param tokens The parsed token buffer.
  * @param index The index of the number in the token buffer.
- * @returns the value as a double-precision float
+ * @param number Number to fill result
+ * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
  */
-double json_number_get(const char *json, const struct json_token *tokens,
-                       size_t index);
+int json_number_get(const char *json, const struct json_token *tokens,
+                    size_t index, double *number);
 
 /**
- * @brief Lookup values from JSON array using an expression language
+ * @brief Lookup values from complex JSON obj/arr using an expression language
  *
  * The expression language starts relative to the tok parameter (which may be an
  * object or array). Objects keys are traversed by using a ".keyname". Arrays
@@ -264,16 +286,25 @@ double json_number_get(const char *json, const struct json_token *tokens,
  * any object key which does not contain one of {'.', '[', '\0'}. Even an end
  * bracket is legal, although not recommended.
  *
+ * On success, the function returns 0, and the index of the specified JSON
+ * element is placed into the variable pointed by @a index. On failure, the
+ * function returns an error code, and the string index (within the expression)
+ * where we encountered the error is stored into the variable ponited by @a
+ * index. (This is unusual, all other NOSJ functions leave their out parameters
+ * unmodified on error.) You can use these two items to print an informative
+ * error message.
+ *
  * @param json The original JSON text buffer
  * @param arr The parsed tokens array
  * @param tok Token which the expression will be evaluated relative to
  * @param key The key, as a JSON-traversing expression
- * @returns 0 when the item is not found (due to any reason, including
- * expression syntax error, or index/key not found), non-0 on success, which
- * indicates the index of the target value.
+ * @param[out] index The index found by the lookup
+ * @returns 0 (JSON_OK) on success, or else an error describing what failed.
+ * This could be a syntax error in the expression, or it could be an index or
+ * lookup error while walking objects and arrays.
  */
-size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
-                   const char *key);
+int json_lookup(const char *json, const struct json_token *arr, size_t tok,
+                const char *key, size_t *index);
 
 /**
  * @brief Loop through each value in a JSON array
@@ -307,7 +338,8 @@ void json_easy_init(struct json_easy *, const char *input);
 static inline struct json_easy *json_easy_new(const char *input)
 {
 	struct json_easy *easy = (struct json_easy *)malloc(sizeof(*easy));
-	json_easy_init(easy, input);
+	if (easy)
+		json_easy_init(easy, input);
 	return easy;
 }
 
@@ -319,42 +351,44 @@ static inline void json_easy_free(struct json_easy *easy)
 }
 
 int json_easy_parse(struct json_easy *easy);
-const char *json_easy_strerror(int err);
 
 /**
  * @brief Return the string at a given index. Returned pointer must be freed.
  */
-char *json_easy_string_get(struct json_easy *easy, size_t index);
+int json_easy_string_get(struct json_easy *easy, size_t index, char **out);
 
 /* Below are just like their non-easy counterparts */
-static inline size_t json_easy_lookup(struct json_easy *easy, size_t tok,
-                                      const char *key)
+static inline int json_easy_lookup(struct json_easy *easy, size_t tok,
+                                   const char *key, size_t *result)
 {
-	return json_lookup(easy->input, easy->tokens, tok, key);
+	return json_lookup(easy->input, easy->tokens, tok, key, result);
 }
-static inline double json_easy_number_get(struct json_easy *easy, size_t index)
+static inline int json_easy_number_get(struct json_easy *easy, size_t index,
+                                       double *result)
 {
-	return json_number_get(easy->input, easy->tokens, index);
+	return json_number_get(easy->input, easy->tokens, index, result);
 }
-static inline bool json_easy_string_match(struct json_easy *easy, size_t index,
-                                          const char *other)
+static inline int json_easy_string_match(struct json_easy *easy, size_t index,
+                                         const char *other, bool *result)
 {
-	return json_string_match(easy->input, easy->tokens, index, other);
+	return json_string_match(easy->input, easy->tokens, index, other,
+	                         result);
 }
 
-static inline void json_easy_string_load(struct json_easy *easy, size_t index,
-                                         char *buffer)
+static inline int json_easy_string_load(struct json_easy *easy, size_t index,
+                                        char *buffer)
 {
 	return json_string_load(easy->input, easy->tokens, index, buffer);
 }
-static inline size_t json_easy_object_get(struct json_easy *easy, size_t index,
-                                          const char *key)
+static inline int json_easy_object_get(struct json_easy *easy, size_t index,
+                                       const char *key, size_t *out)
 {
-	return json_object_get(easy->input, easy->tokens, index, key);
+	return json_object_get(easy->input, easy->tokens, index, key, out);
 }
-static inline size_t json_easy_array_get(struct json_easy *easy, size_t index,
-                                         size_t array_index)
+static inline int json_easy_array_get(struct json_easy *easy, size_t index,
+                                      size_t array_index, size_t *result)
 {
-	return json_array_get(easy->input, easy->tokens, index, array_index);
+	return json_array_get(easy->input, easy->tokens, index, array_index,
+	                      result);
 }
 #endif // SMB_JSON

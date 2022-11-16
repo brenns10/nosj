@@ -13,6 +13,7 @@
 
  *******************************************************************************/
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,19 +37,19 @@ int json_easy_parse(struct json_easy *easy)
 		return 0;
 
 	p = json_parse(easy->input, NULL, 0);
-	if (p.error != JSONERR_NO_ERROR)
-		return -p.error;
+	if (p.error != JSON_OK)
+		return p.error;
 
 	easy->tokens_len = p.tokenidx;
 	easy->tokens = calloc(p.tokenidx, sizeof(*easy->tokens));
 	p = json_parse(easy->input, easy->tokens, easy->tokens_len);
 
 	/* This should be impossible, but catch it anyway */
-	if (p.error != JSONERR_NO_ERROR) {
+	if (p.error != JSON_OK) {
 		free(easy->tokens);
 		easy->tokens = NULL;
 		easy->tokens_len = 0;
-		return -p.error;
+		return p.error;
 	}
 	return 0;
 }
@@ -58,59 +59,71 @@ void json_easy_destroy(struct json_easy *easy)
 	free(easy->tokens);
 }
 
-const char *json_easy_strerror(int err)
-{
-	return json_strerror(-err);
-}
-
-char *json_easy_string_get(struct json_easy *easy, size_t index)
+int json_easy_string_get(struct json_easy *easy, size_t index, char **out)
 {
 	char *buf = malloc(easy->tokens[index].length + 1);
-	json_easy_string_load(easy, index, buf);
-	return buf;
+	int rv = json_easy_string_load(easy, index, buf);
+	if (rv != JSON_OK) {
+		free(buf);
+		return rv;
+	}
+	*out = buf;
+	return JSON_OK;
 }
 
-size_t json_object_get(const char *json, const struct json_token *tokens,
-                       size_t index, const char *key)
+int json_object_get(const char *json, const struct json_token *tokens,
+                    size_t index, const char *key, size_t *ret)
 {
 	if (tokens[index].type != JSON_OBJECT)
-		return 0;
+		return JSONERR_TYPE;
 
 	index = tokens[index].child;
 
 	while (index != 0) {
-		if (json_string_match(json, tokens, index, key)) {
-			return tokens[index].child;
+		int rv;
+		bool match;
+
+		rv = json_string_match(json, tokens, index, key, &match);
+		assert(rv == JSON_OK);
+		if (match) {
+			*ret = tokens[index].child;
+			return JSON_OK;
 		}
 		index = tokens[index].next;
 	}
 
-	return 0;
+	return JSONERR_LOOKUP;
 }
 
-size_t json_array_get(const char *json, const struct json_token *tokens,
-                      size_t index, size_t array_index)
+int json_array_get(const char *json, const struct json_token *tokens,
+                   size_t index, size_t array_index, size_t *result)
 {
 	(void)json;
 
-	if (array_index >= tokens[index].length) {
-		return 0;
-	}
+	if (tokens[index].type != JSON_ARRAY)
+		return JSONERR_TYPE;
+	if (array_index >= tokens[index].length)
+		return JSONERR_INDEX;
 
 	index = tokens[index].child;
 	while (array_index--) {
 		index = tokens[index].next;
 	}
-
-	return index;
+	*result = index;
+	return JSON_OK;
 }
 
-double json_number_get(const char *json, const struct json_token *tokens,
-                       size_t index)
+int json_number_get(const char *json, const struct json_token *tokens,
+                    size_t index, double *number)
 {
-	double result;
-	sscanf(json + tokens[index].start, "%lf", &result);
-	return result;
+	if (tokens[index].type != JSON_NUMBER)
+		return JSONERR_TYPE;
+	/*
+	 * At this point, we've validated the syntax of the float. If sscanf()
+	 * fails, that is highly unexpected and worth an assertion.
+	 */
+	assert(sscanf(json + tokens[index].start, "%lf", number) == 1);
+	return JSON_OK;
 }
 
 /**
@@ -120,13 +133,15 @@ double json_number_get(const char *json, const struct json_token *tokens,
  *
  *   keyname.nextkey[123].blah
  */
-size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
-                   const char *key)
+int json_lookup(const char *json, const struct json_token *arr, size_t tok,
+                const char *key, size_t *result)
 {
 	size_t start = 0, i = 0;
 	int state = 0;
+	int ret = JSON_OK;
 	long index;
 	char *keymut = strdup(key);
+	char *endptr;
 	char c;
 
 	for (i = 0;; i++) {
@@ -141,15 +156,14 @@ size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
 			}
 			if (arr[tok].type != JSON_OBJECT) {
 				tok = 0;
+				ret = JSONERR_TYPE;
 				goto out;
 			}
 			keymut[i] = '\0';
-			// printf("Get key \"%s\"\n", &keymut[start]);
-			tok = json_object_get(json, arr, tok, &keymut[start]);
-			if (tok == 0) {
-				// printf("not found\n");
+			ret = json_object_get(json, arr, tok, &keymut[start],
+			                      &tok);
+			if (tok == 0)
 				goto out;
-			}
 			start = i + 1;
 			if (c == '[')
 				state = 1;
@@ -160,17 +174,25 @@ size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
 			// do nothing
 		} else if (state == 1 && c == ']') {
 			if (arr[tok].type != JSON_ARRAY) {
-				tok = 0;
+				ret = JSONERR_TYPE;
 				goto out;
 			}
 			keymut[i] = '\0';
-			index = strtol(&keymut[start], NULL, 10);
-			// printf("Get ix %ld\n", index);
-			tok = json_array_get(json, arr, tok, (size_t)index);
-			if (tok == 0) {
-				// printf("Not found\n");
+			index = strtol(&keymut[start], &endptr, 10);
+			if (endptr != &keymut[i]) {
+				/* This should actually be covered by the case
+				 * below, but it's extra precaution. */
+				ret = JSONERR_BAD_EXPR;
 				goto out;
 			}
+			if (index < 0) {
+				ret = JSONERR_INDEX;
+				goto out;
+			}
+			ret = json_array_get(json, arr, tok, (size_t)index,
+			                     &tok);
+			if (ret != JSON_OK)
+				goto out;
 			i += 1;
 			start = i + 1;
 			if (keymut[i] == '.') {
@@ -180,17 +202,27 @@ size_t json_lookup(const char *json, const struct json_token *arr, size_t tok,
 			} else if (keymut[i] == '\0') {
 				goto out;
 			} else {
-				tok = 0;
+				ret = JSONERR_BAD_EXPR;
 				goto out;
 			}
 		} else if (state == 1 && (c < '0' || c > '9')) {
-			// bad character
-			tok = 0;
+			/* We also check the index values above, but
+			 * Doing it preemptively here allows us to give
+			 * a more accurate error index.
+			 */
+			ret = JSONERR_BAD_EXPR;
 			goto out;
 		}
 	}
 
 out:
 	free(keymut);
-	return tok;
+	if (ret == JSON_OK) {
+		assert(tok != 0);
+		*result = tok;
+	} else {
+		/* For errors, we can give an exact index. */
+		*result = i;
+	}
+	return ret;
 }

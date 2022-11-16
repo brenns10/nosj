@@ -290,7 +290,7 @@ static struct json_parser json_parse_array(const char *text,
 		prev_tokenidx = curr_tokenidx;
 		curr_tokenidx = p.tokenidx;
 		p = json_parse_rec(text, arr, maxtoken, p);
-		if (p.error != JSONERR_NO_ERROR) {
+		if (p.error != JSON_OK) {
 			return p;
 		}
 
@@ -373,7 +373,7 @@ static struct json_parser json_parse_object(const char *text,
 		prev_keyidx = curr_keyidx;
 		curr_keyidx = p.tokenidx;
 		p = json_parse_string(text, arr, maxtoken, p);
-		if (p.error != JSONERR_NO_ERROR) {
+		if (p.error != JSON_OK) {
 			return p;
 		}
 		p = json_skip_whitespace(text, p);
@@ -383,7 +383,7 @@ static struct json_parser json_parse_object(const char *text,
 		}
 		p.textidx++;
 		p = json_parse_rec(text, arr, maxtoken, p);
-		if (p.error != JSONERR_NO_ERROR) {
+		if (p.error != JSON_OK) {
 			return p;
 		}
 
@@ -649,6 +649,10 @@ char *json_error_str[] = {
 	"invalid surrogate pair",
 	"expected comma between elements",
 	"expected colon between key and value",
+	"JSON type does not match expected",
+	"the key does not exist in the object",
+	"the array index is out of bounds",
+	"invalid object lookup syntax",
 };
 
 struct json_parser json_parse(const char *text, struct json_token *arr,
@@ -656,7 +660,7 @@ struct json_parser json_parse(const char *text, struct json_token *arr,
 {
 	struct json_parser parser = { .textidx = 0,
 		                      .tokenidx = 0,
-		                      .error = JSONERR_NO_ERROR };
+		                      .error = JSON_OK };
 	return json_parse_rec(text, arr, maxtoken, parser);
 }
 
@@ -671,8 +675,12 @@ void json_print(struct json_token *arr, size_t n)
 	}
 }
 
-const char *json_strerror(enum json_error err)
+const char *json_strerror(int err)
 {
+	if (err < 0)
+		err = -err;
+	if (err >= _LAST_JSONERR)
+		return "Unknown JSON error";
 	return json_error_str[err];
 }
 
