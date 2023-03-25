@@ -383,7 +383,7 @@ static struct json_parser json_parse_number(const char *text,
 {
 	struct json_token tok = { .type = JSON_NUMBER,
 		                  .start = p.textidx,
-		                  .length = 0, // not used
+		                  .length = 0, // will become string length
 		                  .next = 0 };
 	enum state {
 		START,
@@ -523,6 +523,7 @@ static struct json_parser json_parse_number(const char *text,
 	}
 
 	p.textidx--; // the character we failed on
+	tok.length = p.textidx - tok.start;
 	json_settoken(arr, tok, p, maxtoken);
 	p.tokenidx++;
 	return p;

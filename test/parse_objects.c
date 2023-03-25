@@ -50,7 +50,7 @@ static void test_single_element(void)
 	struct json_token expected[] = {
 		{ .type = JSON_OBJECT, .start = 0, .length = 1, .next = 0 },
 		{ .type = JSON_STRING, .start = 1, .length = 1, .next = 0 },
-		{ .type = JSON_NUMBER, .start = 6, .length = 0, .next = 0 },
+		{ .type = JSON_NUMBER, .start = 6, .length = 1, .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSON_OK);
@@ -72,9 +72,9 @@ static void test_multiple_elements(void)
 	struct json_token expected[] = {
 		{ .type = JSON_OBJECT, .start = 0, .length = 2, .next = 0 },
 		{ .type = JSON_STRING, .start = 1, .length = 1, .next = 3 },
-		{ .type = JSON_NUMBER, .start = 6, .length = 0, .next = 0 },
+		{ .type = JSON_NUMBER, .start = 6, .length = 1, .next = 0 },
 		{ .type = JSON_STRING, .start = 9, .length = 1, .next = 0 },
-		{ .type = JSON_NUMBER, .start = 14, .length = 0, .next = 0 },
+		{ .type = JSON_NUMBER, .start = 14, .length = 1, .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSON_OK);
@@ -96,7 +96,7 @@ static void test_extra_comma(void)
 	struct json_token expected[] = {
 		{ .type = JSON_OBJECT, .start = 0, .length = 1, .next = 0 },
 		{ .type = JSON_STRING, .start = 1, .length = 1, .next = 0 },
-		{ .type = JSON_NUMBER, .start = 6, .length = 0, .next = 0 },
+		{ .type = JSON_NUMBER, .start = 6, .length = 1, .next = 0 },
 	};
 	struct json_parser p = json_parse(input, tokens, ntok);
 	TEST_ASSERT(p.error == JSON_OK);
