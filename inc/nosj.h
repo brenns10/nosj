@@ -307,7 +307,11 @@ int json_lookup(const char *json, const struct json_token *arr, uint32_t tok,
                 const char *key, uint32_t *index);
 
 /**
- * @brief Loop through each value in a JSON array
+ * @brief Loop through each value in a JSON array, or each key in an object
+ *
+ * For arrays, the var will contain the index of each value. For objects, the
+ * var will contain the index of each key. The index of each value will be at
+ * var + 1.
  *
  * Example:
  * @code
@@ -317,12 +321,15 @@ int json_lookup(const char *json, const struct json_token *arr, uint32_t tok,
  * }
  * @endcode
  *
- * @param var A variable (uint32_t which will contain the index of each token
+ * @param var A variable (uint32_t) which will contain the index of each token
  * @param tok_arr The JSON token array
  * @param start The index of the JSON array in the token array
  */
 #define json_array_for_each(var, tok_arr, start)                               \
 	for (var = (start) + 1; var != 0; var = tok_arr[var].next)
+
+#define json_for_each(var, tok_arr, start)                                     \
+	json_array_for_each(var, tok_arr, start)
 
 struct json_easy {
 	const char *input;
@@ -331,8 +338,8 @@ struct json_easy {
 	uint32_t tokens_len;
 };
 
-#define json_easy_for_each(var, jsonp)                                         \
-	json_array_for_each(var, ((jsonp)->tokens), ((jsonp)->tokens_len))
+#define json_easy_for_each(var, jsonp, start)                                  \
+	json_array_for_each(var, ((jsonp)->tokens), (start))
 
 void json_easy_init(struct json_easy *, const char *input);
 static inline struct json_easy *json_easy_new(const char *input)
