@@ -235,6 +235,22 @@ int json_string_load(const char *json, const struct json_token *tokens,
                      uint32_t index, char *buffer);
 
 /**
+ * @brief Print a string to a file, escaped or not
+ * @param json The original JSON buffer.
+ * @param tokens The parsed tokens.
+ * @param index The index of the string token
+ * @param f The file to print to
+ * @param escaped Whether to escape the string
+ *
+ * If escaped is true, then the string is printed so that backslashes, quotes,
+ * and non-space whitespace (newline, tab, etc) are escaped, in order to be
+ * interpreted as valid JSON. Non ascii characters are printed as-is, in the
+ * UTF-8 encoding.
+ */
+int json_string_print(const char *json, const struct json_token *tokens,
+                      uint32_t index, FILE *f, bool escaped);
+
+/**
  * @brief Return the value associated with a key in a JSON object.
  * @param json The original JSON buffer.
  * @param tokens The parsed token buffer.
@@ -386,6 +402,11 @@ static inline int json_easy_string_load(struct json_easy *easy, uint32_t index,
                                         char *buffer)
 {
 	return json_string_load(easy->input, easy->tokens, index, buffer);
+}
+static inline int json_easy_string_print(struct json_easy *easy, uint32_t index,
+                                         FILE *f, bool escaped)
+{
+	return json_string_print(easy->input, easy->tokens, index, f, escaped);
 }
 static inline int json_easy_object_get(struct json_easy *easy, uint32_t index,
                                        const char *key, uint32_t *out)

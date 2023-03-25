@@ -507,3 +507,57 @@ int json_string_load(const char *json, const struct json_token *tokens,
 	buffer[pa.outidx] = '\0';
 	return JSON_OK;
 }
+
+struct print_arg {
+	FILE *f;
+	bool escape;
+};
+
+static void json_string_printer(struct parser_arg *a, char c, void *arg)
+{
+	struct print_arg *pa = arg;
+	if (!pa->escape) {
+		fputc(c, pa->f);
+		return;
+	}
+	switch (c) {
+	case '"':
+		fputs("\\\"", pa->f);
+		break;
+	case '\\':
+		fputs("\\\\", pa->f);
+		break;
+	case '\b':
+		fputs("\\b", pa->f);
+		break;
+	case '\n':
+		fputs("\\n", pa->f);
+		break;
+	case '\f':
+		fputs("\\f", pa->f);
+		break;
+	case '\r':
+		fputs("\\r", pa->f);
+		break;
+	case '\t':
+		fputs("\\t", pa->f);
+		break;
+	default:
+		fputc(c, pa->f);
+		break;
+	}
+}
+
+int json_string_print(const char *json, const struct json_token *tokens,
+                      uint32_t index, FILE *f, bool escaped)
+{
+	struct print_arg pa = { f, escaped };
+	struct parser_arg parse;
+
+	if (tokens[index].type != JSON_STRING)
+		return JSONERR_TYPE;
+
+	parse = json_string(json, tokens[index].start, &json_string_printer,
+	                    &pa);
+	return parse.error;
+}
