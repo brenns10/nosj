@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v2.1.0 -- 2022-03-25
+
+- The macro `json_easy_for_each()` has been fixed.
+- Added `json_string_print()` function to print strings escaped, or not.
+- Added `json_format()` function to format JSON nicely.
+
 ## v2.0.0 -- 2022-11-15
 
 Multiple Major API Changes:
