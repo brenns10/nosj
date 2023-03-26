@@ -9,6 +9,7 @@ sources = [
   'src/json.c',
   'src/string.c',
   'src/util.c',
+  'src/format.c',
 ]
 
 inc = include_directories('inc')
@@ -48,6 +49,7 @@ tests = [
   'test/parse_strings.c',
   'test/lookup.c',
   'test/easy.c',
+  'test/format.c',
 ]
 unity_dep = dependency(
     'Unity',

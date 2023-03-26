@@ -322,6 +322,9 @@ int json_number_get(const char *json, const struct json_token *tokens,
 int json_lookup(const char *json, const struct json_token *arr, uint32_t tok,
                 const char *key, uint32_t *index);
 
+void json_format(const char *json, const struct json_token *arr, uint32_t len,
+                 uint32_t start, FILE *f);
+
 /**
  * @brief Loop through each value in a JSON array, or each key in an object
  *
@@ -418,5 +421,10 @@ static inline int json_easy_array_get(struct json_easy *easy, uint32_t index,
 {
 	return json_array_get(easy->input, easy->tokens, index, array_index,
 	                      result);
+}
+static inline void json_easy_format(struct json_easy *easy, uint32_t start,
+                                    FILE *f)
+{
+	json_format(easy->input, easy->tokens, easy->tokens_len, start, f);
 }
 #endif // SMB_JSON
