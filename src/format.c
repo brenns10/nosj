@@ -31,8 +31,6 @@ void json_format(const char *json, const struct json_token *arr, uint32_t len,
 	for (uint32_t ix = start; ix < len;) {
 		switch (arr[ix].type) {
 		case JSON_NUMBER:
-			printf("NUMBER: %u len, %.*s\n", arr[ix].length,
-			       arr[ix].length, &json[arr[ix].start]);
 			fprintf(f, "%.*s", arr[ix].length,
 			        &json[arr[ix].start]);
 			break;
