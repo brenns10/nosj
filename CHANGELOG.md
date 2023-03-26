@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.1.1 -- 2022-03-25
+
+- Remove forgotten print statement.
+
 ## v2.1.0 -- 2022-03-25
 
 - The macro `json_easy_for_each()` has been fixed.
