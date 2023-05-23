@@ -116,6 +116,10 @@ enum json_error {
 	 * @brief An error occurred parsing "lookup" expression
 	 */
 	JSONERR_BAD_EXPR,
+	/**
+	 * @brief The number provided is not an integer
+	 */
+	JSONERR_NOT_INT,
 
 	_LAST_JSONERR,
 };
@@ -287,6 +291,45 @@ int json_number_get(const char *json, const struct json_token *tokens,
                     uint32_t index, double *number);
 
 /**
+ * @brief Return the value of a JSON number token as an integer
+ *
+ * This does NOT mean that this function parses the number in a general purpose
+ * way and then checks whether it is an integer. Instead, we parse the numeric
+ * literal as an integer, and return the result, if successful. There are
+ * several valid JSON representations of integers which are NOT valid integer
+ * representations according to the standard library: "10.0", "1e1" are two
+ * examples of representations of the integer 10. This function would not
+ * successfully parse either of these values.
+ *
+ * Thankfully, any practical JSON implementation will output integers in the
+ * expected base-10 format, when they are expected to be interpreted as
+ * integers. Therefore, this limitation is not a problem.
+ *
+ * @param json The original JSON buffer.
+ * @param tokens The parsed token buffer.
+ * @param index The index of the number in the token buffer.
+ * @param number Number to fill result
+ * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
+ */
+int json_number_getint(const char *json, const struct json_token *tokens,
+                       uint32_t index, int64_t *number);
+
+/**
+ * @brief Return the value of a JSON number token as an unsigned integer
+ *
+ * This behaves similar to json_number_getuint(), but returns an unsigned
+ * integer. It should be noted that one
+ *
+ * @param json The original JSON buffer.
+ * @param tokens The parsed token buffer.
+ * @param index The index of the number in the token buffer.
+ * @param number Number to fill result
+ * @returns 0 (NO_ERROR) on success, or JSONERR_TYPE if token is invalid
+ */
+int json_number_getuint(const char *json, const struct json_token *tokens,
+                        uint32_t index, uint64_t *number);
+
+/**
  * @brief Lookup values from complex JSON obj/arr using an expression language
  *
  * The expression language starts relative to the tok parameter (which may be an
@@ -393,6 +436,16 @@ static inline int json_easy_number_get(struct json_easy *easy, uint32_t index,
                                        double *result)
 {
 	return json_number_get(easy->input, easy->tokens, index, result);
+}
+static inline int json_easy_number_getint(struct json_easy *easy,
+                                          uint32_t index, int64_t *result)
+{
+	return json_number_getint(easy->input, easy->tokens, index, result);
+}
+static inline int json_easy_number_getuint(struct json_easy *easy,
+                                           uint32_t index, uint64_t *result)
+{
+	return json_number_getuint(easy->input, easy->tokens, index, result);
 }
 static inline int json_easy_string_match(struct json_easy *easy, uint32_t index,
                                          const char *other, bool *result)

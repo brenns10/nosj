@@ -34,11 +34,17 @@ static void test_single_digit(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(0.0, number);
+	TEST_ASSERT(!json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT_EQUAL(0LL, dst_int);
+	TEST_ASSERT(!json_number_getuint(input, tokens, 0, &dst_uint));
+	TEST_ASSERT_EQUAL(0ULL, dst_uint);
 }
 
 static void test_multiple_digit(void)
@@ -48,11 +54,17 @@ static void test_multiple_digit(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(12.0, number);
+	TEST_ASSERT(!json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT_EQUAL(12LL, dst_int);
+	TEST_ASSERT(!json_number_getuint(input, tokens, 0, &dst_uint));
+	TEST_ASSERT_EQUAL(12ULL, dst_uint);
 }
 
 static void test_starts_with_zero(void)
@@ -80,11 +92,17 @@ static void test_decimal(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(1.1, number);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_zero_decimal(void)
@@ -94,25 +112,37 @@ static void test_zero_decimal(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(0.1, number);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_negative_sign(void)
 {
-	char input[] = "-1";
+	char input[] = "-123";
 	uint32_t ntok = 1;
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
-	TEST_ASSERT_EQUAL(-1.0, number);
+	TEST_ASSERT_EQUAL(-123.0, number);
+	TEST_ASSERT(!json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT_EQUAL(-123LL, dst_int);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_exponent_upper(void)
@@ -122,11 +152,17 @@ static void test_exponent_upper(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(1e5, number);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_exponent_lower(void)
@@ -136,11 +172,17 @@ static void test_exponent_lower(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(1e5, number);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_exponent_plus(void)
@@ -150,11 +192,17 @@ static void test_exponent_plus(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(1e5, number);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_exponent_minus(void)
@@ -164,11 +212,17 @@ static void test_exponent_minus(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(1e-5, number);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_sign_decimal_exponent(void)
@@ -178,11 +232,17 @@ static void test_sign_decimal_exponent(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(-1.5e5, number);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_sign_alone(void)
@@ -220,11 +280,19 @@ static void test_negative_zero(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(0.0, number);
+	TEST_ASSERT(!json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT_EQUAL(0LL, dst_int);
+	/* Even though this is technically unsigned, it's a negative and we'll
+	 * fail */
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 }
 
 static void test_zero_exp(void)
@@ -234,9 +302,15 @@ static void test_zero_exp(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(0.0, number);
 }
@@ -248,9 +322,15 @@ static void test_double_digit_decimal(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	TEST_ASSERT_EQUAL(1.23, number);
 }
@@ -262,9 +342,15 @@ static void test_double_digit_exp(void)
 	struct json_token tokens[ntok];
 	struct json_parser p = json_parse(input, tokens, ntok);
 	double number = 0;
+	int64_t dst_int;
+	uint64_t dst_uint;
 	TEST_ASSERT(p.error == JSON_OK);
 	TEST_ASSERT(p.tokenidx == ntok);
 	TEST_ASSERT(p.textidx == sizeof(input) / sizeof(char) - 1);
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getint(input, tokens, 0, &dst_int));
+	TEST_ASSERT(JSONERR_NOT_INT ==
+	            json_number_getuint(input, tokens, 0, &dst_uint));
 	TEST_ASSERT(!json_number_get(input, tokens, 0, &number));
 	/* Something with Unity doesn't work with TEST_ASSERT_EQUAL here ... */
 	TEST_ASSERT(1e23 == number);

@@ -127,6 +127,36 @@ int json_number_get(const char *json, const struct json_token *tokens,
 	return JSON_OK;
 }
 
+int json_number_getint(const char *json, const struct json_token *tokens,
+                       uint32_t index, int64_t *number)
+{
+	if (tokens[index].type != JSON_NUMBER)
+		return JSONERR_TYPE;
+	char *end;
+	int64_t val = strtoll(json + tokens[index].start, &end, 10);
+	if (end != json + tokens[index].length) {
+		return JSONERR_NOT_INT;
+	}
+	*number = val;
+	return JSON_OK;
+}
+
+int json_number_getuint(const char *json, const struct json_token *tokens,
+                        uint32_t index, uint64_t *number)
+{
+	if (tokens[index].type != JSON_NUMBER)
+		return JSONERR_TYPE;
+	char *end;
+	/* Fail negative numbers, since strtoull doesn't */
+	if (json[tokens[index].start] == '-')
+		return JSONERR_NOT_INT;
+	uint64_t val = strtoull(json + tokens[index].start, &end, 10);
+	if (end != json + tokens[index].length)
+		return JSONERR_NOT_INT;
+	*number = val;
+	return JSON_OK;
+}
+
 /**
  * Lookup key within the parsed json_token buffer. Note that in this case, "key"
  * is not simply an object key. It can express a dotted notation for traversing

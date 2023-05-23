@@ -587,6 +587,7 @@ char *json_error_str[] = {
 	"the key does not exist in the object",
 	"the array index is out of bounds",
 	"invalid object lookup syntax",
+	"the number provided is not an integer",
 };
 
 struct json_parser json_parse(const char *text, struct json_token *arr,
