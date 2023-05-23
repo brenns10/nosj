@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v2.2.0 -- 2022-05-23
+
+- Add `json_{easy_,}number_get{u,}int` functions for accessing numbers as
+  integers.
+
 ## v2.1.1 -- 2022-03-25
 
 - Remove forgotten print statement.
