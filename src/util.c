@@ -134,7 +134,7 @@ int json_number_getint(const char *json, const struct json_token *tokens,
 		return JSONERR_TYPE;
 	char *end;
 	int64_t val = strtoll(json + tokens[index].start, &end, 10);
-	if (end != json + tokens[index].length) {
+	if (end != json + tokens[index].start + tokens[index].length) {
 		return JSONERR_NOT_INT;
 	}
 	*number = val;
@@ -151,7 +151,7 @@ int json_number_getuint(const char *json, const struct json_token *tokens,
 	if (json[tokens[index].start] == '-')
 		return JSONERR_NOT_INT;
 	uint64_t val = strtoull(json + tokens[index].start, &end, 10);
-	if (end != json + tokens[index].length)
+	if (end != json + tokens[index].start + tokens[index].length)
 		return JSONERR_NOT_INT;
 	*number = val;
 	return JSON_OK;
