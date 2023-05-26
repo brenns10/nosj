@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.2.1 -- 2022-05-25
+
+- Fix getuint
+
 ## v2.2.0 -- 2022-05-23
 
 - Add `json_{easy_,}number_get{u,}int` functions for accessing numbers as
